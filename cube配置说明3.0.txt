@@ -1,0 +1,22 @@
+PB4/5/7 开启LED
+
+PA0 开启ADC1_1   防止舵机堵转
+PB14 开启ADC4_4  防止舵机堵转
+
+PB1/PB2  输入IO检测行程开关
+
+TIM4 PA11    通道一PWM控制舵机1
+TIM4 PA12    通道二PWM控制舵机2
+
+PA7 控制舵机1工作
+PB0 控制舵机2工作
+
+TIM3 PA6       通道一PWM控制激光
+
+FDCAN2开启 
+
+LPUART1 打印信息
+USART1  遥控器
+USART2  磁传感器通信
+
+FREERTOS,占用TIM20

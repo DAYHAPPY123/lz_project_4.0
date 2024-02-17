@@ -344,6 +344,7 @@ void LPUART1_IRQHandler(void)
   /* USER CODE END LPUART1_IRQn 0 */
   HAL_UART_IRQHandler(&hlpuart1);
   /* USER CODE BEGIN LPUART1_IRQn 1 */
+
   /* USER CODE END LPUART1_IRQn 1 */
 }
 

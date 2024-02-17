@@ -5,6 +5,8 @@
 #include "adc.h"
 #include "usart.h"
 
+//右边是servo0,左边是servo1
+
 float servos_pos[2];//0到180度
 int actual_pos_input[2];
 uint32_t adc_value[2];
@@ -28,10 +30,24 @@ void servos_start()
     HAL_GPIO_WritePin(GPIOB,GPIO_PIN_0,GPIO_PIN_SET);
 }
 
-void servos_limit(float* input)
+void servo0_limit(float* input)
 {
-if (*input>120) *input=120;
-if (*input<0) *input=0;
+if (*input > 60) *input = 60;
+if (*input < 0) *input = 0;
+}
+
+void servo1_limit(float* input)
+{
+    if (*input > 0) *input = 0;
+    if (*input < -60) *input = -60;
+}
+
+void servos_reset()
+{
+    actual_pos_input[0]=servo0_start;
+    actual_pos_input[1]=servo1_start;
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, actual_pos_input[0]);
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, actual_pos_input[1]);
 }
 
 void servos_control()
@@ -39,66 +55,69 @@ void servos_control()
     if ((mode == MOTOR_MANUAL) || (mode == MOTOR_AUTO))
     {
         servos_start();
-        if (rc_ctrl.rc.s[0] == 3)
-        {//中
+        if (rc_ctrl.rc.s[0] == 3)//中
+        {
             if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
             {
-                servos_pos[0]-=0.5;
-                servos_limit(&servos_pos[0]);
+                servos_pos[0]-=servos_speed;
+                servo0_limit(&servos_pos[0]);
                 actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-                servos_pos[1]+=0.5;
-                servos_limit(&servos_pos[1]);
+                servos_pos[1]+=servos_speed;
+                servo1_limit(&servos_pos[1]);
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
-            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
+            else if (rc_ctrl.rc.ch[4] < 0)//滚轮下滚
             {
-                servos_pos[0]+=0.5;
-                servos_limit(&servos_pos[0]);
+                servos_pos[0]+=servos_speed;
+                servo0_limit(&servos_pos[0]);
                 actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-                servos_pos[1]-=0.5;
-                servos_limit(&servos_pos[1]);
+                servos_pos[1]-=servos_speed;
+                servo1_limit(&servos_pos[1]);
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
-        } else if (rc_ctrl.rc.s[0] == 1)
-        {//上
-            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
-            {
-                servos_pos[0]-=0.5;
-                servos_limit(&servos_pos[0]);
-                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-            }
-            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
-            {
-                servos_pos[0]+=0.5;
-                servos_limit(&servos_pos[0]);
-                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-            }
-        } else if (rc_ctrl.rc.s[0] == 2)
-        {//下
-            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
-            {
-                servos_pos[1]+=0.5;
-                servos_limit(&servos_pos[1]);
-                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
-            }
-            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
-            {
-                servos_pos[1]-=0.5;
-                servos_limit(&servos_pos[1]);
-                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
-            }
-        } else {
-            actual_pos_input[0]=servo0_start;
-            actual_pos_input[1]=servo1_start;
         }
-
+        else if (rc_ctrl.rc.s[0] == 1)//上，右,越大越下
+        {
+            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
+            {
+                servos_pos[0]-=servos_speed;
+                servo0_limit(&servos_pos[0]);
+                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
+            }
+            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
+            {
+                servos_pos[0]+=servos_speed;
+                servo0_limit(&servos_pos[0]);
+                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
+            }
+        }
+        else if (rc_ctrl.rc.s[0] == 2)//下，左，越小越下
+        {
+            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
+            {
+                servos_pos[1]+=servos_speed;
+                servo1_limit(&servos_pos[1]);
+                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
+            }
+            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
+            {
+                servos_pos[1]-=servos_speed;
+                servo1_limit(&servos_pos[1]);
+                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
+            }
+        }
         __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, actual_pos_input[0]);
         __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, actual_pos_input[1]);
     }
     else if (mode == MOTOR_STOP)
     {
         servos_stop();
+        actual_pos_input[0]=servo0_start;
+        actual_pos_input[1]=servo1_start;
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, actual_pos_input[0]);
+        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, actual_pos_input[1]);
     }
+//    usart_printf("%d,%d\r\n",actual_pos_input[0],actual_pos_input[1]);
 }
 
 void ADC_detect()
@@ -107,12 +126,12 @@ void ADC_detect()
 
     HAL_ADC_Start_DMA(&hadc4, &adc_value[0], 1);
     HAL_ADC_Start_DMA(&hadc1, &adc_value[1], 1);
-    if( (adc_value[0]>3500)||(adc_value[1]>4000) )
+    if( (adc_value[0]>3000)||(adc_value[1]>4400) )
     {
         mode=MOTOR_STOP;
         servos_init();
         actual_pos_input[0]=servo0_start;
         actual_pos_input[1]=servo1_start;
     }
-//    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
+    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
 }

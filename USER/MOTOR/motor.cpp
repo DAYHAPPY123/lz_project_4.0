@@ -71,20 +71,20 @@ void angle_cal()
             motor6_4.set_pos=mid_counter_4;
         }
         if(rc_ctrl.rc.ch[2]<0){
-            left_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.9);
+            left_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.7);
             left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
             right_counter = right_angle*180/PI/360*8191*3;
-            motor6_3.set_pos=mid_counter_3+left_counter;
-            motor6_4.set_pos=mid_counter_4+right_counter;
+            motor6_3.set_pos=mid_counter_3-left_counter;
+            motor6_4.set_pos=mid_counter_4-right_counter;
         }
         if(rc_ctrl.rc.ch[2]>0){
-            right_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.9);
+            right_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.7);
             right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
             left_counter = left_angle*180/PI/360*8191*3;
-            motor6_3.set_pos=mid_counter_3+left_counter;
-            motor6_4.set_pos=mid_counter_4+right_counter;
+            motor6_3.set_pos=mid_counter_3-left_counter;
+            motor6_4.set_pos=mid_counter_4-right_counter;
         }
     }
 
@@ -135,10 +135,10 @@ void backwheel_speed_cal(void)
         if(rc_ctrl.rc.ch[2]==0){
             motor3_1.set_rpm=float ((float)(rc_ctrl.rc.ch[1])/660.0f*20.0f);
             motor3_2.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*20.0f);}
-        if(rc_ctrl.rc.ch[2]<0){
+        if(rc_ctrl.rc.ch[2]>0){
             motor3_1.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*20.0f);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(left_angle)/tan(right_angle);}
-        if(rc_ctrl.rc.ch[2]>0){
+        if(rc_ctrl.rc.ch[2]<0){
             motor3_2.set_rpm=int16_t((float)(rc_ctrl.rc.ch[1])/660.0f*20.0f);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(right_angle)/tan(left_angle);}
     }

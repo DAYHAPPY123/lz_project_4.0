@@ -8,20 +8,22 @@
 #include "trace.h"
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "usart.h"
 
 void init_task(void *argument){
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
     for(;;)
     {
         ADC_detect();
-        HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
         __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1,100);//激光
         osDelay(50);
     }
 };
 
 void control_task(void *argument){
-    TickType_t PrTime1 = osKernelSysTick();
+    TickType_t PrTime1 = xTaskGetTickCount();
     motor_reset();
+    servos_reset();
     for(;;)
     {
         state_control();
@@ -33,21 +35,15 @@ void control_task(void *argument){
     }
 };
 
-void printf_task(void *argument){
-    for(;;)
-    {
-        osDelay(20);
-    }
-};
-
 void agv_task(void *argument){
-    TickType_t PrTime2 = osKernelSysTick();
+    TickType_t PrTime2 = xTaskGetTickCount();
+    agv_init();
     for (;;)
     {
         read_agv_data();
 //        agv_calculate();
 //        SPL(8,x1_value,y1_value,10,x2_value,y2_value);
-        vTaskDelayUntil(&PrTime2, 50);
+        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(100));  // 延迟50豪秒
     }
 };
 

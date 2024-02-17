@@ -68,13 +68,6 @@ const osThreadAttr_t Control_Task_attributes = {
   .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 1024 * 4
 };
-/* Definitions for Printf_Task */
-osThreadId_t Printf_TaskHandle;
-const osThreadAttr_t Printf_Task_attributes = {
-  .name = "Printf_Task",
-  .priority = (osPriority_t) osPriorityBelowNormal,
-  .stack_size = 256 * 4
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -83,7 +76,6 @@ const osThreadAttr_t Printf_Task_attributes = {
 void agv_task(void *argument);
 void init_task(void *argument);
 void control_task(void *argument);
-void printf_task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -121,9 +113,6 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of Control_Task */
   Control_TaskHandle = osThreadNew(control_task, NULL, &Control_Task_attributes);
-
-  /* creation of Printf_Task */
-  Printf_TaskHandle = osThreadNew(printf_task, NULL, &Printf_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -187,24 +176,6 @@ __weak void control_task(void *argument)
     osDelay(1);
   }
   /* USER CODE END control_task */
-}
-
-/* USER CODE BEGIN Header_printf_task */
-/**
-* @brief Function implementing the Printf_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_printf_task */
-__weak void printf_task(void *argument)
-{
-  /* USER CODE BEGIN printf_task */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END printf_task */
 }
 
 /* Private application code --------------------------------------------------*/

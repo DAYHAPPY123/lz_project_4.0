@@ -1,9 +1,11 @@
 #include "trace.h"
-#include <stdlib.h>
-#include <math.h>
-#include "main.h"
+#include <cstdlib>
 #include "usart.h"
 
+float x1_value[8] = {0, 14.3, 28.6, 42.9, 57.1, 71.4, 85.7, 100};
+float y1_value[8] = {20, 24, 57, 89, 105, 81, 34, 29};
+float x2_value[8] = {0};
+float y2_value[8] = {0};
 
 static int spline(int n, int end1, int end2,
                   float slope1, float slope2,
@@ -155,4 +157,6 @@ void SPL(int n, float *x, float *y, int ni, float *xi, float *yi)
         free(c);
         free(d);
     };
+
 }
+

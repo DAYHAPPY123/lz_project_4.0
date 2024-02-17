@@ -47,84 +47,43 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
+/* Definitions for Agv_Task */
+osThreadId_t Agv_TaskHandle;
+const osThreadAttr_t Agv_Task_attributes = {
+  .name = "Agv_Task",
   .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
+  .stack_size = 512 * 4
+};
+/* Definitions for Init_Task */
+osThreadId_t Init_TaskHandle;
+const osThreadAttr_t Init_Task_attributes = {
+  .name = "Init_Task",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 512 * 4
+};
+/* Definitions for Control_Task */
+osThreadId_t Control_TaskHandle;
+const osThreadAttr_t Control_Task_attributes = {
+  .name = "Control_Task",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 512 * 4
+};
+/* Definitions for Printf_Task */
+osThreadId_t Printf_TaskHandle;
+const osThreadAttr_t Printf_Task_attributes = {
+  .name = "Printf_Task",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 256 * 4
 };
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-const osThreadAttr_t InitTask_attributes = {
-        .name = "defaultTask",
-        .priority = (osPriority_t) osPriorityNormal,
-        .stack_size = 128
-};
-
-const osThreadAttr_t Control_Task_attributes = {
-        .name = "Control_Task",
-        .priority = (osPriority_t) osPriorityHigh,
-        .stack_size = 2048
-};
-
-const osThreadAttr_t Printf_Task_attributes = {
-        .name = "Printf_Task",
-        .priority = (osPriority_t) osPriorityLow,
-        .stack_size = 128
-};
-
-const osThreadAttr_t AGV_TASK_attributes = {
-        .name = "AGV_TASK",
-        .priority = (osPriority_t) osPriorityBelowNormal,
-        .stack_size = 512
-};
-
-const osThreadAttr_t ADC_Task_attributes = {
-        .name = "ADC_Task",
-        .priority = (osPriority_t) osPriorityLow,
-        .stack_size = 128
-};
-
-__weak void Init_Task(void *argument){
-    for(;;)
-    {
-        osDelay(1);
-    }
-};
-
-__weak void control_task(void *argument){
-    for(;;)
-    {
-        osDelay(1);
-    }
-};
-
-__weak void printf_task(void *argument){
-    for(;;)
-    {
-        osDelay(1);
-    }
-};
-
-__weak void agv_task(void *argument){
-    for(;;)
-    {
-        osDelay(1);
-    }
-};
-
-__weak void adc_task(void *argument){
-    for(;;)
-    {
-        osDelay(1);
-    }
-};
-
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void *argument);
+void agv_task(void *argument);
+void init_task(void *argument);
+void control_task(void *argument);
+void printf_task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -135,12 +94,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-    osThreadId_t Init_TaskHandle = osThreadNew(Init_Task, NULL, &InitTask_attributes);
-    osThreadId_t Control_TaskHandle = osThreadNew(control_task, NULL, &Control_Task_attributes);
-    osThreadId_t Printf_TaskHandle = osThreadNew(printf_task, NULL, &Printf_Task_attributes);
-    osThreadId_t  AGV_TASKHandle = osThreadNew(agv_task, NULL, &AGV_TASK_attributes);
-    osThreadId_t  ADC_TASKHandle = osThreadNew(adc_task, NULL, &ADC_Task_attributes);
-    /* USER CODE END Init */
+  /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -159,8 +113,17 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  /* creation of Agv_Task */
+  Agv_TaskHandle = osThreadNew(agv_task, NULL, &Agv_Task_attributes);
+
+  /* creation of Init_Task */
+  Init_TaskHandle = osThreadNew(init_task, NULL, &Init_Task_attributes);
+
+  /* creation of Control_Task */
+  Control_TaskHandle = osThreadNew(control_task, NULL, &Control_Task_attributes);
+
+  /* creation of Printf_Task */
+  Printf_TaskHandle = osThreadNew(printf_task, NULL, &Printf_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -172,22 +135,76 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_agv_task */
 /**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+* @brief Function implementing the Agv_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_agv_task */
+__weak void agv_task(void *argument)
 {
-  /* USER CODE BEGIN StartDefaultTask */
+  /* USER CODE BEGIN agv_task */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartDefaultTask */
+  /* USER CODE END agv_task */
+}
+
+/* USER CODE BEGIN Header_init_task */
+/**
+* @brief Function implementing the Init_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_init_task */
+__weak void init_task(void *argument)
+{
+  /* USER CODE BEGIN init_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END init_task */
+}
+
+/* USER CODE BEGIN Header_control_task */
+/**
+* @brief Function implementing the Control_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_control_task */
+__weak void control_task(void *argument)
+{
+  /* USER CODE BEGIN control_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END control_task */
+}
+
+/* USER CODE BEGIN Header_printf_task */
+/**
+* @brief Function implementing the Printf_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_printf_task */
+__weak void printf_task(void *argument)
+{
+  /* USER CODE BEGIN printf_task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END printf_task */
 }
 
 /* Private application code --------------------------------------------------*/

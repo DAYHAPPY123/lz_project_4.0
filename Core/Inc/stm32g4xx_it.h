@@ -58,8 +58,11 @@ void DMA1_Channel3_IRQHandler(void);
 void DMA1_Channel4_IRQHandler(void);
 void DMA1_Channel5_IRQHandler(void);
 void DMA1_Channel6_IRQHandler(void);
+void USART1_IRQHandler(void);
+void USART2_IRQHandler(void);
 void TIM20_UP_IRQHandler(void);
 void FDCAN2_IT0_IRQHandler(void);
+void FDCAN2_IT1_IRQHandler(void);
 void LPUART1_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 

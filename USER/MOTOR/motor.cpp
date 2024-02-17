@@ -13,43 +13,57 @@
 uint8_t mode;
 float left_angle=0;
 float right_angle=0;
-float left_counter=0;
-float right_counter=0;
+int16_t left_counter=0;
+int16_t right_counter=0;
 
 struct motor_init motor3_1={0};
 struct motor_init motor3_2={0};
-struct motor_init motor6_1={0};
-struct motor_init motor6_2={0};
+struct motor_init motor6_3={0};
+struct motor_init motor6_4={0};
+
+void motor_reset()
+{
+    while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1)!=0)
+    {
+        PIDControl_3508(&pid1,0,motor3_1.rpm);
+        PIDControl_3508(&pid2,0,motor3_2.rpm);
+        PIDControl_2006_v(&pid3_2,-50,motor6_3.rpm);
+        PortSendMotorsCur(0,0,pid3_2.output,0);
+//        usart_printf("%.2f,%.2f,%.2f,%.2f\n",motor6_3.rpm,
+//                     pid3_2.output,pid3_2.integral,motor6_3.calculate_continuous);
+    }
+    motor6_3.calculate_continuous=0;
+
+    while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2)!=0)
+    {
+        PIDControl_3508(&pid1,0,motor3_1.rpm);
+        PIDControl_3508(&pid2,0,motor3_2.rpm);
+        PIDControl_2006_v(&pid4_2,50,motor6_4.rpm);
+        PortSendMotorsCur(0,0,0,pid4_2.output);
+//        usart_printf("%.2f,%.2f,%.2f,%.2f\n",motor6_4.rpm,
+//                     pid4_2.output,pid4_2.integral,motor6_4.calculate_continuous);
+    }
+    motor6_4.calculate_continuous=0;
+}
 
 void motor_io_init()
 {
     mode=MOTOR_STOP;
-    motor6_1.set_pos=3400;
-    motor6_2.set_pos=2100;
+    motor6_3.set_pos=mid_counter_3;
+    motor6_4.set_pos=mid_counter_4;
+
 }
 
 void Speed_Send(void){
     PIDControl_3508(&pid1,motor3_1.set_rpm,motor3_1.rpm);
     PIDControl_3508(&pid2,-motor3_2.set_rpm,motor3_2.rpm);
+    PIDControl_2006(&pid3,motor6_3.set_pos,motor6_3.calculate_continuous);
+    PIDControl_2006(&pid4,motor6_4.set_pos,motor6_4.calculate_continuous);
 
-    PIDControl_6020(&pid3,motor6_1.set_pos,motor6_1.continuous);
-    PIDControl_6020(&pid4,motor6_2.set_pos,motor6_2.continuous);
+//    usart_printf("%d,%.2f,%.2f,%.2f,%.2f\n",motor6_3.set_pos,motor6_3.calculate_continuous,
+//                 pid3.output,motor6_3.target_new,pid3.integral);
 
-//    usart_printf(" %f,%d,%f,%f \r\n",
-//                 wlwg[0].gap_counter,wlwg[0].encoder_counter,pid_front_1.integral,pid_front_1.output);
-
-//    usart_printf(" %f,%d,%f,%f \r\n",
-//                 wlwg[1].gap_counter,wlwg[1].encoder_counter,pid_front_2.integral,pid_front_2.output);
-
-    PortSendMotorsCur_3508(pid1.output,pid2.output,0,0);
-    PortSendMotorsCur_6020(pid3.output,pid4.output,0,0);
-
-//    usart_printf("%.2f,%.2f,%d,%.2f \r\n",
-//                 motor3_1.set_rpm,motor3_1.rpm,pid1.output,pid1.integral);
-
-//    usart_printf("%d,%d,%.2f,%.2f \r\n",
-//                 motor6_2.set_pos,motor6_2.continuous,pid4.output,pid4.integral);
-
+    PortSendMotorsCur(pid1.output,pid2.output,pid3.output,pid4.output);
 }
 
 void angle_cal()
@@ -57,24 +71,24 @@ void angle_cal()
     if (mode == MOTOR_MANUAL)
     {
         if(rc_ctrl.rc.ch[2]==0){
-            motor6_1.set_pos=mid_counter_1;
-            motor6_2.set_pos=mid_counter_2;
+            motor6_3.set_pos=mid_counter_3;
+            motor6_4.set_pos=mid_counter_4;
         }
         if(rc_ctrl.rc.ch[2]<0){
-            left_counter = (float )rc_ctrl.rc.ch[2]/660.0f*1000.0f;
-            left_angle = left_counter / 8191 * 360 * PI / 180;
+            left_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.9);
+            left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
-            right_counter = right_angle*180/PI/360*8191;
-            motor6_1.set_pos=mid_counter_1+left_counter;
-            motor6_2.set_pos=mid_counter_2+right_counter;
+            right_counter = right_angle*180/PI/360*8191*3;
+            motor6_3.set_pos=mid_counter_3+left_counter;
+            motor6_4.set_pos=mid_counter_4+right_counter;
         }
         if(rc_ctrl.rc.ch[2]>0){
-            right_counter = (float )rc_ctrl.rc.ch[2]/660.0f*1000.0f;
-            right_angle = right_counter / 8191 * 360 * PI / 180;
+            right_counter = int16_t(double(rc_ctrl.rc.ch[2])/660.0f*8191.0*3.0/4.0/2*0.9);
+            right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
-            left_counter = left_angle*180/PI/360*8191;
-            motor6_1.set_pos=mid_counter_1+left_counter;
-            motor6_2.set_pos=mid_counter_2+right_counter;
+            left_counter = left_angle*180/PI/360*8191*3;
+            motor6_3.set_pos=mid_counter_3+left_counter;
+            motor6_4.set_pos=mid_counter_4+right_counter;
         }
     }
 
@@ -90,31 +104,31 @@ void angle_cal()
         }
 
         if(turn_angle==0){
-            motor6_1.set_pos=mid_counter_1;
-            motor6_2.set_pos=mid_counter_2;
+            motor6_3.set_pos=mid_counter_3;
+            motor6_4.set_pos=mid_counter_4;
         }
         if(turn_angle<0){//向左转
             left_counter = turn_angle;
             left_angle = left_counter / 8191 * 360 * PI / 180;
             right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
             right_counter = right_angle*180/PI/360*8191;
-            motor6_1.set_pos=mid_counter_1+left_counter;
-            motor6_2.set_pos=mid_counter_2+right_counter;
+            motor6_3.set_pos=mid_counter_3+left_counter;
+            motor6_4.set_pos=mid_counter_4+right_counter;
         }
         if(turn_angle>0){//向右转
             right_counter = turn_angle;
             right_angle = right_counter / 8191 * 360 * PI / 180;
             left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
             left_counter = left_angle*180/PI/360*8191;
-            motor6_1.set_pos=mid_counter_1+left_counter;
-            motor6_2.set_pos=mid_counter_2+right_counter;
+            motor6_3.set_pos=mid_counter_3+left_counter;
+            motor6_4.set_pos=mid_counter_4+right_counter;
         }
     }
 
     else if (mode == MOTOR_STOP)
     {
-        motor6_1.set_pos=mid_counter_1;
-        motor6_2.set_pos=mid_counter_2;
+        motor6_3.set_pos=mid_counter_3;
+        motor6_4.set_pos=mid_counter_4;
     }
 }
 

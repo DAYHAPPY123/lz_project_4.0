@@ -40,8 +40,8 @@ void read_agv_data()
         agv_left[i]=agv_buffer[0][3-i];
         agv_right[i]=agv_buffer[0][i+4];
     }
-//    usart_printf("%d %d %d %d %d %d %d %d\r\n",agv_buffer[0][0],agv_buffer[0][1], agv_buffer[0][2],
-//                 agv_buffer[0][3],agv_buffer[0][4], agv_buffer[0][5], agv_buffer[0][6], agv_buffer[0][7]);
+    usart_printf("%d %d %d %d %d %d %d %d\r\n",agv_buffer[0][0],agv_buffer[0][1], agv_buffer[0][2],
+                 agv_buffer[0][3],agv_buffer[0][4], agv_buffer[0][5], agv_buffer[0][6], agv_buffer[0][7]);
 }
 
 void state_control()//由通道值计算出转向幅度
@@ -52,12 +52,12 @@ void state_control()//由通道值计算出转向幅度
         case 3:mode=MOTOR_MANUAL;break;//中
         case 2:mode=MOTOR_STOP;break;//下
     }
-    if (mode==MOTOR_AUTO)
-    {
-        if ( (agv_right[3]+agv_left[3]) >=50)
-        {
-            mode=MOTOR_STOP;
-        }
-    }
+//    if (mode==MOTOR_AUTO)
+//    {
+//        if ( (agv_right[3]+agv_left[3]) >=50)
+//        {
+//            mode=MOTOR_STOP;
+//        }
+//    }
 }
 

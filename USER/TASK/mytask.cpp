@@ -1,22 +1,27 @@
-#include "task.h"
+#include "mytask.h"
 #include "cmsis_os2.h"
 #include "tim.h"
 #include "motor.h"
 #include "agv.h"
-#include "usart.h"
-#include "adc.h"
 #include "servos.h"
-uint32_t adc_value[2];
+#include "agv_trace.h"
+#include "trace.h"
+#include "FreeRTOS.h"
+#include "cmsis_os.h"
 
-void Init_Task(void *argument){
+void init_task(void *argument){
     for(;;)
     {
-        HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7);//LED
-        osDelay(1000);
+        ADC_detect();
+        HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+        __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1,100);//激光
+        osDelay(50);
     }
 };
 
 void control_task(void *argument){
+    TickType_t PrTime = osKernelSysTick();
+    motor_reset();
     for(;;)
     {
         state_control();
@@ -24,7 +29,7 @@ void control_task(void *argument){
         backwheel_speed_cal();
         Speed_Send();
         servos_control();
-        osDelay(5);
+        vTaskDelayUntil(&PrTime, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 };
 
@@ -40,22 +45,10 @@ void agv_task(void *argument){
     for (;;)
     {
         read_agv_data();
+//        agv_calculate();
+//        SPL(8,x1_value,y1_value,10,x2_value,y2_value);
         osDelay(100);
 //        vTaskDelayUntil(&current_time, 100);
     }
 };
 
-void adc_task(void *argument){
-    for(;;)
-    {
-        HAL_ADC_Start_DMA(&hadc4, &adc_value[0], 1);
-        HAL_ADC_Start_DMA(&hadc1, &adc_value[1], 1);
-        if( (adc_value[0]>4000)||(adc_value[1]>4000) )
-        {
-            mode=MOTOR_STOP;
-            servos_init();
-        }
-        usart_printf("%d %d \n",adc_value[0],adc_value[1]);
-        osDelay(20);
-    }
-}

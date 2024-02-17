@@ -20,10 +20,10 @@ int main()
 {
     BSP_Init();
     User_Init();
-
     osKernelInitialize();
     MX_FREERTOS_Init();
     osKernelStart();
+
     while (1)
     {
         HAL_Delay(5);
@@ -32,13 +32,12 @@ int main()
 
 void User_Init()
 {
-//    DEBUGC_UartInit();
     CAN_Init(&hfdcan2);
     REMOTEC_Init();
     motor_io_init();
     servos_init();
     agv_init();
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1,800);//激光
+
 }
 
 void BSP_Init()

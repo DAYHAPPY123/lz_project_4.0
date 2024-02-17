@@ -24,6 +24,9 @@
 /* USER CODE BEGIN Includes */
 #include "remote.h"
 #include "usart.h"
+#include "motor.h"
+#include "mycan.h"
+#include "fdcan.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,6 +68,8 @@ extern DMA_HandleTypeDef hdma_lpuart1_tx;
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern UART_HandleTypeDef hlpuart1;
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 extern TIM_HandleTypeDef htim20;
 
 /* USER CODE BEGIN EV */
@@ -254,6 +259,40 @@ void DMA1_Channel6_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXTI line 25.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+    REMOTEC_UartIrqHandler();
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
+  */
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+    if(__HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE) == SET)
+    {
+        __HAL_UART_CLEAR_IDLEFLAG(&huart2);
+        __HAL_DMA_DISABLE(&hdma_usart2_rx);
+        __HAL_DMA_GET_COUNTER(&hdma_usart2_rx) = 26;
+        __HAL_DMA_ENABLE(&hdma_usart2_rx);
+    }
+  /* USER CODE END USART2_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM20 update interrupt.
   */
 void TIM20_UP_IRQHandler(void)
@@ -282,6 +321,20 @@ void FDCAN2_IT0_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles FDCAN2 interrupt 1.
+  */
+void FDCAN2_IT1_IRQHandler(void)
+{
+  /* USER CODE BEGIN FDCAN2_IT1_IRQn 0 */
+
+  /* USER CODE END FDCAN2_IT1_IRQn 0 */
+  HAL_FDCAN_IRQHandler(&hfdcan2);
+  /* USER CODE BEGIN FDCAN2_IT1_IRQn 1 */
+
+  /* USER CODE END FDCAN2_IT1_IRQn 1 */
+}
+
+/**
   * @brief This function handles LPUART1 global interrupt.
   */
 void LPUART1_IRQHandler(void)
@@ -291,7 +344,6 @@ void LPUART1_IRQHandler(void)
   /* USER CODE END LPUART1_IRQn 0 */
   HAL_UART_IRQHandler(&hlpuart1);
   /* USER CODE BEGIN LPUART1_IRQn 1 */
-
   /* USER CODE END LPUART1_IRQn 1 */
 }
 

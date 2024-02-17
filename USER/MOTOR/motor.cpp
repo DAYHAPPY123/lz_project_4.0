@@ -9,6 +9,7 @@
 #include "remote.h"
 #include "pid.h"
 #include "agv.h"
+#include "math.h"
 
 uint8_t mode;
 float left_angle=0;
@@ -29,8 +30,6 @@ void motor_reset()
         PIDControl_3508(&pid2,0,motor3_2.rpm);
         PIDControl_2006_v(&pid3_2,-50,motor6_3.rpm);
         PortSendMotorsCur(0,0,pid3_2.output,0);
-//        usart_printf("%.2f,%.2f,%.2f,%.2f\n",motor6_3.rpm,
-//                     pid3_2.output,pid3_2.integral,motor6_3.calculate_continuous);
     }
     motor6_3.calculate_continuous=0;
 
@@ -40,8 +39,6 @@ void motor_reset()
         PIDControl_3508(&pid2,0,motor3_2.rpm);
         PIDControl_2006_v(&pid4_2,50,motor6_4.rpm);
         PortSendMotorsCur(0,0,0,pid4_2.output);
-//        usart_printf("%.2f,%.2f,%.2f,%.2f\n",motor6_4.rpm,
-//                     pid4_2.output,pid4_2.integral,motor6_4.calculate_continuous);
     }
     motor6_4.calculate_continuous=0;
 }
@@ -51,14 +48,13 @@ void motor_io_init()
     mode=MOTOR_STOP;
     motor6_3.set_pos=mid_counter_3;
     motor6_4.set_pos=mid_counter_4;
-
 }
 
 void Speed_Send(void){
     PIDControl_3508(&pid1,motor3_1.set_rpm,motor3_1.rpm);
     PIDControl_3508(&pid2,-motor3_2.set_rpm,motor3_2.rpm);
-    PIDControl_2006(&pid3,motor6_3.set_pos,motor6_3.calculate_continuous);
-    PIDControl_2006(&pid4,motor6_4.set_pos,motor6_4.calculate_continuous);
+    PIDControl_2006_pos(&pid3,motor6_3.set_pos,motor6_3.calculate_continuous);
+    PIDControl_2006_pos(&pid4,motor6_4.set_pos,motor6_4.calculate_continuous);
 
 //    usart_printf("%d,%.2f,%.2f,%.2f,%.2f\n",motor6_3.set_pos,motor6_3.calculate_continuous,
 //                 pid3.output,motor6_3.target_new,pid3.integral);

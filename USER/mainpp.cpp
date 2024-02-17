@@ -37,7 +37,6 @@ void User_Init()
     motor_io_init();
     servos_init();
     agv_init();
-
 }
 
 void BSP_Init()

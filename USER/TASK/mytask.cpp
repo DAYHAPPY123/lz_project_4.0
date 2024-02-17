@@ -20,7 +20,7 @@ void init_task(void *argument){
 };
 
 void control_task(void *argument){
-    TickType_t PrTime = osKernelSysTick();
+    TickType_t PrTime1 = osKernelSysTick();
     motor_reset();
     for(;;)
     {
@@ -29,7 +29,7 @@ void control_task(void *argument){
         backwheel_speed_cal();
         Speed_Send();
         servos_control();
-        vTaskDelayUntil(&PrTime, pdMS_TO_TICKS(5));  // 延迟5豪秒
+        vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 };
 
@@ -41,14 +41,13 @@ void printf_task(void *argument){
 };
 
 void agv_task(void *argument){
-//    TickType_t current_time = xTaskGetTickCoun t();
+    TickType_t PrTime2 = osKernelSysTick();
     for (;;)
     {
         read_agv_data();
 //        agv_calculate();
 //        SPL(8,x1_value,y1_value,10,x2_value,y2_value);
-        osDelay(100);
-//        vTaskDelayUntil(&current_time, 100);
+        vTaskDelayUntil(&PrTime2, 50);
     }
 };
 

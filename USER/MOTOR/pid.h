@@ -45,7 +45,7 @@ extern float limit(float a, float ABS_MAX);
 
 void update_target(float* ramp_target,float* target_now);
 int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed);
-int16_t PIDControl_2006(struct PID_INIT* pid,float targetPos,float NowPos);
+int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos);
 int16_t PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed);
 
 #ifdef __cplusplus

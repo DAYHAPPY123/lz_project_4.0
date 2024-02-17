@@ -51,7 +51,7 @@
 osThreadId_t Agv_TaskHandle;
 const osThreadAttr_t Agv_Task_attributes = {
   .name = "Agv_Task",
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityAboveNormal,
   .stack_size = 512 * 4
 };
 /* Definitions for Init_Task */
@@ -65,14 +65,14 @@ const osThreadAttr_t Init_Task_attributes = {
 osThreadId_t Control_TaskHandle;
 const osThreadAttr_t Control_Task_attributes = {
   .name = "Control_Task",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 512 * 4
+  .priority = (osPriority_t) osPriorityHigh,
+  .stack_size = 1024 * 4
 };
 /* Definitions for Printf_Task */
 osThreadId_t Printf_TaskHandle;
 const osThreadAttr_t Printf_Task_attributes = {
   .name = "Printf_Task",
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityBelowNormal,
   .stack_size = 256 * 4
 };
 

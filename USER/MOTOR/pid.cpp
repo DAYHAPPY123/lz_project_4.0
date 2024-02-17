@@ -85,7 +85,7 @@ int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed)
     return pid->output;
 }
 
-int16_t PIDControl_2006(struct PID_INIT* pid,float targetPos,float NowPos)
+int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
     if (pid==&pid3)
     {
@@ -111,6 +111,7 @@ int16_t PIDControl_2006(struct PID_INIT* pid,float targetPos,float NowPos)
 
 int16_t PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed)
 {
+
     pid->error[0] = targetSpeed - NowSpeed;
 
     pid->integral += pid->error[0];

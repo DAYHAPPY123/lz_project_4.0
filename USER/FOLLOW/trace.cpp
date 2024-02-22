@@ -4,8 +4,8 @@
 
 float x1_value[8] = {0, 14.3, 28.6, 42.9, 57.1, 71.4, 85.7, 100};
 float y1_value[8] = {20, 24, 57, 89, 105, 81, 34, 29};
-float x2_value[8] = {0};
-float y2_value[8] = {0};
+float x2_value[21] = {0};
+float y2_value[21] = {0};
 
 static int spline(int n, int end1, int end2,
                   float slope1, float slope2,
@@ -147,16 +147,11 @@ void SPL(int n, float *x, float *y, int ni, float *xi, float *yi)
     else
     {
         spline(n, 0, 0, 0, 0, x, y, b, c, d, &iflag);
-        // if (iflag == 0)
-        //     myprintf("I got coef b,c,d now\n");
-        // else
-        //     myprintf("x not in order or other error\n");
         for (i = 0; i < ni; i++)
             yi[i] = seval(ni, xi[i], n, x, y, b, c, d, &last);
         free(b);
         free(c);
         free(d);
     };
-
 }
 

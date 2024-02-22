@@ -11,11 +11,9 @@
 #include "usart.h"
 
 void init_task(void *argument){
-    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
     for(;;)
     {
         ADC_detect();
-        __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1,100);//激光
         osDelay(50);
     }
 };
@@ -32,6 +30,7 @@ void control_task(void *argument){
         Speed_Send();
         servos_control();
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
+        osDelay(5);
     }
 };
 
@@ -41,9 +40,10 @@ void agv_task(void *argument){
     for (;;)
     {
         read_agv_data();
-//        agv_calculate();
-//        SPL(8,x1_value,y1_value,10,x2_value,y2_value);
-        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(100));  // 延迟50豪秒
+        SPL(8,x1_value,y1_value,1,x2_value,y2_value);
+        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(50));  // 延迟50豪秒
+//        usart_printf("%f %f %f %f %f %f %f %f\r\n",y2_value[0],y2_value[1], y2_value[2],
+//                     y2_value[3],y2_value[4], y2_value[5], y2_value[6], y2_value[7]);
     }
 };
 

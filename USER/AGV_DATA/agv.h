@@ -9,6 +9,7 @@ extern "C" {
 void agv_init();
 void state_control();
 void read_agv_data();
+uint8_t find_max(float arry[], uint8_t length);
 
 extern uint8_t agv_right[4];
 extern uint8_t agv_left[4];

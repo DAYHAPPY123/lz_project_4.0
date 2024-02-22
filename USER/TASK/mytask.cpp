@@ -40,10 +40,7 @@ void agv_task(void *argument){
     for (;;)
     {
         read_agv_data();
-        SPL(8,x1_value,y1_value,1,x2_value,y2_value);
-        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(50));  // 延迟50豪秒
-//        usart_printf("%f %f %f %f %f %f %f %f\r\n",y2_value[0],y2_value[1], y2_value[2],
-//                     y2_value[3],y2_value[4], y2_value[5], y2_value[6], y2_value[7]);
+        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(20));  // 延迟50豪秒
     }
 };
 

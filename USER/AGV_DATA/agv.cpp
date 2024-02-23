@@ -10,6 +10,7 @@
 float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
 uint8_t agvBuff[AGV_RVSIZE]={0};
+static uint8_t origin_max_index = 0;
 
 float turn_angle;
 
@@ -50,14 +51,14 @@ void read_agv_data()
 //    usart_printf("%f %f %f %f %f %f %f %f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
 //                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
-    static uint8_t origin_max_index = 0;
+
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
 
-//    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
+    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] > 40.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] > 50.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {
@@ -88,6 +89,7 @@ void read_agv_data()
             limit(&turn_angle,2000);
         }
     }
+
 }
 
 }
@@ -101,8 +103,9 @@ void state_control()//由通道值计算出转向幅度
         case 3:mode=MOTOR_MANUAL;break;//中
         case 2:mode=MOTOR_STOP;break;//下
     }
-//    if (mode==MOTOR_AUTO)
-//    {
-//    }
+    if ( (agv_buffer[origin_max_index] < 50.0f) && (mode==MOTOR_AUTO) )
+    {
+        mode = MOTOR_STOP;
+    }
 }
 

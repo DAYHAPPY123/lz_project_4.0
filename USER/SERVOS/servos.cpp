@@ -135,5 +135,5 @@ void ADC_detect()
         actual_pos_input[0]=servo0_start;
         actual_pos_input[1]=servo1_start;
     }
-    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
+//    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
 }

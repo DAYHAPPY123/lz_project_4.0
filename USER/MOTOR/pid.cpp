@@ -44,13 +44,13 @@ PID_INIT pid4_2={
 
 float ramp_step=50;
 
-float limit(float a, float ABS_MAX)
+float limit(float *a, float ABS_MAX)
 {
-    if (a > ABS_MAX)
-        a = ABS_MAX;
-    if (a < -ABS_MAX)
-        a = -ABS_MAX;
-    return a;
+    if (*a > ABS_MAX)
+        *a = ABS_MAX;
+    if (*a < -ABS_MAX)
+        *a = -ABS_MAX;
+    return *a;
 }
 
 void update_target(float target_new,float target_now,struct motor_init *motor)
@@ -78,7 +78,7 @@ int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed)
     pid->derivative = pid->error[0] - pid->error[1];
     pid->output = pid->vel_kp * pid->error[0] + pid->vel_ki *pid->integral
                   + pid->vel_kd * pid->derivative;
-    pid->output= limit(pid->output,10000);
+    pid->output= limit(&pid->output,10000);
 
     pid->error[1] = pid->error[0];
 
@@ -97,13 +97,13 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         pid->error[0] = motor6_4.target_new - NowPos;
     }
     pid->integral += pid->error[0];
-    pid->integral= limit(pid->integral,100000);
+    pid->integral= limit(&pid->integral,100000);
 
     pid->derivative = pid->error[0] - pid->error[1];
-    pid->derivative= limit(pid->derivative,10000);
+    pid->derivative= limit(&pid->derivative,10000);
 
     pid->output = pid->pos_kp * pid->error[0] + pid->pos_ki *pid->integral + pid->pos_kd * pid->derivative;
-    pid->output= limit(pid->output,10000);
+    pid->output= limit(&pid->output,10000);
 
     pid->error[1] = pid->error[0];
     return pid->output;
@@ -115,13 +115,13 @@ int16_t PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed)
     pid->error[0] = targetSpeed - NowSpeed;
 
     pid->integral += pid->error[0];
-    pid->integral= limit(pid->integral,1000);
+    pid->integral= limit(&pid->integral,1000);
 
     pid->derivative = pid->error[0] - pid->error[1];
-    pid->derivative= limit(pid->derivative,10000);
+    pid->derivative= limit(&pid->derivative,10000);
 
     pid->output = pid->vel_kp * pid->error[0] + pid->vel_ki *pid->integral + pid->vel_kd * pid->derivative;
-    pid->output= limit(pid->output,10000);
+    pid->output= limit(&pid->output,10000);
 
     pid->error[1] = pid->error[0];
     return pid->output;

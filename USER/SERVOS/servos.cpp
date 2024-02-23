@@ -127,12 +127,13 @@ void ADC_detect()
 
     HAL_ADC_Start_DMA(&hadc4, &adc_value[0], 1);
     HAL_ADC_Start_DMA(&hadc1, &adc_value[1], 1);
-    if( (adc_value[0]>3000)||(adc_value[1]>4400) )
+    if( (adc_value[0]>4000)||(adc_value[1]>4000) )
     {
         mode=MOTOR_STOP;
         servos_init();
+        servos_pos[0]=0;servos_pos[1]=0;
         actual_pos_input[0]=servo0_start;
         actual_pos_input[1]=servo1_start;
     }
-//    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
+    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
 }

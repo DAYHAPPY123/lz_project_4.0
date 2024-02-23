@@ -41,7 +41,7 @@ extern struct PID_INIT pid4;
 extern struct PID_INIT pid3_2;
 extern struct PID_INIT pid4_2;
 
-extern float limit(float a, float ABS_MAX);
+float limit(float *a, float ABS_MAX);
 
 void update_target(float* ramp_target,float* target_now);
 int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed);

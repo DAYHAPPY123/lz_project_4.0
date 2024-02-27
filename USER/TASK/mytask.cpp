@@ -4,11 +4,11 @@
 #include "motor.h"
 #include "agv.h"
 #include "servos.h"
-#include "agv_trace.h"
 #include "trace.h"
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 #include "usart.h"
+#include "pid.h"
 
 void init_task(void *argument){
     for(;;)
@@ -29,8 +29,8 @@ void control_task(void *argument){
         backwheel_speed_cal();
         Speed_Send();
         servos_control();
+
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
-        osDelay(5);
     }
 };
 

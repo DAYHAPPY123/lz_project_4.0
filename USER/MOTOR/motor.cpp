@@ -29,6 +29,10 @@ void motor_reset()
         PIDControl_3508(&pid1,0,motor3_1.rpm);
         PIDControl_3508(&pid2,0,motor3_2.rpm);
         PIDControl_2006_v(&pid3_2,-50,motor6_3.rpm);
+
+//        usart_printf("%.2f,%.2f,%.2f  \r\n",pid3_2.error[0],pid3_2.integral,pid3_2.output);
+//        usart_printf("%.2f,%.2f,%.2f  \r\n",pid4_2.error[0],pid4_2.integral,pid4_2.output);
+
         PortSendMotorsCur(0,0,pid3_2.output,0);
     }
     motor6_3.calculate_continuous=0;
@@ -55,6 +59,9 @@ void Speed_Send(void){
     PIDControl_3508(&pid2,-motor3_2.set_rpm,motor3_2.rpm);
     PIDControl_2006_pos(&pid3,motor6_3.set_pos,motor6_3.calculate_continuous);
     PIDControl_2006_pos(&pid4,motor6_4.set_pos,motor6_4.calculate_continuous);
+//    usart_printf("%.2f,%.2f,%.2f  \r\n",pid3.error[0],pid3.integral,pid3.output);
+//    usart_printf("%.2f,%.2f,%.2f  \r\n",pid4.error[0],pid4.integral,pid4.output);
+//    usart_printf("%.2f,%.2f,%.2f  \r\n",pid1.error[0],pid1.integral,pid1.output);
     PortSendMotorsCur(pid1.output,pid2.output,pid3.output,pid4.output);
 }
 

@@ -15,7 +15,7 @@ extern uint8_t mode;
 #define car_length 200         //前后轮间距
 #define car_width 260.9  //两后轮之间的间距259.4 262.4
 #define PI 3.1415926
-#define mid_counter_3 3200
+#define mid_counter_3 3100
 #define mid_counter_4 (-3200)
 #define MOTOR_MANUAL 0
 #define MOTOR_AUTO 1
@@ -36,7 +36,8 @@ struct motor_init
 
     double continuous;
     float calculate_continuous;
-    float target_new;
+    float target_pos_new;
+    float target_v_new;
 };
 
 typedef enum

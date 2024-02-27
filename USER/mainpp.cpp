@@ -20,6 +20,7 @@ int main()
 {
     BSP_Init();
     User_Init();
+
     osKernelInitialize();
     MX_FREERTOS_Init();
     osKernelStart();

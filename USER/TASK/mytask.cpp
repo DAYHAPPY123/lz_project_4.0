@@ -29,7 +29,6 @@ void control_task(void *argument){
         backwheel_speed_cal();
         Speed_Send();
         servos_control();
-
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 };

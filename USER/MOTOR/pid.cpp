@@ -19,14 +19,16 @@ PID_INIT pid2={
 };
 
 PID_INIT pid3={
-        .pos_kp=2.0f,
-        .pos_ki=0.03f,
+        .pos_kp=2.2f,
+        .pos_ki=0.04f,
         .pos_kd=20.0f,
 };
-
+//.pos_kp=2.0f,
+//.pos_ki=0.03f,
+//.pos_kd=20.0f,
 PID_INIT pid4={
-        .pos_kp=2.0f,
-        .pos_ki=0.03f,
+        .pos_kp=2.2f,
+        .pos_ki=0.04f,
         .pos_kd=20.0f,
 };
 
@@ -42,7 +44,7 @@ PID_INIT pid4_2={
         .vel_kd=0.0f
 };
 
-float ramp_step[3]={30,0.15,0.0004};//2006pos-3508v-2006v
+float ramp_step[3]={30,0.15,0.000005};//2006pos-3508v-2006v
 
 float limit(float *a, float ABS_MAX)
 {

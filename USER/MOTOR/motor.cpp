@@ -28,7 +28,7 @@ void motor_reset()
     {
         PIDControl_3508(&pid1,0,motor3_1.rpm);
         PIDControl_3508(&pid2,0,motor3_2.rpm);
-        PIDControl_2006_v(&pid3_2,-50,motor6_3.rpm);
+        PIDControl_2006_v(&pid3_2,-10,motor6_3.rpm);
 
 //        usart_printf("%.2f,%.2f,%.2f  \r\n",pid3_2.error[0],pid3_2.integral,pid3_2.output);
 //        usart_printf("%.2f,%.2f,%.2f  \r\n",pid4_2.error[0],pid4_2.integral,pid4_2.output);
@@ -41,7 +41,7 @@ void motor_reset()
     {
         PIDControl_3508(&pid1,0,motor3_1.rpm);
         PIDControl_3508(&pid2,0,motor3_2.rpm);
-        PIDControl_2006_v(&pid4_2,50,motor6_4.rpm);
+        PIDControl_2006_v(&pid4_2,10,motor6_4.rpm);
         PortSendMotorsCur(0,0,0,pid4_2.output);
     }
     motor6_4.calculate_continuous=0;
@@ -140,13 +140,13 @@ void backwheel_speed_cal(void)
     else if (mode == MOTOR_AUTO )
     {
         if(turn_angle==0){
-            motor3_1.set_rpm=5;
-            motor3_2.set_rpm=5;}
+            motor3_1.set_rpm=3;
+            motor3_2.set_rpm=3;}
         if(turn_angle<0){
-            motor3_2.set_rpm=5+float(-turn_angle/1000.0);
+            motor3_2.set_rpm=3+float(-turn_angle/1000.0);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);}
         if(turn_angle>0){
-            motor3_1.set_rpm=5+float(turn_angle/1000.0);
+            motor3_1.set_rpm=3+float(turn_angle/1000.0);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);}
     }
 

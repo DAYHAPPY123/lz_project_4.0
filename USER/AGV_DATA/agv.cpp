@@ -7,6 +7,8 @@
 #include "trace.h"
 #include "pid.h"
 
+int noise = 50;
+double offset_distance=0;
 float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
 uint8_t agvBuff[AGV_RVSIZE]={0};
@@ -39,26 +41,26 @@ void read_agv_data()
     memcpy(agvBuff,&agvRvBuff[3],8);
     if( (agvRvBuff[0] == 0x01) && (agvRvBuff[1] == 0x03) && (agvRvBuff[2]== 0x10) )
     {
-        agv_buffer[0] = (float)agvBuff[1];
-        agv_buffer[1] = (float)agvBuff[0];
-        agv_buffer[2] = (float)agvBuff[3];
-        agv_buffer[3] = (float)agvBuff[2];
-        agv_buffer[4] = (float)agvBuff[5];
-        agv_buffer[5] = (float)agvBuff[4];
-        agv_buffer[6] = (float)agvBuff[7];
-        agv_buffer[7] = (float)agvBuff[6];
+        agv_buffer[0] = (float)agvBuff[1]-noise;
+        agv_buffer[1] = (float)agvBuff[0]-noise;
+        agv_buffer[2] = (float)agvBuff[3]-noise;
+        agv_buffer[3] = (float)agvBuff[2]-noise;
+        agv_buffer[4] = (float)agvBuff[5]-noise;
+        agv_buffer[5] = (float)agvBuff[4]-noise;
+        agv_buffer[6] = (float)agvBuff[7]-noise;
+        agv_buffer[7] = (float)agvBuff[6]-noise;
     }
-//    usart_printf("%f %f %f %f %f %f %f %f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
+//    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
 //                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
 
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
 
-    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
+//    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] > 50.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] > 20.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {
@@ -80,7 +82,9 @@ void read_agv_data()
             fit_max_index = find_max(fit_origin_data_s, 21);
 //            usart_printf("%d\r\n",fit_max_index);
 //假设超过实际最大值横坐标与3.5插值超过1就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
-            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-10)*0.1))*2000.0*2.5);
+            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-10)*0.1))*2000.0*1.2);
+            offset_distance=(3.5-(origin_max_index+(fit_max_index-10.0)*0.1))*10.0;
+            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2000);
         }
         else
@@ -103,7 +107,7 @@ void state_control()//由通道值计算出转向幅度
         case 3:mode=MOTOR_MANUAL;break;//中
         case 2:mode=MOTOR_STOP;break;//下
     }
-    if ( (agv_buffer[origin_max_index] < 50.0f) && (mode==MOTOR_AUTO) )
+    if ( (agv_buffer[origin_max_index] < 20.0f) && (mode==MOTOR_AUTO) )
     {
         mode = MOTOR_STOP;
     }

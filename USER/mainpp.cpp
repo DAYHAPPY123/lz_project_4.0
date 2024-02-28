@@ -21,6 +21,9 @@ int main()
     BSP_Init();
     User_Init();
 
+    motor_reset();
+    servos_reset();
+
     osKernelInitialize();
     MX_FREERTOS_Init();
     osKernelStart();

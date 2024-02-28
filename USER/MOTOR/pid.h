@@ -15,31 +15,21 @@ struct PID_INIT{
 
     float output;
 
-    float pos_kp;
-    float pos_ki;
-    float pos_kd;
+    float pos_kp_strong;
+    float pos_ki_strong;
+    float pos_kd_strong;
+
+    float pos_kp_wake;
+    float pos_ki_wake;
+    float pos_kd_wake;
 };
 
-#define STARTPID  0x70          //p
-
-#define VEL_LOOP 0x73
-#define VEL_KP 0x70            //p
-#define VEL_KI 0x69            //i
-#define VEL_KD 0x64            //d
-#define VEL_MAXOUT 0x6F        //o
-#define VEL_MAXINTEGRAL 0x61   //a
-
-#define POS_LOOP 0x70           //p
-#define POS_KP 0x70            //p
-#define POS_KI 0x69            //i
-#define POS_KD 0x64            //d
-
-extern struct PID_INIT pid1;
-extern struct PID_INIT pid2;
-extern struct PID_INIT pid3;
-extern struct PID_INIT pid4;
+extern struct PID_INIT pid3_1;
 extern struct PID_INIT pid3_2;
-extern struct PID_INIT pid4_2;
+extern struct PID_INIT pid2_1;
+extern struct PID_INIT pid2_2;
+extern struct PID_INIT pid_reset1;
+extern struct PID_INIT pid_reset2;
 
 float limit(float *a, float ABS_MAX);
 

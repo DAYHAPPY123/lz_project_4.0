@@ -20,8 +20,6 @@ void init_task(void *argument){
 
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
-    motor_reset();
-    servos_reset();
     for(;;)
     {
         state_control();
@@ -39,7 +37,7 @@ void agv_task(void *argument){
     for (;;)
     {
         read_agv_data();
-        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(20));  // 延迟50豪秒
+        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟50豪秒
     }
 };
 

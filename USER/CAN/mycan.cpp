@@ -21,6 +21,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rx_header,rx_data );
             int16_t ID = rx_header.Identifier;
             if (ID == CAN_3508_M1_ID) {
+                motor3_1.online_flag=1;
                 motor3_1.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor3_1.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
@@ -28,6 +29,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_1.rpm=motor3_1.vel/100.0;
             }
             if (ID == CAN_3508_M2_ID) {
+                motor3_2.online_flag=1;
                 motor3_2.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor3_2.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
@@ -35,6 +37,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_2.rpm=motor3_2.vel/100.0;
             }
             if (ID == CAN_2006_M1_ID) {
+                motor6_3.online_flag=1;
                 static float last_counter1 = 0;
                 static float counter_change_1 = 0;
                 motor6_3.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
@@ -50,6 +53,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 last_counter1 = motor6_3.pos;
             }
             if (ID == CAN_2006_M2_ID) {
+                motor6_4.online_flag=1;
                 static float last_counter2 = 0;
                 static float counter_change_2 = 0;
                 motor6_4.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);

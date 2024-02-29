@@ -10,6 +10,7 @@
 #include "pid.h"
 #include "agv.h"
 #include "math.h"
+#include "cmsis_os2.h"
 
 uint8_t mode;
 float left_angle=0;
@@ -30,7 +31,7 @@ void motor_reset()
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);
         PIDControl_2006_v(&pid_reset1,-50,motor2_1.rpm);
         PortSendMotorsCur(0,0,pid_reset1.output,0);
-        HAL_Delay(5);
+        osDelay(5);
 //                usart_printf("%.2f,%.2f,%.2f  \r\n",pid_reset1.error[0],pid_reset1.integral,pid_reset1.output);
         //        usart_printf("%.2f,%.2f,%.2f  \r\n",pid4_2.error[0],pid4_2.integral,pid4_2.output);
     }
@@ -42,7 +43,7 @@ void motor_reset()
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);
         PIDControl_2006_v(&pid_reset2,50,motor2_2.rpm);
         PortSendMotorsCur(0,0,0,pid_reset2.output);
-        HAL_Delay(5);
+        osDelay(5);
     }
     motor2_2.calculate_continuous=0;
 }

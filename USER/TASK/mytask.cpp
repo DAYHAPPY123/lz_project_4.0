@@ -20,6 +20,8 @@ void init_task(void *argument){
 
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
+    motor_reset();
+    servos_reset();
     for(;;)
     {
         state_control();

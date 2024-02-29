@@ -62,8 +62,8 @@ void motor_reset();
 
 extern struct motor_init motor3_1;
 extern struct motor_init motor3_2;
-extern struct motor_init motor6_3;
-extern struct motor_init motor6_4;
+extern struct motor_init motor2_1;
+extern struct motor_init motor2_2;
 
 #ifdef __cplusplus
 }

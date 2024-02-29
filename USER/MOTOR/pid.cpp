@@ -44,18 +44,18 @@ PID_INIT pid2_2={
 };
 
 PID_INIT pid_reset1={
-        .vel_kp=70.0f,
-        .vel_ki=0.06f,
+        .vel_kp=250.0f,
+        .vel_ki=0.15f,
         .vel_kd=0.0f
 };
 
 PID_INIT pid_reset2={
-        .vel_kp=50.0f,
-        .vel_ki=0.04f,
+        .vel_kp=150.0f,
+        .vel_ki=0.06f,
         .vel_kd=0.0f
 };
 
-float ramp_step[3]={30,0.15,0.15};//2006pos-3508v-2006v
+float ramp_step[3]={10,0.15,0.1};//2006pos-3508v-2006v
 
 float limit(float *a, float ABS_MAX)
 {
@@ -99,7 +99,7 @@ void update_target_v(float target_new,float target_now,struct motor_init *motor)
                 motor->target_v_new = target_new;
         }
     }
-    if( (motor==&motor6_3)||(motor==&motor6_4) )
+    if( (motor==&motor2_1)||(motor==&motor2_2) )
     {
         if (target_now < target_new)
         {
@@ -147,8 +147,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
     if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] < 0)))//向左转，转角1大，2小
     {
         if (pid == &pid2_1) {
-            update_target_pos(targetPos, NowPos, &motor6_3);
-            pid->error[0] = motor6_3.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_1);
+            pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -160,8 +160,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         } else if (pid == &pid2_2) {
-            update_target_pos(targetPos, NowPos, &motor6_4);
-            pid->error[0] = motor6_4.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_2);
+            pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -176,8 +176,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
     } else if (((mode == MOTOR_AUTO) && (turn_angle > 0)) ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
     {
         if (pid == &pid2_2) {
-            update_target_pos(targetPos, NowPos, &motor6_4);
-            pid->error[0] = motor6_4.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_2);
+            pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -189,8 +189,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         } else if (pid == &pid2_1) {
-            update_target_pos(targetPos, NowPos, &motor6_3);
-            pid->error[0] = motor6_3.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_1);
+            pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -202,11 +202,11 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         }
-    } else if (((mode == MOTOR_AUTO) && (turn_angle = 0)) ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] = 0)))//不转
+    } else
     {
         if (pid == &pid2_1) {
-            update_target_pos(targetPos, NowPos, &motor6_3);
-            pid->error[0] = motor6_3.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_1);
+            pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -218,8 +218,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         } else if (pid == &pid2_2) {
-            update_target_pos(targetPos, NowPos, &motor6_4);
-            pid->error[0] = motor6_4.target_pos_new - NowPos;
+            update_target_pos(targetPos, NowPos, &motor2_2);
+            pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
             pid->integral = limit(&pid->integral, 100000);
 
@@ -239,15 +239,15 @@ int16_t PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed)
 {
     if (pid==&pid_reset1)
     {
-        update_target_v(targetSpeed,NowSpeed,&motor6_3);
-        pid->error[0] = motor6_3.target_v_new - NowSpeed;
+        update_target_v(targetSpeed,NowSpeed,&motor2_1);
+        pid->error[0] = motor2_1.target_v_new - NowSpeed;
     } else if(pid==&pid_reset2)
     {
-        update_target_v(targetSpeed,NowSpeed,&motor6_4);
-        pid->error[0] = motor6_4.target_v_new - NowSpeed;
+        update_target_v(targetSpeed,NowSpeed,&motor2_2);
+        pid->error[0] = motor2_2.target_v_new - NowSpeed;
     }
     pid->integral += pid->error[0];
-    pid->integral= limit(&pid->integral,80000);
+    pid->integral= limit(&pid->integral,100000);
 
     pid->derivative = pid->error[0] - pid->error[1];
     pid->derivative= limit(&pid->derivative,10000);

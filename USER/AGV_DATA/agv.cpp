@@ -84,7 +84,7 @@ void read_agv_data()
 //假设超过实际最大值横坐标与3.5插值超过1就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
             turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-10)*0.1))*2000.0*1.2);
             offset_distance=(3.5-(origin_max_index+(fit_max_index-10.0)*0.1))*10.0;
-            usart_printf("%.3f\r\n",offset_distance);
+//            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2000);
         }
         else

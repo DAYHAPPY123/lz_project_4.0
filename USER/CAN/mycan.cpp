@@ -3,6 +3,9 @@
 #include "motor.h"
 #include "usart.h"
 
+float counter_change_1 = 0;
+float counter_change_2 = 0;
+
 void CAN_Init(FDCAN_HandleTypeDef *hfdcan)
 {
     assert_param(hfdcan != NULL);
@@ -39,7 +42,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             if (ID == CAN_2006_M1_ID) {
                 motor2_1.online_flag=1;
                 static float last_counter1 = 0;
-                static float counter_change_1 = 0;
                 motor2_1.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor2_1.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor2_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
@@ -55,7 +57,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             if (ID == CAN_2006_M2_ID) {
                 motor2_2.online_flag=1;
                 static float last_counter2 = 0;
-                static float counter_change_2 = 0;
                 motor2_2.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor2_2.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor2_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);

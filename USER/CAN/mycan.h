@@ -7,6 +7,9 @@
 extern "C" {
 #endif
 
+extern float counter_change_1;
+extern float counter_change_2;
+
 void CAN_FilterInit();
 void CAN_Init(FDCAN_HandleTypeDef *hfdcan);
 void PortSendMotorsCur(int16_t cur0, int16_t cur1, int16_t cur2, int16_t cur3);

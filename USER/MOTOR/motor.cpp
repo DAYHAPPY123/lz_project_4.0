@@ -11,6 +11,9 @@
 #include "agv.h"
 #include "math.h"
 #include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
 
 uint8_t mode;
 float left_angle=0;
@@ -32,11 +35,9 @@ void motor_reset()
         PIDControl_2006_v(&pid_reset1,-50,motor2_1.rpm);
         PortSendMotorsCur(0,0,pid_reset1.output,0);
         osDelay(5);
-//                usart_printf("%.2f,%.2f,%.2f  \r\n",pid_reset1.error[0],pid_reset1.integral,pid_reset1.output);
+        //                usart_printf("%.2f,%.2f,%.2f  \r\n",pid_reset1.error[0],pid_reset1.integral,pid_reset1.output);
         //        usart_printf("%.2f,%.2f,%.2f  \r\n",pid4_2.error[0],pid4_2.integral,pid4_2.output);
     }
-    motor2_1.calculate_continuous=0;
-
     while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2)!=0)
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
@@ -45,7 +46,14 @@ void motor_reset()
         PortSendMotorsCur(0,0,0,pid_reset2.output);
         osDelay(5);
     }
-    motor2_2.calculate_continuous=0;
+    taskENTER_CRITICAL();
+    counter_change_1=0;
+    counter_change_2=0;
+    motor2_1.calculate_continuous=0;motor2_1.continuous=0;
+    motor2_2.calculate_continuous=0;motor2_2.continuous=0;
+    usart_printf("%d,%.2f,%d,%.2f  \r\n",motor2_1.set_pos,motor2_1.calculate_continuous,
+                 motor2_2.set_pos,motor2_2.calculate_continuous);
+    taskEXIT_CRITICAL();
 }
 
 void motor_io_init()
@@ -60,9 +68,10 @@ void Speed_Send(void){
     PIDControl_3508(&pid3_2,-motor3_2.set_rpm,motor3_2.rpm);
     PIDControl_2006_pos(&pid2_1,motor2_1.set_pos,motor2_1.calculate_continuous);
     PIDControl_2006_pos(&pid2_2,motor2_2.set_pos,motor2_2.calculate_continuous);
-    usart_printf("%.2f,%.2f,%.2f  \r\n",pid2_1.error[0],pid2_1.integral,pid2_1.output);
-//    usart_printf("%.2f,%.2f,%.2f  \r\n",pid4.error[0],pid4.integral,pid4.output);
-//    usart_printf("%.2f,%.2f,%.2f  \r\n",pid1.error[0],pid1.integral,pid1.output);
+    usart_printf("%.2f,%.2f,%.2f,%d,%.2f  \r\n",pid2_1.error[0],pid2_1.integral,pid2_1.output,
+                 motor2_1.set_pos,motor2_1.calculate_continuous);
+
+//    PortSendMotorsCur(pid3_1.output,pid3_2.output,0,0);
     PortSendMotorsCur(pid3_1.output,pid3_2.output,pid2_1.output,pid2_2.output);
 }
 
@@ -156,8 +165,5 @@ void backwheel_speed_cal(void)
         motor3_1.set_rpm=0;
         motor3_2.set_rpm=0;
     }
-//    float a = tan(left_angle)/tan(right_angle);
-//    usart_printf("%f  %f  %f %f\r\n",turn_angle,right_angle,left_angle,a);
-//    usart_printf("%f  %f\r\n",motor3_1.set_rpm,motor3_2.set_rpm);
 }
 

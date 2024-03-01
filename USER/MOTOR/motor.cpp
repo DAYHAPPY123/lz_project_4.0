@@ -67,7 +67,7 @@ void motor_reset()
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);
-        PIDControl_2006_v(&pid_reset2,-50,motor2_1.rpm);
+        PIDControl_2006_v(&pid_reset2,-50,motor2_2.rpm);
         PortSendMotorsCur(0,0,0,pid_reset2.output);
         osDelay(5);
     }
@@ -167,13 +167,13 @@ void backwheel_speed_cal(void)
     else if (mode == MOTOR_AUTO )
     {
         if(turn_angle==0){
-            motor3_1.set_rpm=3;
-            motor3_2.set_rpm=3;}
+            motor3_1.set_rpm=1.5;
+            motor3_2.set_rpm=1.5;}
         if(turn_angle<0){
-            motor3_2.set_rpm=3+float(-turn_angle/1000.0);
+            motor3_2.set_rpm=1.5+float(-turn_angle/1000.0);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);}
         if(turn_angle>0){
-            motor3_1.set_rpm=3+float(turn_angle/1000.0);
+            motor3_1.set_rpm=1.5+float(turn_angle/1000.0);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);}
     }
 

@@ -28,16 +28,16 @@ PID_INIT pid2_1={
         .pos_ki_strong=0.04f,
         .pos_kd_strong=20.0f,
 
-        .pos_kp_wake=2.6f,
+        .pos_kp_wake=3.0f,
         .pos_ki_wake=0.10f,
         .pos_kd_wake=100.0f,
 };
 PID_INIT pid2_2={
         .pos_kp_strong=2.6f,
-        .pos_ki_strong=0.04f,
+        .pos_ki_strong=0.05f,
         .pos_kd_strong=20.0f,
 
-        .pos_kp_wake=2.6f,
+        .pos_kp_wake=3.0f,
         .pos_ki_wake=0.10f,
         .pos_kd_wake=100.0f,
 };

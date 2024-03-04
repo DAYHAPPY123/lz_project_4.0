@@ -29,7 +29,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_1.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor3_1.tmp = (int16_t) rx_data[6];
-                motor3_1.rpm=motor3_1.vel/100.0;
+                motor3_1.rpm=(float)(motor3_1.vel/100.0);
             }
             if (ID == CAN_3508_M2_ID) {
                 motor3_2.online_flag=1;
@@ -37,7 +37,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_2.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor3_2.tmp = (int16_t) rx_data[6];
-                motor3_2.rpm=motor3_2.vel/100.0;
+                motor3_2.rpm=(float)motor3_2.vel/100.0;
             }
             if (ID == CAN_2006_M1_ID) {
                 motor2_1.online_flag=1;

@@ -54,7 +54,7 @@ PID_INIT pid_reset2={
         .vel_kd=100.0f
 };
 
-float ramp_step[3]={20,0.15,0.3};//2006pos-3508v-2006v
+float ramp_step[3]={20,0.2,0.3};//2006pos-3508v-2006v
 
 float limit(float *a, float ABS_MAX)
 {

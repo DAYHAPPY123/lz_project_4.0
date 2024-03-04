@@ -56,39 +56,39 @@ void read_agv_data()
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
 
-//    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
+    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] > 1.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {
             float fit_origin_data_y[3] = {agv_buffer[origin_max_index - 1], agv_buffer[origin_max_index], agv_buffer[origin_max_index + 1]};
             float fit_origin_data_x[3] = {0, 1, 2};
-            static float fit_origin_data_u[21]={0};            //20等分，所以数组有21个成员
-            static float fit_origin_data_s[21]={0};
-            for (int i = 0; i < 21; i++)
+            static float fit_origin_data_u[41]={0};            //20等分，所以数组有21个成员
+            static float fit_origin_data_s[41]={0};
+            for (int i = 0; i < 41; i++)
             {
-                fit_origin_data_u[i] = (float)i * 0.1f;
+                fit_origin_data_u[i] = (float)i * 0.05f;
             }
-            SPL(3, fit_origin_data_x, fit_origin_data_y, 21, fit_origin_data_u, fit_origin_data_s);
+            SPL(3, fit_origin_data_x, fit_origin_data_y, 41, fit_origin_data_u, fit_origin_data_s);
 
 //             for (int i = 0; i < 21; i++)
 //             {
 //                 usart_printf("%.2f\r\n", fit_origin_data_s[i]);
 //             }
 
-            fit_max_index = find_max(fit_origin_data_s, 21);
+            fit_max_index = find_max(fit_origin_data_s, 41);
 //            usart_printf("%d\r\n",fit_max_index);
-//假设超过实际最大值横坐标与3.5插值超过1就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
-            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-10)*0.1))*2000.0*1.7);
-            offset_distance=(3.5-(origin_max_index+(fit_max_index-10.0)*0.1))*10.0;
-            usart_printf("%.3f\r\n",offset_distance);
+//假设超过实际最大值横坐标与3.5插值超过0.5就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
+            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.7);
+            offset_distance=(3.5-(origin_max_index+(fit_max_index-20.0)*0.05))*10.0;
+//            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2150);
         }
         else
         {
-            turn_angle=(float)((4.5-origin_max_index)*2000.0);
+            turn_angle=(float)((3.5-origin_max_index)*2000.0);
             limit(&turn_angle,2000);
         }
     }

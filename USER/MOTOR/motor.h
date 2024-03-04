@@ -15,8 +15,8 @@ extern uint8_t mode;
 #define car_length 200         //前后轮间距
 #define car_width 260.9  //两后轮之间的间距259.4 262.4
 #define PI 3.1415926
-#define mid_counter_3 3200
-#define mid_counter_4 (-3000)
+#define mid_counter_3 3300
+#define mid_counter_4 (-3100)
 #define MOTOR_MANUAL 0
 #define MOTOR_AUTO 1
 #define MOTOR_STOP 2

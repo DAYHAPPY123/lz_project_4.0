@@ -7,7 +7,7 @@
 #include "trace.h"
 #include "pid.h"
 
-int noise = 50;
+int noise = 0;
 double offset_distance=0;
 float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
@@ -53,14 +53,13 @@ void read_agv_data()
 //    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
 //                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
-
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
 
 //    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] > 20.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] > 1.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {

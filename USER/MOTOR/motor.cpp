@@ -14,7 +14,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-
 uint8_t mode;
 float left_angle=0;
 float right_angle=0;
@@ -54,7 +53,7 @@ void motor_reset()
 //    usart_printf("%d,%.2f,%d,%.2f  \r\n",motor2_1.set_pos,motor2_1.calculate_continuous,
 //                 motor2_2.set_pos,motor2_2.calculate_continuous);
     taskEXIT_CRITICAL();
-    while (motor2_1.calculate_continuous<=3000)
+    while (motor2_1.calculate_continuous<=3100)
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);
@@ -63,7 +62,7 @@ void motor_reset()
         osDelay(5);
     }
 
-    while (motor2_2.calculate_continuous>=-3000)
+    while (motor2_2.calculate_continuous>=-3100)
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);

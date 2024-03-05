@@ -80,15 +80,19 @@ void motor_io_init()
 }
 
 void Speed_Send(void){
+
     PIDControl_3508(&pid3_1,motor3_1.set_rpm,motor3_1.rpm);
     PIDControl_3508(&pid3_2,-motor3_2.set_rpm,motor3_2.rpm);
+    taskENTER_CRITICAL();
     PIDControl_2006_pos(&pid2_1,motor2_1.set_pos,motor2_1.calculate_continuous);
     PIDControl_2006_pos(&pid2_2,motor2_2.set_pos,motor2_2.calculate_continuous);
-    usart_printf("%.2f,%.2f,%.2f,%d,%.2f  \r\n",pid2_1.error[0],pid2_1.integral,pid2_1.output,
+    taskEXIT_CRITICAL();
+    usart_printf("%.2f,%d,%.2f\r\n",pid2_1.output,
                  motor2_1.set_pos,motor2_1.calculate_continuous);
 //    usart_printf("%.2f  %.2f \r\n",pid2_1.integral,pid2_2.integral);
 //    PortSendMotorsCur(pid3_1.output,pid3_2.output,0,0);
     PortSendMotorsCur(pid3_1.output,pid3_2.output,pid2_1.output,pid2_2.output);
+
 }
 
 void angle_cal()

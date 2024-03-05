@@ -23,11 +23,11 @@ PID_INIT pid3_2={
 };
 
 PID_INIT pid2_1={
-        .pos_kp_strong=5.0f,
+        .pos_kp_strong=3.0f,
         .pos_ki_strong=0.06f,
         .pos_kd_strong=50.0f,
 
-        .pos_kp_wake=5.0f,
+        .pos_kp_wake=3.0f,
         .pos_ki_wake=0.10f,
         .pos_kd_wake=100.0f,
 };
@@ -53,8 +53,8 @@ PID_INIT pid_reset2={
         .vel_kd=100.0f
 };
 
-float ramp_step[3]={10,0.2,0.3};//2006pos-3508v-2006v
-float pid_start=1000;
+float ramp_step[3]={20,0.2,0.3};//2006pos-3508v-2006v
+float pid_start=500;
 
 float limit(float *a, float ABS_MAX)
 {
@@ -145,7 +145,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
     if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] < 0)))//向左转，转角1大，2小
     {
-        if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
+        if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -158,7 +158,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
+        } else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -174,7 +174,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     } else if (((mode == MOTOR_AUTO) && (turn_angle > 0)) ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
     {
-        if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
+        if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -187,7 +187,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
+        } else if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -203,7 +203,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     } else
     {
-        if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
+        if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
 
@@ -217,7 +217,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
+        } else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];

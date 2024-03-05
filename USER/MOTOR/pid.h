@@ -31,7 +31,7 @@ extern struct PID_INIT pid2_2;
 extern struct PID_INIT pid_reset1;
 extern struct PID_INIT pid_reset2;
 
-float limit(float *a, float ABS_MAX);
+extern float limit(float *a, float ABS_MAX);
 
 void update_target_pos(float* ramp_target,float* target_now);
 int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed);

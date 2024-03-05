@@ -10,7 +10,6 @@
 #include "motor.h"
 #include "agv.h"
 #include "remote.h"
-
 //PID命名中，1左，2右
 //strong,wake意思是按照轮子转幅大小调用的参数，比如向左转，左轮偏角大，左轮调用strong，右轮调用wake
 PID_INIT pid3_1={
@@ -55,6 +54,7 @@ PID_INIT pid_reset2={
 };
 
 float ramp_step[3]={10,0.2,0.3};//2006pos-3508v-2006v
+float pid_start=1000;
 
 float limit(float *a, float ABS_MAX)
 {
@@ -145,7 +145,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
     if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] < 0)))//向左转，转角1大，2小
     {
-        if (pid == &pid2_1) {
+        if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -158,7 +158,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if (pid == &pid2_2) {
+        } else if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -174,7 +174,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     } else if (((mode == MOTOR_AUTO) && (turn_angle > 0)) ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
     {
-        if (pid == &pid2_2) {
+        if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -187,7 +187,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if (pid == &pid2_1) {
+        } else if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -203,7 +203,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     } else
     {
-        if (pid == &pid2_1) {
+        if ((pid == &pid2_1)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
 
@@ -217,7 +217,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if (pid == &pid2_2) {
+        } else if ((pid == &pid2_2)&&(abs(targetPos-NowPos)<=pid_start)) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];

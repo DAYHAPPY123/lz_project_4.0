@@ -24,11 +24,11 @@ PID_INIT pid3_2={
 };
 
 PID_INIT pid2_1={
-        .pos_kp_strong=3.0f,
+        .pos_kp_strong=5.0f,
         .pos_ki_strong=0.06f,
         .pos_kd_strong=50.0f,
 
-        .pos_kp_wake=3.0f,
+        .pos_kp_wake=5.0f,
         .pos_ki_wake=0.10f,
         .pos_kd_wake=100.0f,
 };
@@ -54,7 +54,7 @@ PID_INIT pid_reset2={
         .vel_kd=100.0f
 };
 
-float ramp_step[3]={20,0.2,0.3};//2006pos-3508v-2006v
+float ramp_step[3]={10,0.2,0.3};//2006pos-3508v-2006v
 
 float limit(float *a, float ABS_MAX)
 {
@@ -162,7 +162,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
-            pid->integral = limit(&pid->integral, 100000);
+            pid->integral = limit(&pid->integral, 150000);
 
             pid->derivative = pid->error[0] - pid->error[1];
             pid->derivative = limit(&pid->derivative, 10000);

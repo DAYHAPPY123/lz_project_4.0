@@ -56,7 +56,7 @@ void read_agv_data()
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
 
-    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
+//    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
     if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值

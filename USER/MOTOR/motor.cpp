@@ -19,6 +19,7 @@ float left_angle=0;
 float right_angle=0;
 int16_t left_counter=0;
 int16_t right_counter=0;
+float back_setrpm=7.25;
 
 struct motor_init motor3_1={0};
 struct motor_init motor3_2={0};
@@ -87,8 +88,8 @@ void Speed_Send(void){
     PIDControl_2006_pos(&pid2_1,motor2_1.set_pos,motor2_1.calculate_continuous);
     PIDControl_2006_pos(&pid2_2,motor2_2.set_pos,motor2_2.calculate_continuous);
     taskEXIT_CRITICAL();
-    usart_printf("%.2f,%d,%.2f\r\n",pid2_1.output,
-                 motor2_1.set_pos,motor2_1.calculate_continuous);
+//    usart_printf("%.2f,%d,%.2f\r\n",pid2_1.output,
+//                 motor2_1.set_pos,motor2_1.calculate_continuous);
 //    usart_printf("%.2f  %.2f \r\n",pid2_1.integral,pid2_2.integral);
 //    PortSendMotorsCur(pid3_1.output,pid3_2.output,0,0);
     PortSendMotorsCur(pid3_1.output,pid3_2.output,pid2_1.output,pid2_2.output);
@@ -171,13 +172,13 @@ void backwheel_speed_cal(void)
     else if (mode == MOTOR_AUTO )//0-70mm/s,对应set_rpm=0-14.53
     {
         if(turn_angle==0){
-            motor3_1.set_rpm=14.53;
-            motor3_2.set_rpm=14.53;}
+            motor3_1.set_rpm=back_setrpm;
+            motor3_2.set_rpm=back_setrpm;}
         if(turn_angle<0){
-            motor3_2.set_rpm=14.53+float(turn_angle/1000.0);
+            motor3_2.set_rpm=back_setrpm+float(turn_angle/1000.0);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);}
         if(turn_angle>0){
-            motor3_1.set_rpm=14.53+float(-turn_angle/1000.0);
+            motor3_1.set_rpm=back_setrpm+float(-turn_angle/1000.0);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);}
     }
 

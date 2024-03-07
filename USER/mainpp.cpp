@@ -24,7 +24,6 @@ int main()
     osKernelInitialize();
     MX_FREERTOS_Init();
     osKernelStart();
-
     while (1)
     {
         HAL_Delay(5);
@@ -37,7 +36,6 @@ void User_Init()
     REMOTEC_Init();
     motor_io_init();
     servos_init();
-
 }
 
 void BSP_Init()

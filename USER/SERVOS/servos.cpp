@@ -4,12 +4,15 @@
 #include "remote.h"
 #include "adc.h"
 #include "usart.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 //右边是servo0,左边是servo1
 
 float servos_pos[2];//0到180度
 int actual_pos_input[2];
 uint32_t adc_value[2];
+int detect_counter=0;
 
 void servos_init()
 {
@@ -32,14 +35,14 @@ void servos_start()
 
 void servo0_limit(float* input)
 {
-if (*input > 60) *input = 60;
+if (*input > 50) *input = 50;
 if (*input < 0) *input = 0;
 }
 
 void servo1_limit(float* input)
 {
     if (*input > 0) *input = 0;
-    if (*input < -60) *input = -60;
+    if (*input < -50) *input = -50;
 }
 
 void servos_reset()
@@ -112,7 +115,7 @@ void servos_control()
     }
     else if (mode == MOTOR_STOP)
     {
-        servos_stop();
+//        servos_stop();
         actual_pos_input[0]=servo0_start;
         actual_pos_input[1]=servo1_start;
         __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, actual_pos_input[0]);
@@ -124,16 +127,27 @@ void servos_control()
 void ADC_detect()
 {
     HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7);//LED
-
     HAL_ADC_Start_DMA(&hadc4, &adc_value[0], 1);
     HAL_ADC_Start_DMA(&hadc1, &adc_value[1], 1);
     if( (adc_value[0]>4000)||(adc_value[1]>4000) )
     {
-        mode=MOTOR_STOP;
-        servos_init();
-        servos_pos[0]=0;servos_pos[1]=0;
-        actual_pos_input[0]=servo0_start;
-        actual_pos_input[1]=servo1_start;
+        if(detect_counter>=1)
+        {
+            mode=MOTOR_STOP;
+            servos_init();
+            servos_pos[0]=0;servos_pos[1]=0;
+            actual_pos_input[0]=servo0_start;
+            actual_pos_input[1]=servo1_start;
+            detect_counter=0;
+            while(mode==MOTOR_AUTO);
+        }
+        else
+        {
+            detect_counter++;
+        }
+    } else if( (adc_value[0]==0)&&(adc_value[1]==0) )
+    {
+        detect_counter=0;
     }
-//    usart_printf("%d,%d\n",adc_value[0],adc_value[1]);
+    usart_printf("%d,%d,%d\n",adc_value[0],adc_value[1],detect_counter);
 }

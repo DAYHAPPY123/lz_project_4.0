@@ -16,7 +16,7 @@ void init_task(void *argument){
 
 //            usart_printf("%d,%.2f,%d,%.2f  \r\n",motor2_1.set_pos,motor2_1.calculate_continuous,
 //                 motor2_2.set_pos,motor2_2.calculate_continuous);
-        ADC_detect();
+//        ADC_detect();
         osDelay(50);
     }
 };

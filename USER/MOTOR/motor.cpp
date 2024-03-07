@@ -19,7 +19,7 @@ float left_angle=0;
 float right_angle=0;
 int16_t left_counter=0;
 int16_t right_counter=0;
-float back_setrpm=7.25;
+float back_setrpm=5.0;
 
 struct motor_init motor3_1={0};
 struct motor_init motor3_2={0};
@@ -167,6 +167,8 @@ void backwheel_speed_cal(void)
         if(rc_ctrl.rc.ch[2]<0){
             motor3_2.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*14.53f);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(right_angle)/tan(left_angle);}
+
+
     }
 
     else if (mode == MOTOR_AUTO )//0-70mm/s,对应set_rpm=0-14.53

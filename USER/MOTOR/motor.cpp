@@ -186,16 +186,28 @@ void backwheel_speed_cal(void)
         if(turn_angle==0){
             motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53f/2.0);
             motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53f/2.0);
+            if (motor3_1.set_rpm<=0)
+            {
+                motor3_1.set_rpm=motor3_2.set_rpm=0;
+            }
             limit(&motor3_1.set_rpm,14.53);
             limit(&motor3_2.set_rpm,14.53);
         }
         if(turn_angle<0){
             motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53f/2.0)+float(-turn_angle/1000.0);
+            if (motor3_2.set_rpm<=0)
+            {
+                motor3_2.set_rpm=0;
+            }
             limit(&motor3_2.set_rpm,14.53);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);
         }
         if(turn_angle>0){
             motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53f/2.0)+float(turn_angle/1000.0);
+            if (motor3_1.set_rpm<=0)
+            {
+                motor3_1.set_rpm=0;
+            }
             limit(&motor3_1.set_rpm,14.53);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
         }

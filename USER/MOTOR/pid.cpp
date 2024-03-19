@@ -143,9 +143,9 @@ int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed)
 
 int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
-    if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] < 0)))//向左转，转角1大，2小
+    if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] <= 0)))//向左转，转角1大，2小
     {
-        if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+        if ((pid == &pid2_1)&&((motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -158,7 +158,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+        } else if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -172,9 +172,9 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         }
-    } else if (((mode == MOTOR_AUTO) && (turn_angle > 0)) ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
+    } else if (((mode == MOTOR_AUTO) && (turn_angle > 0))||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
     {
-        if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+        if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -187,7 +187,7 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+        } else if ((pid == &pid2_1)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
             pid->integral += pid->error[0];
@@ -201,38 +201,14 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         }
-    } else
+    }
+    if (motor3_1.set_rpm==0)
     {
-//        if ( (pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0)) )
-            if ((pid == &pid2_1)&&(motor3_1.set_rpm!=0)) {
-            update_target_pos(targetPos, NowPos, &motor2_1);
-            pid->error[0] = motor2_1.target_pos_new - NowPos;
-
-            pid->integral += pid->error[0];
-            pid->integral = limit(&pid->integral, 100000);
-
-            pid->derivative = pid->error[0] - pid->error[1];
-            pid->derivative = limit(&pid->derivative, 3000);
-
-            pid->output = pid->pos_kp_strong * pid->error[0] + pid->pos_ki_strong * pid->integral +
-                          pid->pos_kd_strong * pid->derivative;
-            pid->output = limit(&pid->output, 10000);
-            pid->error[1] = pid->error[0];
-        }
-//            else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0)))
-            else if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)){
-            update_target_pos(targetPos, NowPos, &motor2_2);
-            pid->error[0] = motor2_2.target_pos_new - NowPos;
-            pid->integral += pid->error[0];
-            pid->integral = limit(&pid->integral, 100000);
-
-            pid->derivative = pid->error[0] - pid->error[1];
-            pid->derivative = limit(&pid->derivative, 3000);
-            pid->output = pid->pos_kp_strong * pid->error[0] + pid->pos_ki_strong * pid->integral +
-                          pid->pos_kd_strong * pid->derivative;
-            pid->output = limit(&pid->output, 10000);
-            pid->error[1] = pid->error[0];
-        }
+        pid->error[0]=0;
+        pid->integral=0;
+        pid->derivative=0;
+        pid->output=0;
+        pid->error[1]=0;
     }
     return pid->output;
 }

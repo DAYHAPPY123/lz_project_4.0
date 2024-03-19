@@ -59,7 +59,7 @@ void read_agv_data()
 //    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] >= 40.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {

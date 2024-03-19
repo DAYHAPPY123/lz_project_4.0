@@ -54,7 +54,7 @@ PID_INIT pid_reset2={
 };
 
 float ramp_step[3]={20,0.2,0.3};//2006pos-3508v-2006v
-float pid_start=1000;
+float pid_start=0;
 
 float limit(float *a, float ABS_MAX)
 {
@@ -203,7 +203,8 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     } else
     {
-        if ((pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+//        if ( (pid == &pid2_1)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0)) )
+            if ((pid == &pid2_1)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_1);
             pid->error[0] = motor2_1.target_pos_new - NowPos;
 
@@ -217,7 +218,9 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
                           pid->pos_kd_strong * pid->derivative;
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
-        } else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0))) {
+        }
+//            else if ((pid == &pid2_2)&&((abs(targetPos-NowPos)>=pid_start)||(motor3_1.set_rpm!=0)))
+            else if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)){
             update_target_pos(targetPos, NowPos, &motor2_2);
             pid->error[0] = motor2_2.target_pos_new - NowPos;
             pid->integral += pid->error[0];

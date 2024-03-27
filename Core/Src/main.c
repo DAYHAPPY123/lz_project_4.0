@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "adc.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "usart.h"

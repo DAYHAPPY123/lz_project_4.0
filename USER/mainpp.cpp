@@ -4,14 +4,12 @@
 #include "gpio.h"
 #include "dma.h"
 #include "usart.h"
-#include "adc.h"
 #include "fdcan.h"
 #include "tim.h"
 #include "remote.h"
 #include "mycan.h"
 #include "motor.h"
 #include "gpio.h"
-#include "adc.h"
 #include "string"
 #include "servos.h"
 #include "agv.h"
@@ -47,8 +45,6 @@ void BSP_Init()
     MX_LPUART1_UART_Init();
     MX_USART1_UART_Init();
     MX_USART2_UART_Init();
-    MX_ADC1_Init();
-    MX_ADC4_Init();
     MX_FDCAN2_Init();
     MX_TIM3_Init();
     MX_TIM4_Init();

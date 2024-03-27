@@ -13,6 +13,8 @@ float servos_pos[2];//0到180度
 int actual_pos_input[2];
 uint32_t adc_value[2];
 int detect_counter=0;
+float angle_limit;
+
 
 void servos_init()
 {
@@ -35,14 +37,14 @@ void servos_start()
 
 void servo0_limit(float* input)
 {
-if (*input > 50) *input = 50;
+if (*input > angle_limit) *input = angle_limit;
 if (*input < 0) *input = 0;
 }
 
 void servo1_limit(float* input)
 {
     if (*input > 0) *input = 0;
-    if (*input < -50) *input = -50;
+    if (*input < -angle_limit) *input = -angle_limit;
 }
 
 void servos_reset()

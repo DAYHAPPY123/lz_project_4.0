@@ -64,6 +64,7 @@ extern struct motor_init motor3_1;
 extern struct motor_init motor3_2;
 extern struct motor_init motor2_1;
 extern struct motor_init motor2_2;
+extern float auto_speed;
 
 #ifdef __cplusplus
 }

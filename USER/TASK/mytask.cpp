@@ -9,14 +9,13 @@
 #include "cmsis_os.h"
 #include "usart.h"
 #include "pid.h"
+#include "mainpp.h"
+#include "button.h"
 
 void init_task(void *argument){
+    light_init();
     for(;;)
     {
-
-//            usart_printf("%d,%.2f,%d,%.2f  \r\n",motor2_1.set_pos,motor2_1.calculate_continuous,
-//                 motor2_2.set_pos,motor2_2.calculate_continuous);
-//        ADC_detect();
         osDelay(50);
     }
 };
@@ -25,6 +24,7 @@ void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
     motor_reset();
     servos_reset();
+    mode_choose();
     for(;;)
     {
         state_control();

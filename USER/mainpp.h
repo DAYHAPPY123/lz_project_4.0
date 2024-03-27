@@ -8,6 +8,7 @@ extern "C" {
 
 void BSP_Init();
 void User_Init();
+void light_init();
 
 #ifdef __cplusplus
 }

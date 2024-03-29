@@ -20,7 +20,7 @@ float right_angle=0;
 int16_t left_counter=0;
 int16_t right_counter=0;
 float back_setrpm=5.0;
-float auto_speed;
+float auto_speed=0;
 
 struct motor_init motor3_1={0};
 struct motor_init motor3_2={0};
@@ -29,6 +29,7 @@ struct motor_init motor2_2={0};
 
 void motor_reset()
 {
+
     while (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1)!=0)
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
@@ -46,14 +47,14 @@ void motor_reset()
         osDelay(5);
     }
 
+    taskENTER_CRITICAL();
     {
-        taskENTER_CRITICAL();
         counter_change_1=0;
         counter_change_2=0;
         motor2_1.calculate_continuous=0;motor2_1.continuous=0;
         motor2_2.calculate_continuous=0;motor2_2.continuous=0;
-        taskEXIT_CRITICAL();
     }
+    taskEXIT_CRITICAL();
 
     while (motor2_1.calculate_continuous<=3200)
     {
@@ -168,20 +169,6 @@ void backwheel_speed_cal(void)
             motor3_1.set_rpm=motor3_2.set_rpm* tan(right_angle)/tan(left_angle);}
     }
 
-//    if (mode == MOTOR_MANUAL)//0-100mm/s,对应set_rpm=0-20.76
-//    {
-//        if(rc_ctrl.rc.ch[2]==0){
-//            motor3_1.set_rpm=float ((float)(rc_ctrl.rc.ch[1])/660.0f*20.76f);
-//            motor3_2.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*20.76f);
-//        }
-//        if(rc_ctrl.rc.ch[2]>0){
-//            motor3_1.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*20.76f);
-//            motor3_2.set_rpm=motor3_1.set_rpm* tan(left_angle)/tan(right_angle);}
-//        if(rc_ctrl.rc.ch[2]<0){
-//            motor3_2.set_rpm=float((float)(rc_ctrl.rc.ch[1])/660.0f*20.76f);
-//            motor3_1.set_rpm=motor3_2.set_rpm* tan(right_angle)/tan(left_angle);}
-//    }
-
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53
     {
         if(turn_angle==0){
@@ -212,6 +199,7 @@ void backwheel_speed_cal(void)
             limit(&motor3_1.set_rpm,14.53);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
         }
+        usart_printf("%.2f \r\n",auto_speed);
     }
 
     else if (mode == MOTOR_STOP)

@@ -13,10 +13,13 @@
 #include "button.h"
 
 void init_task(void *argument){
+    TickType_t PrTime0 = xTaskGetTickCount();
     light_init();
     for(;;)
     {
-        osDelay(50);
+        mode_choose();
+        state_control();
+        vTaskDelayUntil(&PrTime0, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 };
 
@@ -24,10 +27,8 @@ void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
     motor_reset();
     servos_reset();
-    mode_choose();
     for(;;)
     {
-        state_control();
         angle_cal();
         backwheel_speed_cal();
         Speed_Send();
@@ -46,3 +47,26 @@ void agv_task(void *argument){
     }
 };
 
+void light_task(void *argument){
+    for (;;)
+    {
+//        if(mode==MOTOR_MANUAL)
+//        {
+//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
+//        }
+//
+//        if(mode==MOTOR_AUTO)
+//        {
+//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);
+//            osDelay(500);
+//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
+//            osDelay(500);
+//        }
+//
+//        if(mode==MOTOR_STOP)
+//        {
+//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);
+//        }
+        osDelay(50);
+    }
+};

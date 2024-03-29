@@ -12,7 +12,8 @@ PB0 控制舵机2工作
 
 按键开关调自动循迹速度：PA8
 
-TIM3 PA6  PWM控制激光
+TIM3-CH1 PA6  PWM控制激光
+TIM3-CH2 PA4  PWM控制指示灯
 
 FDCAN2开启 
 

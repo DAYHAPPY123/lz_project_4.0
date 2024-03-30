@@ -11,15 +11,15 @@
 #include "pid.h"
 #include "mainpp.h"
 #include "button.h"
+#include "remote.h"
 
 void init_task(void *argument){
-    TickType_t PrTime0 = xTaskGetTickCount();
     light_init();
     for(;;)
     {
         mode_choose();
-        state_control();
-        vTaskDelayUntil(&PrTime0, pdMS_TO_TICKS(5));  // 延迟5豪秒
+        light_mode();
+        osDelay(5);
     }
 };
 
@@ -29,6 +29,7 @@ void control_task(void *argument){
     servos_reset();
     for(;;)
     {
+        state_control();
         angle_cal();
         backwheel_speed_cal();
         Speed_Send();
@@ -43,30 +44,15 @@ void agv_task(void *argument){
     for (;;)
     {
         read_agv_data();
-        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟50豪秒
+        vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
 };
 
-void light_task(void *argument){
+void error_task(void *argument){
+    TickType_t PrTime3 = xTaskGetTickCount();
     for (;;)
     {
-//        if(mode==MOTOR_MANUAL)
-//        {
-//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
-//        }
-//
-//        if(mode==MOTOR_AUTO)
-//        {
-//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);
-//            osDelay(500);
-//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 0);
-//            osDelay(500);
-//        }
-//
-//        if(mode==MOTOR_STOP)
-//        {
-//            __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);
-//        }
-        osDelay(50);
+        check_rc_connection();
+        vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(100));
     }
 };

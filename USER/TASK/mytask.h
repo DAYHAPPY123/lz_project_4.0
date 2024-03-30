@@ -10,6 +10,7 @@ void init_task(void *argument);
 void control_task(void *argument);
 void printf_task(void *argument);
 void agv_task(void *argument);
+void error_task(void *argument);
 
 #ifdef __cplusplus
 }

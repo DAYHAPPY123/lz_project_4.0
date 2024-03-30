@@ -76,16 +76,16 @@ void read_agv_data()
             SPL(3, fit_origin_data_x, fit_origin_data_y, 41, fit_origin_data_u, fit_origin_data_s);
 
             fit_max_index = find_max(fit_origin_data_s, 41);
-            usart_printf("%d\r\n",fit_max_index);
+//            usart_printf("%d\r\n",fit_max_index);
 //假设超过实际最大值横坐标与3.5插值超过0.5就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
-            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.5);
+            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.5);//分辨率300
             offset_distance=(3.5-(origin_max_index+(fit_max_index-20.0)*0.05))*10.0;
-            usart_printf("%.3f\r\n",offset_distance);
+//            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2150);
         }
         else
         {
-            turn_angle=(float)((3.5-origin_max_index)*2000.0);
+            turn_angle=(float)((3.5-origin_max_index)*2000.0*1.5);
             limit(&turn_angle,2000);
         }
     }
@@ -94,19 +94,20 @@ void read_agv_data()
 
 void state_control()//由通道值计算出转向幅度
 {
-    mode=MOTOR_MANUAL;
-    switch (rc_ctrl.rc.s[1])
+    if(rc_start==1)
     {
-        case 1:mode=MOTOR_AUTO;break;//上
-        case 3:mode=MOTOR_MANUAL;break;//中
-        case 2:mode=MOTOR_STOP;break;//下
+        mode=MOTOR_MANUAL;
+        switch (rc_ctrl.rc.s[1])
+        {
+            case 1:mode=MOTOR_AUTO;break;//上
+            case 3:mode=MOTOR_MANUAL;break;//中
+            case 2:mode=MOTOR_STOP;break;//下
+        }
     }
-
     if ( (agv_buffer[origin_max_index] < 20.0f) && (mode==MOTOR_AUTO) )
     {
         mode = MOTOR_STOP;
     }
-
 }
 
 

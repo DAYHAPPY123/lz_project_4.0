@@ -19,8 +19,7 @@ float left_angle=0;
 float right_angle=0;
 int16_t left_counter=0;
 int16_t right_counter=0;
-float back_setrpm=5.0;
-float auto_speed=0;
+float back_setrpm=0;
 
 struct motor_init motor3_1={0};
 struct motor_init motor3_2={0};
@@ -73,6 +72,17 @@ void motor_reset()
         PortSendMotorsCur(0,0,0,pid_reset2.output);
         osDelay(5);
     }
+
+    pid3_1.error[0]=0;
+    pid3_1.integral=0;
+    pid3_1.derivative=0;
+    pid3_1.output=0;
+    pid3_1.error[1]=0;
+    pid3_2.error[0]=0;
+    pid3_2.integral=0;
+    pid3_2.derivative=0;
+    pid3_2.output=0;
+    pid3_2.error[1]=0;
 }
 
 void motor_io_init()
@@ -172,8 +182,8 @@ void backwheel_speed_cal(void)
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53
     {
         if(turn_angle==0){
-            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*auto_speed/2.0);
-            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*auto_speed/2.0);
+            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
+            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
             if (motor3_1.set_rpm<=0)
             {
                 motor3_1.set_rpm=motor3_2.set_rpm=0;
@@ -182,16 +192,16 @@ void backwheel_speed_cal(void)
             limit(&motor3_2.set_rpm,14.53);
         }
         if(turn_angle<0){
-            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*auto_speed/2.0)+float(-turn_angle/1000.0);
+            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(-turn_angle/1000.0);
             if (motor3_2.set_rpm<=0)
             {
                 motor3_2.set_rpm=0;
             }
-            limit(&motor3_2.set_rpm,auto_speed);
+            limit(&motor3_2.set_rpm,14.53);
             motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);
         }
         if(turn_angle>0){
-            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*auto_speed/2.0)+float(turn_angle/1000.0);
+            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(turn_angle/1000.0);
             if (motor3_1.set_rpm<=0)
             {
                 motor3_1.set_rpm=0;
@@ -199,7 +209,7 @@ void backwheel_speed_cal(void)
             limit(&motor3_1.set_rpm,14.53);
             motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
         }
-        usart_printf("%.2f \r\n",auto_speed);
+//        usart_printf("%.2f \r\n",back_setrpm);
     }
 
     else if (mode == MOTOR_STOP)

@@ -2,6 +2,11 @@
 #include "usart.h"
 #include "stm32g4xx_hal.h"
 #include "cmsis_os2.h"
+#include "motor.h"
+
+uint32_t last_rc_receive_time = 0; // 上一次接收到遥控器信号的时间戳
+uint32_t rc_timeout = 1000; // 超时阈值，单位为毫秒
+uint8_t rc_start=0;
 
 RC_ctrl_t rc_ctrl;
 static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
@@ -26,6 +31,22 @@ if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
         }
         __HAL_DMA_ENABLE(&hdma_usart1_rx);
     }
+    last_rc_receive_time=osKernelGetTickCount();
+}
+
+void check_rc_connection()
+{
+    uint32_t current_time = osKernelGetTickCount();
+    uint32_t time_gap = current_time - last_rc_receive_time;
+    if (time_gap >= rc_timeout)
+    {
+        mode = MOTOR_STOP;
+        rc_start=0;
+    } else
+    {
+        rc_start=1;
+    }
+//    usart_printf("%d  %d \r\n",current_time,last_rc_receive_time);
 }
 
 void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器数据处理

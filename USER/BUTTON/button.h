@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 void mode_choose();
+void light_mode();
 
 #ifdef __cplusplus
 }

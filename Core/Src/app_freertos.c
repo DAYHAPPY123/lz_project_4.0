@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "cmsis_os2.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,10 +69,10 @@ const osThreadAttr_t Control_Task_attributes = {
   .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 1024 * 4
 };
-/* Definitions for Light_Task */
-osThreadId_t Light_TaskHandle;
-const osThreadAttr_t Light_Task_attributes = {
-  .name = "Light_Task",
+/* Definitions for Error_Task */
+osThreadId_t Error_TaskHandle;
+const osThreadAttr_t Error_Task_attributes = {
+  .name = "Error_Task",
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128 * 4
 };
@@ -83,7 +84,7 @@ const osThreadAttr_t Light_Task_attributes = {
 void agv_task(void *argument);
 void init_task(void *argument);
 void control_task(void *argument);
-void light_task(void *argument);
+void error_task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -122,8 +123,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of Control_Task */
   Control_TaskHandle = osThreadNew(control_task, NULL, &Control_Task_attributes);
 
-  /* creation of Light_Task */
-  Light_TaskHandle = osThreadNew(light_task, NULL, &Light_Task_attributes);
+  /* creation of Error_Task */
+  Error_TaskHandle = osThreadNew(error_task, NULL, &Error_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -189,22 +190,22 @@ __weak void control_task(void *argument)
   /* USER CODE END control_task */
 }
 
-/* USER CODE BEGIN Header_light_task */
+/* USER CODE BEGIN Header_error_task */
 /**
-* @brief Function implementing the Light_Task thread.
+* @brief Function implementing the Error_Task thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_light_task */
-__weak void light_task(void *argument)
+/* USER CODE END Header_error_task */
+__weak void error_task(void *argument)
 {
-  /* USER CODE BEGIN light_task */
+  /* USER CODE BEGIN error_task */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END light_task */
+  /* USER CODE END error_task */
 }
 
 /* Private application code --------------------------------------------------*/

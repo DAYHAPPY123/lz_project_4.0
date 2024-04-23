@@ -134,26 +134,54 @@ void angle_cal()
 
     else if (mode == MOTOR_AUTO )
     {
-        if(turn_angle==0){
-            motor2_1.set_pos=mid_counter_3;
-            motor2_2.set_pos=mid_counter_4;
+        if (rc_ctrl.rc.s[0] == 1)//右拨杆打上,开启前进循迹
+        {
+            if(turn_angle==0){
+                motor2_1.set_pos=mid_counter_3;
+                motor2_2.set_pos=mid_counter_4;
+            }
+            if(turn_angle<0){//向左转
+                left_counter = turn_angle;
+                left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
+                right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
+                right_counter = right_angle*180/PI/360*8191*3;
+                motor2_1.set_pos=mid_counter_3+left_counter;
+                motor2_2.set_pos=mid_counter_4+right_counter;
+            }
+            if(turn_angle>0){//向右转
+                right_counter = turn_angle;
+                right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
+                left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
+                left_counter = left_angle*180/PI/360*8191*3;
+                motor2_1.set_pos=mid_counter_3+left_counter;
+                motor2_2.set_pos=mid_counter_4+right_counter;
+            }
         }
-        if(turn_angle<0){//向左转
-            left_counter = turn_angle;
-            left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
-            right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
-            right_counter = right_angle*180/PI/360*8191*3;
-            motor2_1.set_pos=mid_counter_3+left_counter;
-            motor2_2.set_pos=mid_counter_4+right_counter;
+
+        else if (rc_ctrl.rc.s[0] == 2)//右拨杆打下,开启后退循迹
+        {
+            if(turn_angle==0){
+                motor2_1.set_pos=mid_counter_3;
+                motor2_2.set_pos=mid_counter_4;
+            }
+            if(turn_angle<0){//向右转
+                right_counter = -turn_angle;
+                right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
+                left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
+                left_counter = left_angle*180/PI/360*8191*3;
+                motor2_1.set_pos=mid_counter_3+left_counter;
+                motor2_2.set_pos=mid_counter_4+right_counter;
+            }
+            if(turn_angle>0){//向左转
+                left_counter = -turn_angle;
+                left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
+                right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
+                right_counter = right_angle*180/PI/360*8191*3;
+                motor2_1.set_pos=mid_counter_3+left_counter;
+                motor2_2.set_pos=mid_counter_4+right_counter;
+            }
         }
-        if(turn_angle>0){//向右转
-            right_counter = turn_angle;
-            right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
-            left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
-            left_counter = left_angle*180/PI/360*8191*3;
-            motor2_1.set_pos=mid_counter_3+left_counter;
-            motor2_2.set_pos=mid_counter_4+right_counter;
-        }
+
     }
 
     else if (mode == MOTOR_STOP)
@@ -181,34 +209,70 @@ void backwheel_speed_cal(void)
 
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53
     {
-        if(turn_angle==0){
-            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
-            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
-            if (motor3_1.set_rpm<=0)
-            {
-                motor3_1.set_rpm=motor3_2.set_rpm=0;
+        if (rc_ctrl.rc.s[0] == 1)//右拨杆打上,开启前进循迹
+        {
+            if(turn_angle==0){
+                motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
+                motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0);
+                if (motor3_1.set_rpm<=0)
+                {
+                    motor3_1.set_rpm=motor3_2.set_rpm=0;
+                }
+                limit(&motor3_1.set_rpm,14.53);
+                limit(&motor3_2.set_rpm,14.53);
             }
-            limit(&motor3_1.set_rpm,14.53);
-            limit(&motor3_2.set_rpm,14.53);
-        }
-        if(turn_angle<0){
-            motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(-turn_angle/1000.0);
-            if (motor3_2.set_rpm<=0)
-            {
-                motor3_2.set_rpm=0;
+            if(turn_angle<0){//向左转
+                motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(-turn_angle/1000.0);
+                if (motor3_2.set_rpm<=0)
+                {
+                    motor3_2.set_rpm=0;
+                }
+                limit(&motor3_2.set_rpm,14.53);
+                motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);
             }
-            limit(&motor3_2.set_rpm,14.53);
-            motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);
-        }
-        if(turn_angle>0){
-            motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(turn_angle/1000.0);
-            if (motor3_1.set_rpm<=0)
-            {
-                motor3_1.set_rpm=0;
+            if(turn_angle>0){
+                motor3_1.set_rpm=back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(turn_angle/1000.0);
+                if (motor3_1.set_rpm<=0)
+                {
+                    motor3_1.set_rpm=0;
+                }
+                limit(&motor3_1.set_rpm,14.53);
+                motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
             }
-            limit(&motor3_1.set_rpm,14.53);
-            motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
         }
+
+        else if (rc_ctrl.rc.s[0] == 2)//右拨杆打下,开启后退循迹
+        {
+            if(turn_angle==0){
+                motor3_1.set_rpm=-(back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0));
+                motor3_2.set_rpm=-(back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0));
+                if (motor3_1.set_rpm>=0)
+                {
+                    motor3_1.set_rpm=motor3_2.set_rpm=0;
+                }
+                limit(&motor3_1.set_rpm,14.53);
+                limit(&motor3_2.set_rpm,14.53);
+            }
+            if(turn_angle<0){//向左转
+                motor3_2.set_rpm=-(back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(-turn_angle/1000.0));
+                if (motor3_2.set_rpm>=0)
+                {
+                    motor3_2.set_rpm=0;
+                }
+                limit(&motor3_2.set_rpm,14.53);
+                motor3_1.set_rpm=motor3_2.set_rpm* tan(left_angle)/tan(right_angle);
+            }
+            if(turn_angle>0){
+                motor3_1.set_rpm=-(back_setrpm+float ((float)(rc_ctrl.rc.ch[1])/660.0f*14.53/2.0)+float(turn_angle/1000.0));
+                if (motor3_1.set_rpm>=0)
+                {
+                    motor3_1.set_rpm=0;
+                }
+                limit(&motor3_1.set_rpm,14.53);
+                motor3_2.set_rpm=motor3_1.set_rpm* tan(right_angle)/tan(left_angle);
+            }
+        }
+
 //        usart_printf("%.2f \r\n",back_setrpm);
     }
 

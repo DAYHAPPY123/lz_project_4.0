@@ -61,7 +61,7 @@ void read_agv_data()
 //    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
     if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] >= 40.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {
@@ -78,7 +78,7 @@ void read_agv_data()
             fit_max_index = find_max(fit_origin_data_s, 41);
 //            usart_printf("%d\r\n",fit_max_index);
 //假设超过实际最大值横坐标与3.5插值超过0.5就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
-            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.5);//分辨率300
+            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.2);//分辨率300
             offset_distance=(3.5-(origin_max_index+(fit_max_index-20.0)*0.05))*10.0;
 //            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2150);
@@ -92,7 +92,7 @@ void read_agv_data()
 }
 }
 
-void state_control()//由通道值计算出转向幅度
+void state_control()//模式控制
 {
     if(rc_start==1)
     {
@@ -104,10 +104,12 @@ void state_control()//由通道值计算出转向幅度
             case 2:mode=MOTOR_STOP;break;//下
         }
     }
-    if ( (agv_buffer[origin_max_index] < 20.0f) && (mode==MOTOR_AUTO) )
-    {
-        mode = MOTOR_STOP;
-    }
+
+//    if ( (agv_buffer[origin_max_index] < 20.0f) && (mode==MOTOR_AUTO) )
+//    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
+//    {
+//        mode = MOTOR_STOP;
+//    }
 }
 
 

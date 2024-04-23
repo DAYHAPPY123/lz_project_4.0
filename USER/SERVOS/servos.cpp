@@ -57,7 +57,7 @@ void servos_reset()
 void servos_control()
 {
 //    usart_printf("%d \r\n",rc_ctrl.rc.ch[4]);
-    if ((mode == MOTOR_MANUAL) || (mode == MOTOR_AUTO))
+    if (mode == MOTOR_MANUAL)
     {
         servos_start();
         if (rc_ctrl.rc.s[0] == 3)//中

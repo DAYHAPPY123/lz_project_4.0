@@ -21,7 +21,7 @@ void init_task(void *argument){
         light_mode();
         osDelay(5);
     }
-};
+}
 
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
@@ -36,7 +36,7 @@ void control_task(void *argument){
         servos_control();
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
-};
+}
 
 void agv_task(void *argument){
     TickType_t PrTime2 = xTaskGetTickCount();
@@ -46,7 +46,7 @@ void agv_task(void *argument){
         read_agv_data();
         vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
-};
+}
 
 void error_task(void *argument){
     TickType_t PrTime3 = xTaskGetTickCount();
@@ -55,4 +55,4 @@ void error_task(void *argument){
         check_rc_connection();
         vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(100));
     }
-};
+}

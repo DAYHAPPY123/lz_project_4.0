@@ -143,7 +143,8 @@ int16_t PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed)
 
 int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
-    if (((mode == MOTOR_AUTO) && (turn_angle < 0)) || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] <= 0)))//向左转，转角1大，2小
+    if (((mode == MOTOR_AUTO) && (turn_angle < 0))
+    || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] <= 0)))//向左转，转角1大，2小
     {
         if ((pid == &pid2_1)&&((motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
@@ -172,7 +173,9 @@ int16_t PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
             pid->output = limit(&pid->output, 10000);
             pid->error[1] = pid->error[0];
         }
-    } else if (((mode == MOTOR_AUTO) && (turn_angle > 0))||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
+    }
+    else if (((mode == MOTOR_AUTO) && (turn_angle > 0))
+    ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
     {
         if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_2);

@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-extern float counter_change_1;
-extern float counter_change_2;
+extern float counter_change2006_1;
+extern float counter_change2006_2;
 
 void CAN_FilterInit();
 void CAN_Init(FDCAN_HandleTypeDef *hfdcan);

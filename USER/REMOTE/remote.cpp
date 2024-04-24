@@ -1,8 +1,10 @@
 #include "remote.h"
 #include "usart.h"
 #include "stm32g4xx_hal.h"
-#include "cmsis_os2.h"
 #include "motor.h"
+#include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 uint32_t last_rc_receive_time = 0; // 上一次接收到遥控器信号的时间戳
 uint32_t rc_timeout = 1000; // 超时阈值，单位为毫秒
@@ -36,8 +38,10 @@ if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
 
 void check_rc_connection()
 {
-    uint32_t current_time = osKernelGetTickCount();
-    uint32_t time_gap = current_time - last_rc_receive_time;
+    static uint32_t current_time;
+    static uint32_t time_gap;
+    current_time = osKernelGetTickCount();
+    time_gap = current_time - last_rc_receive_time;
     if (time_gap >= rc_timeout)
     {
         mode = MOTOR_STOP;
@@ -55,6 +59,7 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
     {
         return;
     }
+    taskENTER_CRITICAL();
     rc_ctrl->rc.ch[0] = (sbus_buf[0] | (sbus_buf[1] << 8)) & 0x07ff;        //!< Channel 0
     rc_ctrl->rc.ch[1] = ((sbus_buf[1] >> 3) | (sbus_buf[2] << 5)) & 0x07ff; //!< Channel 1
     rc_ctrl->rc.ch[2] = ((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) |          //!< Channel 2
@@ -72,4 +77,5 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
     rc_ctrl->rc.ch[3] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[4] -= RC_CH_VALUE_OFFSET;
     rc_ctrl->rc.ch[4] = -rc_ctrl->rc.ch[4];
+    taskEXIT_CRITICAL();
 }

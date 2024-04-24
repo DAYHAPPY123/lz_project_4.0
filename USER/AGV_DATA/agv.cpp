@@ -59,7 +59,7 @@ void read_agv_data()
     origin_max_index = find_max(agv_buffer, 8);
 
 //    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
-    if (mode == MOTOR_AUTO )
+    if ( (mode == MOTOR_AUTO ) &&(rc_ctrl.rc.s[0] == 1) )
 {
     if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值
     {
@@ -78,7 +78,7 @@ void read_agv_data()
             fit_max_index = find_max(fit_origin_data_s, 41);
 //            usart_printf("%d\r\n",fit_max_index);
 //假设超过实际最大值横坐标与3.5插值超过0.5就打满转向，而手动转向最大值8191.0*3.0/4.0/2*0.7=2150.1375，故设置阈值为2000
-            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.2);//分辨率300
+            turn_angle=(float)((3.5-(origin_max_index+(fit_max_index-20)*0.05))*2000.0*1.5);//分辨率300
             offset_distance=(3.5-(origin_max_index+(fit_max_index-20.0)*0.05))*10.0;
 //            usart_printf("%.3f\r\n",offset_distance);
             limit(&turn_angle,2150);
@@ -90,6 +90,10 @@ void read_agv_data()
         }
     }
 }
+    else if ( (mode == MOTOR_AUTO ) &&( (rc_ctrl.rc.s[0] == 3)||(rc_ctrl.rc.s[0] == 2) ) )
+    {
+        turn_angle=0;
+    }
 }
 
 void state_control()//模式控制

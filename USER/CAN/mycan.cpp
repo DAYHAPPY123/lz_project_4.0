@@ -3,8 +3,11 @@
 #include "motor.h"
 #include "usart.h"
 
-float counter_change_1 = 0;
-float counter_change_2 = 0;
+float counter_change2006_1 = 0;
+float counter_change2006_2 = 0;
+float counter_change3508_1 = 0;
+float counter_change3508_2 = 0;
+
 
 void CAN_Init(FDCAN_HandleTypeDef *hfdcan)
 {
@@ -25,49 +28,65 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             int16_t ID = rx_header.Identifier;
             if (ID == CAN_3508_M1_ID) {
                 motor3_1.online_flag=1;
+                static float last_counter3508_1 = 0;
                 motor3_1.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor3_1.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor3_1.tmp = (int16_t) rx_data[6];
                 motor3_1.rpm=(float)(motor3_1.vel/100.0);
+
+                counter_change3508_1 = float(motor3_1.pos) - last_counter3508_1 ;
+                counter_change3508_1 = counter_change3508_1 >= 5000 ? counter_change3508_1 - 8192
+                        : counter_change3508_1 <= -5000 ? counter_change3508_1 + 8192
+                        : counter_change3508_1;
+                motor3_1.calculate_continuous+= counter_change3508_1/100.0;
+                last_counter3508_1 = motor3_1.pos;
+
             }
             if (ID == CAN_3508_M2_ID) {
                 motor3_2.online_flag=1;
+                static float last_counter3508_2 = 0;
                 motor3_2.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor3_2.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor3_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor3_2.tmp = (int16_t) rx_data[6];
                 motor3_2.rpm=(float)motor3_2.vel/100.0;
+
+                counter_change3508_2 = float(motor3_2.pos) - last_counter3508_2 ;
+                counter_change3508_2 = counter_change3508_2 >= 5000 ? counter_change3508_2 - 8192
+                        : counter_change3508_2 <= -5000 ? counter_change3508_2 + 8192
+                        : counter_change3508_2;
+                motor3_2.calculate_continuous+= counter_change3508_2/100.0;
+                last_counter3508_2 = motor3_2.pos;
+
             }
             if (ID == CAN_2006_M1_ID) {
                 motor2_1.online_flag=1;
-                static float last_counter1 = 0;
+                static float last_counter2006_1 = 0;
                 motor2_1.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor2_1.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor2_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor2_1.rpm=motor2_1.vel/36.0;
-                counter_change_1 = float(motor2_1.pos) - last_counter1 ;
-                counter_change_1 = counter_change_1 >= 5000 ? counter_change_1 - 8192
-                        : counter_change_1 <= -5000 ? counter_change_1 + 8192
-                        : counter_change_1;
-                motor2_1.continuous += counter_change_1;
-                motor2_1.calculate_continuous = motor2_1.continuous/36.0;
-                last_counter1 = motor2_1.pos;
+                counter_change2006_1 = float(motor2_1.pos) - last_counter2006_1 ;
+                counter_change2006_1 = counter_change2006_1 >= 5000 ? counter_change2006_1 - 8192
+                        : counter_change2006_1 <= -5000 ? counter_change2006_1 + 8192
+                        : counter_change2006_1;//max1231=470/60X19.2X8191/1000
+                motor2_1.calculate_continuous += counter_change2006_1/36.0;
+                last_counter2006_1 = motor2_1.pos;
             }
             if (ID == CAN_2006_M2_ID) {
                 motor2_2.online_flag=1;
-                static float last_counter2 = 0;
+                static float last_counter2006_2 = 0;
                 motor2_2.pos = (int16_t) (rx_data[0] << 8 | rx_data[1]);
                 motor2_2.vel = (int16_t) (rx_data[2] << 8 | rx_data[3]);
                 motor2_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor2_2.rpm=motor2_2.vel/36.0;
-                counter_change_2 = float(motor2_2.pos) - last_counter2 ;
-                counter_change_2 = counter_change_2 >= 5000 ? counter_change_2 - 8192
-                        : counter_change_2 <= -5000 ? counter_change_2 + 8192
-                        : counter_change_2;
-                motor2_2.continuous += counter_change_2 ;
-                motor2_2.calculate_continuous = motor2_2.continuous/36.0;
-                last_counter2 = motor2_2.pos;
+                counter_change2006_2 = float(motor2_2.pos) - last_counter2006_2 ;
+                counter_change2006_2 = counter_change2006_2 >= 5000 ? counter_change2006_2 - 8192
+                        : counter_change2006_2 <= -5000 ? counter_change2006_2 + 8192
+                        : counter_change2006_2;
+                motor2_2.calculate_continuous += counter_change2006_2/36.0;
+                last_counter2006_2 = motor2_2.pos;
 //                usart_printf("%f\n",motor2_2.calculate_continuous);
             }
         }

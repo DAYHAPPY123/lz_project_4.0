@@ -73,36 +73,17 @@ float limit(float *a, float ABS_MAX)
 
 void update_target_pos(float target_new,float target_now,struct motor_init *motor)
 {
-    if( (motor==&motor3_1)||(motor==&motor3_2) )
+    if (target_now < target_new)
     {
-        if (target_now < target_new)
-        {
-            motor->target_v_new += ramp_step[3];
-            if (motor->target_v_new > target_new)
-                motor->target_v_new = target_new;
-        }
-        else if (target_now > target_new)
-        {
-            motor->target_v_new -= ramp_step[3];
-            if (motor->target_v_new < target_new)
-                motor->target_v_new = target_new;
-        }
+        motor->target_pos_new += ramp_step[0];
+        if (motor->target_pos_new > target_new)
+            motor->target_pos_new = target_new;
     }
-
-    if( (motor==&motor2_1)||(motor==&motor2_2) )
+    else if (target_now > target_new)
     {
-        if (target_now < target_new)
-        {
-            motor->target_pos_new += ramp_step[0];
-            if (motor->target_pos_new > target_new)
-                motor->target_pos_new = target_new;
-        }
-        else if (target_now > target_new)
-        {
-            motor->target_pos_new -= ramp_step[0];
-            if (motor->target_pos_new < target_new)
-                motor->target_pos_new = target_new;
-        }
+        motor->target_pos_new -= ramp_step[0];
+        if (motor->target_pos_new < target_new)
+            motor->target_pos_new = target_new;
     }
 }
 

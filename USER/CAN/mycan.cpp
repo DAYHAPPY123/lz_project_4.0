@@ -36,8 +36,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_1.rpm=(float)(motor3_1.vel/100.0);
 
                 counter_change3508_1 = float(motor3_1.pos) - last_counter3508_1 ;
-                counter_change3508_1 = counter_change3508_1 >= 5000 ? counter_change3508_1 - 8192
-                        : counter_change3508_1 <= -5000 ? counter_change3508_1 + 8192
+                counter_change3508_1 = counter_change3508_1 >= 5000 ? counter_change3508_1 - 8191
+                        : counter_change3508_1 <= -5000 ? counter_change3508_1 + 8191
                         : counter_change3508_1;
                 motor3_1.calculate_continuous+= counter_change3508_1/100.0;
                 last_counter3508_1 = motor3_1.pos;
@@ -53,8 +53,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor3_2.rpm=(float)motor3_2.vel/100.0;
 
                 counter_change3508_2 = float(motor3_2.pos) - last_counter3508_2 ;
-                counter_change3508_2 = counter_change3508_2 >= 5000 ? counter_change3508_2 - 8192
-                        : counter_change3508_2 <= -5000 ? counter_change3508_2 + 8192
+                counter_change3508_2 = counter_change3508_2 >= 5000 ? counter_change3508_2 - 8191
+                        : counter_change3508_2 <= -5000 ? counter_change3508_2 + 8191
                         : counter_change3508_2;
                 motor3_2.calculate_continuous+= counter_change3508_2/100.0;
                 last_counter3508_2 = motor3_2.pos;
@@ -68,8 +68,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor2_1.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor2_1.rpm=motor2_1.vel/36.0;
                 counter_change2006_1 = float(motor2_1.pos) - last_counter2006_1 ;
-                counter_change2006_1 = counter_change2006_1 >= 5000 ? counter_change2006_1 - 8192
-                        : counter_change2006_1 <= -5000 ? counter_change2006_1 + 8192
+                counter_change2006_1 = counter_change2006_1 >= 5000 ? counter_change2006_1 - 8191
+                        : counter_change2006_1 <= -5000 ? counter_change2006_1 + 8191
                         : counter_change2006_1;//max1231=470/60X19.2X8191/1000
                 motor2_1.calculate_continuous += counter_change2006_1/36.0;
                 last_counter2006_1 = motor2_1.pos;
@@ -82,8 +82,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
                 motor2_2.current = (int16_t) ((rx_data)[4] << 8 | rx_data[5]);
                 motor2_2.rpm=motor2_2.vel/36.0;
                 counter_change2006_2 = float(motor2_2.pos) - last_counter2006_2 ;
-                counter_change2006_2 = counter_change2006_2 >= 5000 ? counter_change2006_2 - 8192
-                        : counter_change2006_2 <= -5000 ? counter_change2006_2 + 8192
+                counter_change2006_2 = counter_change2006_2 >= 5000 ? counter_change2006_2 - 8191
+                        : counter_change2006_2 <= -5000 ? counter_change2006_2 + 8191
                         : counter_change2006_2;
                 motor2_2.calculate_continuous += counter_change2006_2/36.0;
                 last_counter2006_2 = motor2_2.pos;

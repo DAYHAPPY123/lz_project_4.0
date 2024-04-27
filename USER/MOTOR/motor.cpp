@@ -94,7 +94,7 @@ void motor_io_init()
 
 void Speed_Send(void){
     if ( (mode==MOTOR_AUTO)&&(rc_ctrl.rc.s[0] == 2)&&
-    (abs(motor3_1.calculate_continuous-motor3_1.set_pos)<=500) )
+    (abs(motor3_1.calculate_continuous-motor3_1.set_pos)<=100) )
     {
         PIDControl_3508(&pid3_1,0,motor3_1.rpm);
         PIDControl_3508(&pid3_2,0,motor3_2.rpm);
@@ -115,6 +115,7 @@ void Speed_Send(void){
 
 void angle_cal()
 {
+    usart_printf("%.3f  %d  %d\r\n",turn_angle,motor2_1.set_pos,motor2_2.set_pos);
     if (mode == MOTOR_MANUAL)
     {
         if(rc_ctrl.rc.ch[2]==0){
@@ -164,6 +165,15 @@ void angle_cal()
                 motor2_2.set_pos=mid_counter_4+right_counter;
             }
         }
+        else if (rc_ctrl.rc.s[0] == 3)//右拨杆打中,停止
+        {
+            motor2_1.set_pos=mid_counter_3;
+            motor2_2.set_pos=mid_counter_4;
+            motor3_1.set_rpm=0;
+            motor3_2.set_rpm=0;
+
+        }
+
         else if (rc_ctrl.rc.s[0] == 2)//右拨杆打下,开启后退循迹
         {
             motor2_1.set_pos=mid_counter_3;
@@ -231,8 +241,8 @@ void backwheel_speed_cal(void)
         {
         if(rc_ctrl.rc.ch[1]<=-500)
         {
-            motor3_1.set_rpm=-5;
-            motor3_2.set_rpm=-5;
+            motor3_1.set_rpm=-3;
+            motor3_2.set_rpm=-3;
             motor3_1.calculate_continuous=0;
             motor3_2.calculate_continuous=0;
             motor3_1.set_pos=-2834;            //  8191X100/92/PI=2834

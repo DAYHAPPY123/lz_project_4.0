@@ -185,7 +185,7 @@ float PIDControl_3508_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 
 float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
-    if (((mode == MOTOR_AUTO) && (turn_angle < 0))
+    if (((mode == MOTOR_AUTO) && (turn_angle <= 0))
     || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] <= 0)))//向左转，转角1大，2小
     {
         if ((pid == &pid2_1)&&((motor3_1.set_rpm!=0))) {

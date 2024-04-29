@@ -109,11 +109,11 @@ void state_control()//模式控制
         }
     }
 
-//    if ( (agv_buffer[origin_max_index] < 20.0f) && (mode==MOTOR_AUTO) )
-//    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
-//    {
-//        mode = MOTOR_STOP;
-//    }
+    if ( (agv_buffer[origin_max_index] < 10.0f) && (mode==MOTOR_AUTO) )
+    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
+    {
+        mode = MOTOR_STOP;
+    }
 }
 
 

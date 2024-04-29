@@ -245,8 +245,10 @@ void backwheel_speed_cal(void)
             motor3_2.set_rpm=-3;
             motor3_1.calculate_continuous=0;
             motor3_2.calculate_continuous=0;
-            motor3_1.set_pos=-2834;            //  8191X100/92/PI=2834
-            motor3_2.set_pos=-2834;
+//            motor3_1.set_pos=-2834;            //  8191X100/92/PI=2834
+//            motor3_2.set_pos=-2834;
+            motor3_1.set_pos=-1417;            //  8191X100/92/PI=2834
+            motor3_2.set_pos=-1417;
         }
         }
 //        usart_printf("%.2f \r\n",back_setrpm);

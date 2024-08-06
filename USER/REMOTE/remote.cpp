@@ -57,21 +57,29 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
     {
         return;
     }
-    rc_ctrl->rc.ch[0] = (sbus_buf[0] | (sbus_buf[1] << 8)) & 0x07ff;        //!< Channel 0
-    rc_ctrl->rc.ch[1] = ((sbus_buf[1] >> 3) | (sbus_buf[2] << 5)) & 0x07ff; //!< Channel 1
-    rc_ctrl->rc.ch[2] = ((sbus_buf[2] >> 6) | (sbus_buf[3] << 2) |          //!< Channel 2
-                         (sbus_buf[4] << 10)) &0x07ff;
-    rc_ctrl->rc.ch[3] = ((sbus_buf[4] >> 1) | (sbus_buf[5] << 7)) & 0x07ff; //!< Channel 3
 
-    rc_ctrl->rc.s[0] = ((sbus_buf[5] >> 4) & 0x0003);               //!< Switch right
-    rc_ctrl->rc.s[1] = ((sbus_buf[5] >> 4) & 0x000C) >> 2;              //!< Switch left
+    rc_ctrl->rc.ch[0] = ((int16_t)sbus_buf[1] >> 0 | ((int16_t)sbus_buf[2] << 8 )) & 0x07FF;//右拨杆水平
+    rc_ctrl->rc.ch[1] = ((int16_t)sbus_buf[2] >> 3 | ((int16_t)sbus_buf[3] << 5 )) & 0x07FF;//左拨杆竖直
+    rc_ctrl->rc.ch[2] = ((int16_t)sbus_buf[3] >> 6 | ((int16_t)sbus_buf[4] << 2 )  | (int16_t)sbus_buf[5] << 10 ) & 0x07FF;//右拨杆竖直
+    rc_ctrl->rc.ch[3] = ((int16_t)sbus_buf[5] >> 1 | ((int16_t)sbus_buf[6] << 7 )) & 0x07FF;//左拨杆水平
+    rc_ctrl->rc.ch[4] = ((int16_t)sbus_buf[6] >> 4 | ((int16_t)sbus_buf[7] << 4 )) & 0x07FF;//SA
+    rc_ctrl->rc.ch[5] = ((int16_t)sbus_buf[7] >> 7 | ((int16_t)sbus_buf[8] << 1 )  | (int16_t)sbus_buf[9] <<  9 ) & 0x07FF;//SB(别骂了
+    rc_ctrl->rc.ch[6] = ((int16_t)sbus_buf[9] >> 2 | ((int16_t)sbus_buf[10] << 6 )) & 0x07FF;//SC
+    rc_ctrl->rc.ch[7] = ((int16_t)sbus_buf[10] >> 5 | ((int16_t)sbus_buf[11] << 3 )) & 0x07FF;//SD
+    rc_ctrl->rc.ch[8] = ((int16_t)sbus_buf[12] << 0 | ((int16_t)sbus_buf[13] << 8 )) & 0x07FF;//SE
+    rc_ctrl->rc.ch[9] = ((int16_t)sbus_buf[13] >> 3 | ((int16_t)sbus_buf[14] << 5 )) & 0x07FF;//中间旋钮
 
-    rc_ctrl->rc.ch[4] = sbus_buf[16] | (sbus_buf[17] << 8);                 //NULL
+    for(int i=0;i<=9;i++)
+    {
+        rc_ctrl->rc.ch[i]-=1024;//转换后每通道理论量程为（-671，+671）
+    }
 
-    rc_ctrl->rc.ch[0] -= RC_CH_VALUE_OFFSET;
-    rc_ctrl->rc.ch[1] -= RC_CH_VALUE_OFFSET;
-    rc_ctrl->rc.ch[2] -= RC_CH_VALUE_OFFSET;
-    rc_ctrl->rc.ch[3] -= RC_CH_VALUE_OFFSET;
-    rc_ctrl->rc.ch[4] -= RC_CH_VALUE_OFFSET;
-    rc_ctrl->rc.ch[4] = -rc_ctrl->rc.ch[4];
+// 以下为WBUS协议剩余内容，遥控器未使用
+//    rc_ctrl->rc.ch[10] = ((int16_t)sbus_buf[14] >> 6 | ((int16_t)sbus_buf[15] << 2 )  | (int16_t)sbus_buf[16] << 10 ) & 0x07FF;
+//    rc_ctrl->rc.ch[11] = ((int16_t)sbus_buf[16] >> 1 | ((int16_t)sbus_buf[17] << 7 )) & 0x07FF;
+//    rc_ctrl->rc.ch[12] = ((int16_t)sbus_buf[17] >> 4 | ((int16_t)sbus_buf[18] << 4 )) & 0x07FF;
+//    rc_ctrl->rc.ch[13] = ((int16_t)sbus_buf[18] >> 7 | ((int16_t)sbus_buf[19] << 1 )  | (int16_t)sbus_buf[20] <<  9 ) & 0x07FF;
+//    rc_ctrl->rc.ch[14] = ((int16_t)sbus_buf[20] >> 2 | ((int16_t)sbus_buf[21] << 6 )) & 0x07FF;
+//    rc_ctrl->rc.ch[15] = ((int16_t)sbus_buf[21] >> 5 | ((int16_t)sbus_buf[22] << 3 )) & 0x07FF;
+
 }

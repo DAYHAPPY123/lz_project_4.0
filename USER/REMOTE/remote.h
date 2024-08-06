@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-#define SBUS_RX_BUF_NUM 36u
-#define RC_FRAME_LENGTH 18u
+#define SBUS_RX_BUF_NUM 50u
+#define RC_FRAME_LENGTH 25u
 
 #define RC_CH_VALUE_OFFSET      ((uint16_t)1024)
 
@@ -20,7 +20,7 @@ typedef struct
 {
     struct
     {
-        int16_t ch[5];
+        int16_t ch[16];
         uint8_t s[2];
     } rc;
 } RC_ctrl_t;

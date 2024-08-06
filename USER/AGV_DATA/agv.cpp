@@ -10,6 +10,7 @@
 #include "cmsis_os2.h"
 
 int noise = 0;
+float min_agv_start=10.0f;
 double offset_distance=0;
 float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
@@ -59,9 +60,9 @@ void read_agv_data()
     origin_max_index = find_max(agv_buffer, 8);
 
 //    usart_printf("%f\r\n",agv_buffer[origin_max_index]);
-    if ( (mode == MOTOR_AUTO ) &&(rc_ctrl.rc.s[0] == 1) )
+    if (mode == MOTOR_AUTO )
 {
-    if (agv_buffer[origin_max_index] >= 10.0f)// 磁导航传感器读值必须大于某个值
+    if (agv_buffer[origin_max_index] >= min_agv_start)// 磁导航传感器读值必须大于某个值
     {
         if (origin_max_index != 0 && origin_max_index != 7)// 如果最大值索引不是0或者7 以最大值和最大值的左右值共三个值拟合曲线，寻找极值
         {
@@ -90,10 +91,6 @@ void read_agv_data()
         }
     }
 }
-    else if ( (mode == MOTOR_AUTO ) &&( (rc_ctrl.rc.s[0] == 3)||(rc_ctrl.rc.s[0] == 2) ) )
-    {
-        turn_angle=0;
-    }
 }
 
 void state_control()//模式控制
@@ -101,15 +98,12 @@ void state_control()//模式控制
     if(rc_start==1)
     {
         mode=MOTOR_MANUAL;
-        switch (rc_ctrl.rc.s[1])
-        {
-            case 1:mode=MOTOR_AUTO;break;//上
-            case 3:mode=MOTOR_MANUAL;break;//中
-            case 2:mode=MOTOR_STOP;break;//下
-        }
+        if(rc_ctrl.ch[5]>600) mode=MOTOR_AUTO;
+        else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
+        else mode=MOTOR_MANUAL;
     }
 
-    if ( (agv_buffer[origin_max_index] < 10.0f) && (mode==MOTOR_AUTO) )
+    if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )
     //若传感器最大读取值小于20.0，则机器人恢复至停止模式
     {
         mode = MOTOR_STOP;

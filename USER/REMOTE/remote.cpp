@@ -58,28 +58,30 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
         return;
     }
 
-    rc_ctrl->rc.ch[0] = ((int16_t)sbus_buf[1] >> 0 | ((int16_t)sbus_buf[2] << 8 )) & 0x07FF;//右拨杆水平
-    rc_ctrl->rc.ch[1] = ((int16_t)sbus_buf[2] >> 3 | ((int16_t)sbus_buf[3] << 5 )) & 0x07FF;//左拨杆竖直
-    rc_ctrl->rc.ch[2] = ((int16_t)sbus_buf[3] >> 6 | ((int16_t)sbus_buf[4] << 2 )  | (int16_t)sbus_buf[5] << 10 ) & 0x07FF;//右拨杆竖直
-    rc_ctrl->rc.ch[3] = ((int16_t)sbus_buf[5] >> 1 | ((int16_t)sbus_buf[6] << 7 )) & 0x07FF;//左拨杆水平
-    rc_ctrl->rc.ch[4] = ((int16_t)sbus_buf[6] >> 4 | ((int16_t)sbus_buf[7] << 4 )) & 0x07FF;//SA
-    rc_ctrl->rc.ch[5] = ((int16_t)sbus_buf[7] >> 7 | ((int16_t)sbus_buf[8] << 1 )  | (int16_t)sbus_buf[9] <<  9 ) & 0x07FF;//SB(别骂了
-    rc_ctrl->rc.ch[6] = ((int16_t)sbus_buf[9] >> 2 | ((int16_t)sbus_buf[10] << 6 )) & 0x07FF;//SC
-    rc_ctrl->rc.ch[7] = ((int16_t)sbus_buf[10] >> 5 | ((int16_t)sbus_buf[11] << 3 )) & 0x07FF;//SD
-    rc_ctrl->rc.ch[8] = ((int16_t)sbus_buf[12] << 0 | ((int16_t)sbus_buf[13] << 8 )) & 0x07FF;//SE
-    rc_ctrl->rc.ch[9] = ((int16_t)sbus_buf[13] >> 3 | ((int16_t)sbus_buf[14] << 5 )) & 0x07FF;//中间旋钮
+    rc_ctrl->ch[0] = ((int16_t)sbus_buf[1] >> 0 | ((int16_t)sbus_buf[2] << 8 )) & 0x07FF;//右拨杆水平
+    rc_ctrl->ch[1] = ((int16_t)sbus_buf[2] >> 3 | ((int16_t)sbus_buf[3] << 5 )) & 0x07FF;//左拨杆竖直
+    rc_ctrl->ch[2] = ((int16_t)sbus_buf[3] >> 6 | ((int16_t)sbus_buf[4] << 2 )
+            |(int16_t)sbus_buf[5] << 10 ) & 0x07FF;//右拨杆竖直
+    rc_ctrl->ch[3] = ((int16_t)sbus_buf[5] >> 1 | ((int16_t)sbus_buf[6] << 7 )) & 0x07FF;//左拨杆水平
+    rc_ctrl->ch[4] = ((int16_t)sbus_buf[6] >> 4 | ((int16_t)sbus_buf[7] << 4 )) & 0x07FF;//SA
+    rc_ctrl->ch[5] = ((int16_t)sbus_buf[7] >> 7 | ((int16_t)sbus_buf[8] << 1 )
+            |(int16_t)sbus_buf[9] <<  9 ) & 0x07FF;//SB(别骂了
+    rc_ctrl->ch[6] = ((int16_t)sbus_buf[9] >> 2 | ((int16_t)sbus_buf[10] << 6 )) & 0x07FF;//SC
+    rc_ctrl->ch[7] = ((int16_t)sbus_buf[10] >> 5 | ((int16_t)sbus_buf[11] << 3 )) & 0x07FF;//SD
+    rc_ctrl->ch[8] = ((int16_t)sbus_buf[12] << 0 | ((int16_t)sbus_buf[13] << 8 )) & 0x07FF;//SE
+    rc_ctrl->ch[9] = ((int16_t)sbus_buf[13] >> 3 | ((int16_t)sbus_buf[14] << 5 )) & 0x07FF;//中间旋钮
 
     for(int i=0;i<=9;i++)
     {
-        rc_ctrl->rc.ch[i]-=1024;//转换后每通道理论量程为（-671，+671）
+        rc_ctrl->ch[i]-=1024;//转换后每通道理论量程为（-671，+671）
     }
 
 // 以下为WBUS协议剩余内容，遥控器未使用
-//    rc_ctrl->rc.ch[10] = ((int16_t)sbus_buf[14] >> 6 | ((int16_t)sbus_buf[15] << 2 )  | (int16_t)sbus_buf[16] << 10 ) & 0x07FF;
-//    rc_ctrl->rc.ch[11] = ((int16_t)sbus_buf[16] >> 1 | ((int16_t)sbus_buf[17] << 7 )) & 0x07FF;
-//    rc_ctrl->rc.ch[12] = ((int16_t)sbus_buf[17] >> 4 | ((int16_t)sbus_buf[18] << 4 )) & 0x07FF;
-//    rc_ctrl->rc.ch[13] = ((int16_t)sbus_buf[18] >> 7 | ((int16_t)sbus_buf[19] << 1 )  | (int16_t)sbus_buf[20] <<  9 ) & 0x07FF;
-//    rc_ctrl->rc.ch[14] = ((int16_t)sbus_buf[20] >> 2 | ((int16_t)sbus_buf[21] << 6 )) & 0x07FF;
-//    rc_ctrl->rc.ch[15] = ((int16_t)sbus_buf[21] >> 5 | ((int16_t)sbus_buf[22] << 3 )) & 0x07FF;
+//    rc_ctrl->ch[10] = ((int16_t)sbus_buf[14] >> 6 | ((int16_t)sbus_buf[15] << 2 )  | (int16_t)sbus_buf[16] << 10 ) & 0x07FF;
+//    rc_ctrl->ch[11] = ((int16_t)sbus_buf[16] >> 1 | ((int16_t)sbus_buf[17] << 7 )) & 0x07FF;
+//    rc_ctrl->ch[12] = ((int16_t)sbus_buf[17] >> 4 | ((int16_t)sbus_buf[18] << 4 )) & 0x07FF;
+//    rc_ctrl->ch[13] = ((int16_t)sbus_buf[18] >> 7 | ((int16_t)sbus_buf[19] << 1 )  | (int16_t)sbus_buf[20] <<  9 ) & 0x07FF;
+//    rc_ctrl->ch[14] = ((int16_t)sbus_buf[20] >> 2 | ((int16_t)sbus_buf[21] << 6 )) & 0x07FF;
+//    rc_ctrl->ch[15] = ((int16_t)sbus_buf[21] >> 5 | ((int16_t)sbus_buf[22] << 3 )) & 0x07FF;
 
 }

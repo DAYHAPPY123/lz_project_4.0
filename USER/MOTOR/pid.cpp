@@ -59,7 +59,7 @@ PID_INIT pid_reset2={
         .vel_kd=100.0f
 };
 
-float ramp_step[4]={20,0.2,0.3,20};//2006pos-3508v-2006v-3508pos
+float ramp_step[4]={20,0.2,0.3};//2006pos-3508v-2006v
 float pid_start=0;
 
 float limit(float *a, float ABS_MAX)
@@ -147,46 +147,10 @@ float PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed)
     return pid->output;
 }
 
-float PIDControl_3508_pos(struct PID_INIT* pid,float targetPos,float NowPos)
-{
-    if (((mode == MOTOR_AUTO) && (rc_ctrl.rc.ch[2] = 2)))
-    {
-        if (pid == &pid3_1) {
-            update_target_pos(targetPos, NowPos, &motor3_1);
-            pid->error[0] = motor2_1.target_pos_new - NowPos;
-            pid->integral += pid->error[0];
-            pid->integral = limit(&pid->integral, 100000);
-
-            pid->derivative = pid->error[0] - pid->error[1];
-            pid->derivative = limit(&pid->derivative, 10000);
-
-            pid->output = pid->pos_kp_strong * pid->error[0] + pid->pos_ki_strong * pid->integral +
-                          pid->pos_kd_strong * pid->derivative;
-            pid->output = limit(&pid->output, 10000);
-            pid->error[1] = pid->error[0];
-        } else if (pid == &pid3_2) {
-            update_target_pos(targetPos, NowPos, &motor3_2);
-            pid->error[0] = motor2_2.target_pos_new - NowPos;
-            pid->integral += pid->error[0];
-            pid->integral = limit(&pid->integral, 100000);
-
-            pid->derivative = pid->error[0] - pid->error[1];
-            pid->derivative = limit(&pid->derivative, 10000);
-
-            pid->output = pid->pos_kp_wake * pid->error[0] + pid->pos_ki_wake * pid->integral +
-                          pid->pos_kd_wake * pid->derivative;
-            pid->output = limit(&pid->output, 10000);
-            pid->error[1] = pid->error[0];
-        }
-    }
-
-    return pid->output;
-}
-
 float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
 {
     if (((mode == MOTOR_AUTO) && (turn_angle <= 0))
-    || ((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] <= 0)))//向左转，转角1大，2小
+    || ((mode == MOTOR_MANUAL) && (rc_ctrl.ch[3] <= 0)))//向左转，转角1大，2小
     {
         if ((pid == &pid2_1)&&((motor3_1.set_rpm!=0))) {
             update_target_pos(targetPos, NowPos, &motor2_1);
@@ -217,7 +181,7 @@ float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
         }
     }
     else if (((mode == MOTOR_AUTO) && (turn_angle > 0))
-    ||((mode == MOTOR_MANUAL) && (rc_ctrl.rc.ch[2] > 0)))//向右转，转角2大，1小
+    ||((mode == MOTOR_MANUAL) && (rc_ctrl.ch[3] > 0)))//向右转，转角2大，1小
     {
         if ((pid == &pid2_2)&&(motor3_1.set_rpm!=0)) {
             update_target_pos(targetPos, NowPos, &motor2_2);

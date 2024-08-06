@@ -12,7 +12,7 @@ extern int16_t left_counter;
 extern int16_t right_counter;
 extern uint8_t mode;
 
-#define car_length 200         //前后轮间距
+#define car_length 192         //前后轮间距
 #define car_width 260.9  //两后轮之间的间距259.4 262.4
 #define PI 3.1415926
 #define mid_counter_3 3300

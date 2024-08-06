@@ -18,11 +18,7 @@ extern "C" {
 
 typedef struct
 {
-    struct
-    {
-        int16_t ch[16];
-        uint8_t s[2];
-    } rc;
+    int16_t ch[16];
 } RC_ctrl_t;
 
 void REMOTEC_Init(void);

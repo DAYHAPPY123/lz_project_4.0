@@ -56,13 +56,43 @@ void servos_reset()
 
 void servos_control()
 {
-//    usart_printf("%d \r\n",rc_ctrl.rc.ch[4]);
     if (mode == MOTOR_MANUAL)
     {
         servos_start();
-        if (rc_ctrl.rc.s[0] == 3)//中
+
+        if (rc_ctrl.ch[6] > 600)//上，右,越大越下
         {
-            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
+            if (rc_ctrl.ch[8] > 600)//SE上拨
+            {
+                servos_pos[0]-=servos_speed;
+                servo0_limit(&servos_pos[0]);
+                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
+            }
+            else if (rc_ctrl.ch[8] < -600)//SE下拨
+            {
+                servos_pos[0]+=servos_speed;
+                servo0_limit(&servos_pos[0]);
+                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
+            }
+        }
+        else if (rc_ctrl.ch[6] < -600)//下，左，越小越下
+        {
+            if (rc_ctrl.ch[8] > 600)//SE上拨
+            {
+                servos_pos[1]+=servos_speed;
+                servo1_limit(&servos_pos[1]);
+                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
+            }
+            else if (rc_ctrl.ch[8] < -600)//SE下拨
+            {
+                servos_pos[1]-=servos_speed;
+                servo1_limit(&servos_pos[1]);
+                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
+            }
+        }
+        else //SE于中位
+        {
+            if (rc_ctrl.ch[8] > 600)//SE上拨
             {
                 servos_pos[0]-=servos_speed;
                 servo0_limit(&servos_pos[0]);
@@ -71,7 +101,7 @@ void servos_control()
                 servo1_limit(&servos_pos[1]);
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
-            else if (rc_ctrl.rc.ch[4] < 0)//滚轮下滚
+            else if (rc_ctrl.ch[8] < -600)//SE下拨
             {
                 servos_pos[0]+=servos_speed;
                 servo0_limit(&servos_pos[0]);
@@ -81,36 +111,7 @@ void servos_control()
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
         }
-        else if (rc_ctrl.rc.s[0] == 1)//上，右,越大越下
-        {
-            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
-            {
-                servos_pos[0]-=servos_speed;
-                servo0_limit(&servos_pos[0]);
-                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-            }
-            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
-            {
-                servos_pos[0]+=servos_speed;
-                servo0_limit(&servos_pos[0]);
-                actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
-            }
-        }
-        else if (rc_ctrl.rc.s[0] == 2)//下，左，越小越下
-        {
-            if (rc_ctrl.rc.ch[4] > 0)//滚轮上滚
-            {
-                servos_pos[1]+=servos_speed;
-                servo1_limit(&servos_pos[1]);
-                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
-            }
-            else if (rc_ctrl.rc.ch[4] < -0)//滚轮下滚
-            {
-                servos_pos[1]-=servos_speed;
-                servo1_limit(&servos_pos[1]);
-                actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
-            }
-        }
+
         __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, actual_pos_input[0]);
         __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, actual_pos_input[1]);
     }

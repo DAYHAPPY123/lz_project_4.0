@@ -49,9 +49,13 @@ typedef enum
     CAN_3508_M2_ID = 0x202,
 
     CAN_CHASSIS_Turn_ID = 0x200,
+//    CAN_CHASSIS_Turn_ID = 0x1FF,
 
     CAN_2006_M1_ID = 0x203,
     CAN_2006_M2_ID = 0x204,
+
+    CAN_6020_M1_ID = 0x205,
+    CAN_6020_M2_ID = 0x206
 } eCanMessageID;
 
 void motor_io_init();

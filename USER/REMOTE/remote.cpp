@@ -14,8 +14,8 @@ RC_ctrl_t rc_ctrl;
 static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
 
 void REMOTEC_Init(void){
-    HAL_UART_Receive_DMA(&huart1, sbus_rx_buf[0], SBUS_RX_BUF_NUM);
     __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+    HAL_UART_Receive_DMA(&huart1, sbus_rx_buf[0], SBUS_RX_BUF_NUM);
 }
 
 void REMOTEC_UartIrqHandler(void)
@@ -26,7 +26,7 @@ if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
         __HAL_UART_CLEAR_IDLEFLAG(&huart1);
         __HAL_DMA_DISABLE(&hdma_usart1_rx);
         this_time_rx_len = SBUS_RX_BUF_NUM - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);
-        ((&hdma_usart1_rx)->Instance->CNDTR = (uint16_t)(SBUS_RX_BUF_NUM));
+        (&hdma_usart1_rx)->Instance->CNDTR = (uint16_t)(SBUS_RX_BUF_NUM);
         if(this_time_rx_len == RC_FRAME_LENGTH)
         {
             sbus_to_rc(sbus_rx_buf[0], &rc_ctrl);

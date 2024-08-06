@@ -8,7 +8,6 @@ float counter_change2006_2 = 0;
 float counter_change3508_1 = 0;
 float counter_change3508_2 = 0;
 
-
 void CAN_Init(FDCAN_HandleTypeDef *hfdcan)
 {
     assert_param(hfdcan != NULL);
@@ -127,5 +126,30 @@ void PortSendMotorsCur(int16_t cur0, int16_t cur1, int16_t cur2, int16_t cur3)
     tx_data[5] = cur2;
     tx_data[6] = (cur3 >> 8);
     tx_data[7] = cur3;
+    HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &tx_header, tx_data);
+}
+
+void PortSendMotorsCur_6020(int16_t volt0, int16_t volt1, int16_t volt2, int16_t volt3)
+{
+    FDCAN_TxHeaderTypeDef tx_header;
+    uint8_t tx_data[8];
+    tx_header.Identifier  = CAN_CHASSIS_Turn_ID;
+    tx_header.IdType  = FDCAN_STANDARD_ID;
+    tx_header.TxFrameType  = FDCAN_DATA_FRAME;
+    tx_header.DataLength  = FDCAN_DLC_BYTES_8;
+    tx_header.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+    tx_header.BitRateSwitch = FDCAN_BRS_OFF;           // 关闭速率切换
+    tx_header.FDFormat = FDCAN_CLASSIC_CAN;            // 传统的CAN模式
+    tx_header.TxEventFifoControl = FDCAN_NO_TX_EVENTS; // 无发送事件
+    tx_header.MessageMarker = 0;
+    tx_data[0] = (volt0 >> 8);
+    tx_data[1] = volt0;
+    tx_data[2] = (volt1 >> 8);
+    tx_data[3] = volt1;
+    tx_data[4] = (volt2 >> 8);
+    tx_data[5] = volt2;
+    tx_data[6] = (volt3 >> 8);
+    tx_data[7] = volt3;
+
     HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &tx_header, tx_data);
 }

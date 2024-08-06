@@ -12,6 +12,7 @@
 #include "mainpp.h"
 #include "button.h"
 #include "remote.h"
+#include "mycan.h"
 
 void init_task(void *argument){
     light_init();
@@ -22,7 +23,6 @@ void init_task(void *argument){
         osDelay(5);
     }
 }
-
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
     motor_reset();
@@ -37,7 +37,6 @@ void control_task(void *argument){
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 }
-
 void agv_task(void *argument){
     TickType_t PrTime2 = xTaskGetTickCount();
     agv_init();
@@ -47,7 +46,6 @@ void agv_task(void *argument){
         vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
 }
-
 void error_task(void *argument){
     TickType_t PrTime3 = xTaskGetTickCount();
     for (;;)

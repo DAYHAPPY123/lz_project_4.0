@@ -73,7 +73,7 @@ void read_agv_data()
             {
                 fit_origin_data_u[i] = (float)i * 0.05f;
             }
-            SPL(3, fit_origin_data_x, fit_origin_data_y, 41, fit_origin_data_u, fit_origin_data_s);
+            SPL(3,  fit_origin_data_x, fit_origin_data_y, 41, fit_origin_data_u, fit_origin_data_s);
 
             fit_max_index = find_max(fit_origin_data_s, 41);
 //            usart_printf("%d\r\n",fit_max_index);

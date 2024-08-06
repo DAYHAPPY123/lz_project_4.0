@@ -115,7 +115,7 @@ void Speed_Send(void){
 
 void angle_cal()
 {
-    usart_printf("%.3f  %d  %d\r\n",turn_angle,motor2_1.set_pos,motor2_2.set_pos);
+//    usart_printf("%.3f  %d  %d\r\n",turn_angle,motor2_1.set_pos,motor2_2.set_pos);
     if (mode == MOTOR_MANUAL)
     {
         if(rc_ctrl.rc.ch[2]==0){

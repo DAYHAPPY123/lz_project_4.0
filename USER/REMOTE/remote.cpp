@@ -61,7 +61,7 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
 
     rc_ctrl->ch[0] = ((int16_t)sbus_buf[1] >> 0 | ((int16_t)sbus_buf[2] << 8 )) & 0x07FF;//右拨杆水平
     rc_ctrl->ch[1] = ((int16_t)sbus_buf[2] >> 3 | ((int16_t)sbus_buf[3] << 5 )) & 0x07FF;//左拨杆竖直
-    rc_ctrl->ch[2] = ((int16_t)sbus_buf[3] >> 6 | ((int16_t)sbus_buf[4] << 2 )
+    rc_ctrl->ch[2] = -((int16_t)sbus_buf[3] >> 6 | ((int16_t)sbus_buf[4] << 2 )
             |(int16_t)sbus_buf[5] << 10 ) & 0x07FF;//右拨杆竖直
     rc_ctrl->ch[3] = ((int16_t)sbus_buf[5] >> 1 | ((int16_t)sbus_buf[6] << 7 )) & 0x07FF;//左拨杆水平
     rc_ctrl->ch[4] = ((int16_t)sbus_buf[6] >> 4 | ((int16_t)sbus_buf[7] << 4 )) & 0x07FF;//SA
@@ -76,7 +76,7 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)//遥控器
     {
         rc_ctrl->ch[i]-=1024;//转换后每通道理论量程为（-671，+671）
     }
-
+//    usart_printf("%d %d %d %d\r\n",rc_ctrl->ch[0],rc_ctrl->ch[1],rc_ctrl->ch[2],rc_ctrl->ch[3]);
 // 以下为WBUS协议剩余内容，遥控器未使用
 //    rc_ctrl->ch[10] = ((int16_t)sbus_buf[14] >> 6 | ((int16_t)sbus_buf[15] << 2 )  | (int16_t)sbus_buf[16] << 10 ) & 0x07FF;
 //    rc_ctrl->ch[11] = ((int16_t)sbus_buf[16] >> 1 | ((int16_t)sbus_buf[17] << 7 )) & 0x07FF;

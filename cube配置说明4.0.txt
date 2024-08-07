@@ -1,0 +1,24 @@
+PB4 开启LED
+
+PB1/PB2  输入IO检测行程开关
+
+TIM4 PA11    通道一PWM控制舵机1
+TIM4 PA12    通道二PWM控制舵机2
+
+PA7 控制舵机1工作
+PB0 控制舵机2工作
+
+按键开关调舵机位置：PA9
+
+按键开关调自动循迹速度：PA8
+
+TIM3-CH1 PA6  PWM控制激光
+TIM3-CH2 PA4  PWM控制指示灯
+
+FDCAN2开启 
+
+LPUART1 打印信息
+USART1  遥控器
+USART2  磁传感器通信
+
+FREERTOS,占用TIM20

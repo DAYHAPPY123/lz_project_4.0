@@ -43,6 +43,7 @@ void check_rc_connection()
     if (time_gap >= rc_timeout)
     {
         mode = MOTOR_STOP;
+        HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
         rc_start=0;
     } else
     {

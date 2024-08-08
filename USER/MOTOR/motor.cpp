@@ -77,16 +77,8 @@ void motor_reset()
         osDelay(5);
     }
 
-    pid3_1.error[0]=0;
-    pid3_1.integral=0;
-    pid3_1.derivative=0;
-    pid3_1.output=0;
-    pid3_1.error[1]=0;
-    pid3_2.error[0]=0;
-    pid3_2.integral=0;
-    pid3_2.derivative=0;
-    pid3_2.output=0;
-    pid3_2.error[1]=0;
+    PID_clear(&pid3_1);
+    PID_clear(&pid3_2);
 }
 
 void motor_io_init()
@@ -107,9 +99,6 @@ void Speed_Send(void){
 //    } else
 
     {
-
-        motor3_1.set_rpm=0;
-        motor3_2.set_rpm=0;
         PIDControl_3508(&pid3_1,motor3_1.set_rpm,motor3_1.rpm);
         PIDControl_3508(&pid3_2,-motor3_2.set_rpm,motor3_2.rpm);
     }
@@ -121,8 +110,9 @@ void Speed_Send(void){
 //                 motor2_1.set_pos,motor2_1.calculate_continuous);
 //    usart_printf("%.2f  %.2f \r\n",pid2_1.integral,pid2_2.integral);
     PortSendMotorsCur(pid3_1.output,pid3_2.output,pid2_1.output,pid2_2.output);
-    usart_printf("%f,%f\r\n",motor3_1.set_rpm,motor3_2.set_rpm);
+//    usart_printf("%.2f %.2f %d %d\r\n",motor3_1.set_rpm,motor3_2.set_rpm,rc_ctrl.ch[2],rc_ctrl.ch[3]);
 
+//        usart_printf("%d %d %d %d\r\n",rc_ctrl.ch[0],rc_ctrl.ch[1],rc_ctrl.ch[2],rc_ctrl.ch[3]);
 
 }
 
@@ -185,7 +175,7 @@ void angle_cal()
 
 void backwheel_speed_cal(void)
 {
-//    usart_printf("%d %d %f %f   123\r\n",mode,rc_ctrl.ch[3],motor3_1.set_rpm,motor3_2.set_rpm);
+    usart_printf("%d %d %f %f   123\r\n",mode,rc_ctrl.ch[3],motor3_1.set_rpm,motor3_2.set_rpm);
 
     if (mode == MOTOR_MANUAL)//0-70mm/s,对应set_rpm=0-14.53
     {
@@ -208,7 +198,8 @@ void backwheel_speed_cal(void)
                 motor3_2.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[2])/671.0f*14.53/2.0);
                 if (motor3_1.set_rpm<=0)
                 {
-                    motor3_1.set_rpm=motor3_2.set_rpm=0;
+                    motor3_1.set_rpm=0;
+                    motor3_2.set_rpm=0;
                 }
                 limit(&motor3_1.set_rpm,14.53);
                 limit(&motor3_2.set_rpm,14.53);
@@ -259,5 +250,6 @@ void backwheel_speed_cal(void)
         motor3_2.set_rpm=0;
     }
 }
+
 
 

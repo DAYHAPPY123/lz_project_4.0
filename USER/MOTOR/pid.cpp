@@ -15,17 +15,11 @@
 PID_INIT pid3_1={
         .vel_kp=200.0f,
         .vel_ki=3.0f,
-        .pos_kp_strong=0,
-        .pos_ki_strong=0,
-        .pos_kd_strong=0
 };
 
 PID_INIT pid3_2={
         .vel_kp=200.0f,
         .vel_ki=3.0f,
-        .pos_kp_strong=0,
-        .pos_ki_strong=0,
-        .pos_kd_strong=0
 };
 
 PID_INIT pid2_1={
@@ -213,11 +207,7 @@ float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos)
     }
     if (motor3_1.set_rpm==0)
     {
-        pid->error[0]=0;
-        pid->integral=0;
-        pid->derivative=0;
-        pid->output=0;
-        pid->error[1]=0;
+        PID_clear(pid);
     }
     return pid->output;
 }
@@ -246,3 +236,12 @@ float PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed)
     return pid->output;
 }
 
+
+
+void PID_clear(struct PID_INIT *pid)
+{
+    pid->error[0]=pid->error[1]=0;
+    pid->integral=0;
+    pid->derivative=0;
+    pid->output=0;
+}

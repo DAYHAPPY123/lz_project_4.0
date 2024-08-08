@@ -25,25 +25,26 @@ void init_task(void *argument){
 }
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
-//    motor_reset();
+    motor_reset();
 //    servos_reset();
     for(;;)
     {
 //        usart_printf("%d %d %f %f",mode,rc_ctrl.ch[3],motor3_1.set_rpm,motor3_2.set_rpm);
-//        state_control();//ok
-//        angle_cal();
-//        backwheel_speed_cal();
-//        Speed_Send();
+        state_control();//ok
+        angle_cal();
+        backwheel_speed_cal();
+        Speed_Send();
 //        servos_control();
+//        usart_printf("%d %d %d %d\r\n",rc_ctrl.ch[0],rc_ctrl.ch[1],rc_ctrl.ch[2],rc_ctrl.ch[3]);
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }
 }
 void agv_task(void *argument){
     TickType_t PrTime2 = xTaskGetTickCount();
-    agv_init();//ok
+//    agv_init();//ok
     for (;;)
     {
-        read_agv_data();//ok
+//        read_agv_data();//ok
         vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
 }
@@ -51,7 +52,7 @@ void error_task(void *argument){
     TickType_t PrTime3 = xTaskGetTickCount();
     for (;;)
     {
-//        check_rc_connection();//ok
+        check_rc_connection();//ok
         vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(100));
     }
 }

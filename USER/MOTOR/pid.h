@@ -38,6 +38,7 @@ float PIDControl_3508_pos(struct PID_INIT* pid,float targetPos,float NowPos);
 float PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed);
 float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos);
 float PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed);
+void PID_clear(struct PID_INIT *pid);
 
 #ifdef __cplusplus
 }

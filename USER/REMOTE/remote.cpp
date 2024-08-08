@@ -42,7 +42,6 @@ void check_rc_connection()
     uint32_t time_gap = current_time - last_rc_receive_time;
     if (time_gap >= rc_timeout)
     {
-        mode = MOTOR_STOP;
         HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
         rc_start=0;
     } else

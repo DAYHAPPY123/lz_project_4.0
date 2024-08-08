@@ -102,6 +102,10 @@ void state_control()//模式控制
         else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
         else mode=MOTOR_MANUAL;
     }
+    else
+    {
+        mode = MOTOR_STOP;
+    }
 //    usart_printf("%d %d\r\n",rc_ctrl.ch[5],mode);
 //    if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )
 //    //若传感器最大读取值小于20.0，则机器人恢复至停止模式

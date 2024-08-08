@@ -1,11 +1,11 @@
 #ifndef LZ_PROJECT_3_0_PID_H
 #define LZ_PROJECT_3_0_PID_H
 
-#include "motor.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "motor.h"
 
 struct PID_INIT{
     float kp;
@@ -53,8 +53,6 @@ extern cPID PID3_1;
 extern cPID PID3_2;
 extern cPID PID2_1;
 extern cPID PID2_2;
-
-float limit(float *a, float ABS_MAX);
 
 #ifdef __cplusplus
 }

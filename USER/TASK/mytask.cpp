@@ -15,11 +15,11 @@
 #include "mycan.h"
 
 void init_task(void *argument){
-//    light_init();
+    light_init();
     for(;;)
     {
-//        mode_choose();
-//        light_mode();
+        mode_choose();
+        light_mode();
         osDelay(5);
     }
 }
@@ -41,10 +41,10 @@ void control_task(void *argument){
 }
 void agv_task(void *argument){
     TickType_t PrTime2 = xTaskGetTickCount();
-//    agv_init();//ok
+    agv_init();//ok
     for (;;)
     {
-//        read_agv_data();//ok
+        read_agv_data();//ok
         vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
 }

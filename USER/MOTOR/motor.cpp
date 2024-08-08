@@ -24,34 +24,34 @@ float back_setrpm=0;
 void motor_enable()
 {
     mode=MOTOR_STOP;
-    PID2_1.motor.set_pos=mid_counter_3;
-    PID2_2.motor.set_pos=mid_counter_4;
+    PID2_1.motor.set_pos=mid_counter_2_1;
+    PID2_2.motor.set_pos=mid_counter_2_2;
 
     PID3_1.Spd_Param_set(0,0,0);
     PID3_1.Pos_Param_set(0,0,0);
-    PID3_1.ramp_Spd_set(0);
+    PID3_1.ramp_Spd_set(0.2);
     PID3_1.ramp_Pos_set(0);
     PID3_1.limit_Spd_set(0,0,0,0);
     PID3_1.limit_Pos_set(0,0,0,0);
 
     PID3_2.Spd_Param_set(0,0,0);
     PID3_2.Pos_Param_set(0,0,0);
-    PID3_2.ramp_Spd_set(0);
+    PID3_2.ramp_Spd_set(0.2);
     PID3_2.ramp_Pos_set(0);
     PID3_2.limit_Spd_set(0,0,0,0);
     PID3_2.limit_Pos_set(0,0,0,0);
 
     PID2_1.Spd_Param_set(0,0,0);
     PID2_1.Pos_Param_set(0,0,0);
-    PID2_1.ramp_Spd_set(0);
-    PID2_1.ramp_Pos_set(0);
+    PID2_1.ramp_Spd_set(0.3);
+    PID2_1.ramp_Pos_set(20);
     PID2_1.limit_Spd_set(0,0,0,0);
     PID2_1.limit_Pos_set(0,0,0,0);
 
     PID2_2.Spd_Param_set(0,0,0);
     PID2_2.Pos_Param_set(0,0,0);
-    PID2_2.ramp_Spd_set(0);
-    PID2_2.ramp_Pos_set(0);
+    PID2_2.ramp_Spd_set(0.3);
+    PID2_2.ramp_Pos_set(20);
     PID2_2.limit_Spd_set(0,0,0,0);
     PID2_2.limit_Pos_set(0,0,0,0);
 
@@ -84,14 +84,12 @@ void motor_reset()
         osDelay(5);
     }
 
-    taskENTER_CRITICAL();
     {
         counter_change2006_1=0;
         counter_change2006_2=0;
         PID2_1.motor.calculate_continuous=0;PID2_1.motor.continuous=0;
         PID2_2.motor.calculate_continuous=0;PID2_2.motor.continuous=0;
     }
-    taskEXIT_CRITICAL();
 
     while (PID2_1.motor.calculate_continuous<=3200)
     {
@@ -158,60 +156,60 @@ void angle_cal()
     if (mode == MOTOR_MANUAL)
     {
         if(rc_ctrl.ch[3]==0){
-            PID2_1.motor.set_pos=mid_counter_3;
-            PID2_2.motor.set_pos=mid_counter_4;
+            PID2_1.motor.set_pos=mid_counter_2_1;
+            PID2_2.motor.set_pos=mid_counter_2_2;
         }
         if(rc_ctrl.ch[3]<0){//向左转
             left_counter = int16_t(double(rc_ctrl.ch[3])/671.0f*8191.0*3.0/4.0/2*0.7);
             left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
             right_counter = right_angle*180/PI/360*8191*3;
-            PID2_1.motor.set_pos=mid_counter_3-left_counter;
-            PID2_2.motor.set_pos=mid_counter_4-right_counter;
+            PID2_1.motor.set_pos=mid_counter_2_1-left_counter;
+            PID2_2.motor.set_pos=mid_counter_2_2-right_counter;
         }
         if(rc_ctrl.ch[3]>0){//向右转
             right_counter = int16_t(double(rc_ctrl.ch[3])/671.0f*8191.0*3.0/4.0/2*0.7);
             right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
             left_counter = left_angle*180/PI/360*8191*3;
-            PID2_1.motor.set_pos=mid_counter_3-left_counter;
-            PID2_2.motor.set_pos=mid_counter_4-right_counter;
+            PID2_1.motor.set_pos=mid_counter_2_1-left_counter;
+            PID2_2.motor.set_pos=mid_counter_2_2-right_counter;
         }
     }
 
     else if (mode == MOTOR_AUTO )
     {
             if(turn_angle==0){
-                PID2_1.motor.set_pos=mid_counter_3;
-                PID2_2.motor.set_pos=mid_counter_4;
+                PID2_1.motor.set_pos=mid_counter_2_1;
+                PID2_2.motor.set_pos=mid_counter_2_2;
             }
             if(turn_angle<0){//向左转
                 left_counter = turn_angle;
                 left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
                 right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
                 right_counter = right_angle*180/PI/360*8191*3;
-                PID2_1.motor.set_pos=mid_counter_3+left_counter;
-                PID2_2.motor.set_pos=mid_counter_4+right_counter;
+                PID2_1.motor.set_pos=mid_counter_2_1+left_counter;
+                PID2_2.motor.set_pos=mid_counter_2_2+right_counter;
             }
             if(turn_angle>0){//向右转
                 right_counter = turn_angle;
                 right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
                 left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
                 left_counter = left_angle*180/PI/360*8191*3;
-                PID2_1.motor.set_pos=mid_counter_3+left_counter;
-                PID2_2.motor.set_pos=mid_counter_4+right_counter;
+                PID2_1.motor.set_pos=mid_counter_2_1+left_counter;
+                PID2_2.motor.set_pos=mid_counter_2_2+right_counter;
             }
     }
     else if (mode == MOTOR_STOP)
     {
-        PID2_1.motor.set_pos=mid_counter_3;
-        PID2_2.motor.set_pos=mid_counter_4;
+        PID2_1.motor.set_pos=mid_counter_2_1;
+        PID2_2.motor.set_pos=mid_counter_2_2;
     }
 }
 
 void backwheel_speed_cal(void)
 {
-    usart_printf("%d %d %f %f   123\r\n",mode,rc_ctrl.ch[3],PID3_1.motor.set_rpm,PID3_2.motor.set_rpm);
+//    usart_printf("%d %d %f %f   123\r\n",mode,rc_ctrl.ch[3],PID3_1.motor.set_rpm,PID3_2.motor.set_rpm);
 
     if (mode == MOTOR_MANUAL)//0-70mm/s,对应set_rpm=0-14.53
     {
@@ -287,5 +285,13 @@ void backwheel_speed_cal(void)
     }
 }
 
+float limit(float *a, float ABS_MAX)
+{
+    if (*a > ABS_MAX)
+        *a = ABS_MAX;
+    if (*a < -ABS_MAX)
+        *a = -ABS_MAX;
+    return *a;
+}
 
 

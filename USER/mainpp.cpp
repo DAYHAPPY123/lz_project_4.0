@@ -13,6 +13,7 @@
 #include "string"
 #include "servos.h"
 #include "agv.h"
+#include "debugc.h"
 
 int main()
 {
@@ -33,6 +34,7 @@ void User_Init()
     REMOTEC_Init();
     motor_enable();
     servos_init();
+    DEBUGC_UartInit();
 }
 
 void BSP_Init()

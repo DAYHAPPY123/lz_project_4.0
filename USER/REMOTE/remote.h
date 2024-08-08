@@ -1,12 +1,11 @@
 #ifndef LZ_PROJECT_3_0_REMOTE_H
 #define LZ_PROJECT_3_0_REMOTE_H
 
-#include "stdint.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "stdint.h"
 #define SBUS_RX_BUF_NUM 50u
 #define RC_FRAME_LENGTH 25u
 

@@ -10,9 +10,6 @@
 #include "agv.h"
 #include "remote.h"
 
-float ramp_step[3]={20,0.2,0.3};//2006pos-3508v-2006v
-float pid_start=0;
-
 cPID PID3_1;
 cPID PID3_2;
 cPID PID2_1;
@@ -37,6 +34,11 @@ void cPID::ramp_Spd_set(float value)
     Spd.ramp=value;
 }
 
+void cPID::ramp_Pos_set(float value)
+{
+    Pos.ramp=value;
+}
+
 void cPID::limit_Spd_set(float error_max,float integral_max
         ,float derivative_max,float output_max)
 {
@@ -44,11 +46,6 @@ void cPID::limit_Spd_set(float error_max,float integral_max
     Spd.integral_max=integral_max;
     Spd.derivative_max=derivative_max;
     Spd.output_max=output_max;
-}
-
-void cPID::ramp_Pos_set(float value)
-{
-    Pos.ramp=value;
 }
 
 void cPID::limit_Pos_set(float error_max,float integral_max
@@ -111,18 +108,9 @@ void cPID::PID_clear()
     Pos.target=0;
 }
 
-float limit(float *a, float ABS_MAX)
-{
-    if (*a > ABS_MAX)
-        *a = ABS_MAX;
-    if (*a < -ABS_MAX)
-        *a = -ABS_MAX;
-    return *a;
-}
-
 float cPID::Spd_calculate(float targetSpeed, float NowSpeed)
 {
-    cPID::update_target_v(targetSpeed,NowSpeed);
+    update_target_v(targetSpeed,NowSpeed);
     Spd.now_error = motor.target_spd_new - NowSpeed;
     Spd.integral += Spd.now_error;
     Spd.integral= limit(&Spd.integral,Spd.integral_max);
@@ -141,7 +129,7 @@ float cPID::Spd_calculate(float targetSpeed, float NowSpeed)
 
 float cPID::Pos_calculate(float targetPos, float NowPos)
 {
-    cPID::update_target_p(targetPos,NowPos);
+    update_target_p(targetPos,NowPos);
     Pos.now_error = motor.target_pos_new - NowPos;
     Pos.integral += Pos.now_error;
     Pos.integral= limit(&Pos.integral,Pos.integral_max);

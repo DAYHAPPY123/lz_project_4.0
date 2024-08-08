@@ -58,6 +58,7 @@ include_directories(Core/Inc Drivers/STM32G4xx_HAL_Driver/Inc Drivers/STM32G4xx_
         USER/SERVOS
         USER/FOLLOW
         USER/BUTTON
+        USER/DEBUG
         USER
         )
 

@@ -1,10 +1,10 @@
 #ifndef LZ_PROJECT_3_0_AGV_H
 #define LZ_PROJECT_3_0_AGV_H
-#include "stdint.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "stdint.h"
 #define AGV_RVSIZE 26
 void agv_init();
 void state_control();

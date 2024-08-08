@@ -1,11 +1,10 @@
 #ifndef LZ_PROJECT_3_0_MOTOR_H
 #define LZ_PROJECT_3_0_MOTOR_H
-#include "stdint.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "stdint.h"
 extern float left_angle;
 extern float right_angle;
 extern int16_t left_counter;
@@ -15,8 +14,8 @@ extern uint8_t mode;
 #define car_length 192         //前后轮间距
 #define car_width 260.9  //两后轮之间的间距259.4 262.4
 #define PI 3.1415926
-#define mid_counter_3 3300
-#define mid_counter_4 (-3100)
+#define mid_counter_2_1 3300
+#define mid_counter_2_2 (-3100)
 #define MOTOR_MANUAL 0
 #define MOTOR_AUTO 1
 #define MOTOR_STOP 2
@@ -63,6 +62,7 @@ void angle_cal();
 void backwheel_speed_cal(void);
 void Speed_Send(void);
 void motor_reset();
+float limit(float *a, float ABS_MAX);
 
 extern float back_setrpm;
 

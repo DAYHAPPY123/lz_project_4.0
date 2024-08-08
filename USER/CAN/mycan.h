@@ -1,12 +1,11 @@
 #ifndef LZ_PROJECT_3_0_MYCAN_H
 #define LZ_PROJECT_3_0_MYCAN_H
-#include "stdint.h"
-#include "fdcan.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "stdint.h"
+#include "fdcan.h"
 extern float counter_change2006_1;
 extern float counter_change2006_2;
 

@@ -1,44 +1,60 @@
 #ifndef LZ_PROJECT_3_0_PID_H
 #define LZ_PROJECT_3_0_PID_H
 
+#include "motor.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 struct PID_INIT{
-    float vel_kp;
-    float vel_ki;
-    float vel_kd;
-    float error[2];
+    float kp;
+    float ki;
+    float kd;
+    float now_error;
+    float last_error;
     float integral;
     float derivative;
-
     float output;
-
-    float pos_kp_strong;
-    float pos_ki_strong;
-    float pos_kd_strong;
-
-    float pos_kp_wake;
-    float pos_ki_wake;
-    float pos_kd_wake;
+    float error_max;
+    float integral_max;
+    float derivative_max;
+    float output_max;
+    float input;
+    float target;
+    float ramp;
 };
 
-extern struct PID_INIT pid3_1;
-extern struct PID_INIT pid3_2;
-extern struct PID_INIT pid2_1;
-extern struct PID_INIT pid2_2;
-extern struct PID_INIT pid_reset1;
-extern struct PID_INIT pid_reset2;
+class cPID
+{
+private:
+    PID_INIT Spd;
+    PID_INIT Pos;
+public:
+    motor_init motor;
+    void Spd_Param_set(float kp,float ki,float kd);
+    void Pos_Param_set(float kp,float ki,float kd);
+    void ramp_Spd_set(float value);
+    void limit_Spd_set(float error_max,float integral_max
+            ,float derivative_max,float output_max);
+    void ramp_Pos_set(float value);
+    void limit_Pos_set(float error_max,float integral_max
+            ,float derivative_max,float output_max);
+    void update_target_p(float target_new,float target_now);
+    void update_target_v(float target_new,float target_now);
+    void PID_clear();
+    float Spd_calculate(float targetSpeed,float NowSpeed);
+    float Pos_calculate(float targetPos,float NowPos);
+    float Spd_output_get();
+    float Pos_output_get();
+};
 
-extern float limit(float *a, float ABS_MAX);
+extern cPID PID3_1;
+extern cPID PID3_2;
+extern cPID PID2_1;
+extern cPID PID2_2;
 
-void update_target_pos(float* ramp_target,float* target_now);
-float PIDControl_3508_pos(struct PID_INIT* pid,float targetPos,float NowPos);
-float PIDControl_3508(struct PID_INIT* pid, float targetSpeed,float NowSpeed);
-float PIDControl_2006_pos(struct PID_INIT* pid,float targetPos,float NowPos);
-float PIDControl_2006_v(struct PID_INIT* pid,float targetSpeed,float NowSpeed);
-void PID_clear(struct PID_INIT *pid);
+float limit(float *a, float ABS_MAX);
 
 #ifdef __cplusplus
 }

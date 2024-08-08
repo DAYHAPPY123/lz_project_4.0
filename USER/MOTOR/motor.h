@@ -37,7 +37,7 @@ struct motor_init
     double continuous;
     float calculate_continuous;
     float target_pos_new;
-    float target_v_new;
+    float target_spd_new;
     int online_flag;
 };
 
@@ -58,16 +58,12 @@ typedef enum
     CAN_6020_M2_ID = 0x206
 } eCanMessageID;
 
-void motor_io_init();
+void motor_enable();
 void angle_cal();
 void backwheel_speed_cal(void);
 void Speed_Send(void);
 void motor_reset();
 
-extern struct motor_init motor3_1;
-extern struct motor_init motor3_2;
-extern struct motor_init motor2_1;
-extern struct motor_init motor2_2;
 extern float back_setrpm;
 
 #ifdef __cplusplus

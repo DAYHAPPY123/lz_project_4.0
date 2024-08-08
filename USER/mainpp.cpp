@@ -31,7 +31,7 @@ void User_Init()
 {
     CAN_Init(&hfdcan2);
     REMOTEC_Init();
-    motor_io_init();
+    motor_enable();
     servos_init();
 }
 

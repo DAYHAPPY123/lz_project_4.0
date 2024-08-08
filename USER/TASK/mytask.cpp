@@ -26,15 +26,15 @@ void init_task(void *argument){
 void control_task(void *argument){
     TickType_t PrTime1 = xTaskGetTickCount();
     motor_reset();
-//    servos_reset();
+    servos_reset();
     for(;;)
     {
-//        usart_printf("%d %d %f %f",mode,rc_ctrl.ch[3],motor3_1.set_rpm,motor3_2.set_rpm);
+//        usart_printf("%d %d %f %f",mode,rc_ctrl.ch[3],PID3_1.motor.set_rpm,PID3_2.motor.set_rpm);
         state_control();//ok
         angle_cal();
         backwheel_speed_cal();
         Speed_Send();
-//        servos_control();
+        servos_control();
 //        usart_printf("%d %d %d %d\r\n",rc_ctrl.ch[0],rc_ctrl.ch[1],rc_ctrl.ch[2],rc_ctrl.ch[3]);
         vTaskDelayUntil(&PrTime1, pdMS_TO_TICKS(5));  // 延迟5豪秒
     }

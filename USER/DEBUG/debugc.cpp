@@ -1,17 +1,15 @@
 //
 // Created by 14298 on 2024/8/8.
 //
-
 #include <cstring>
 #include <cstdlib>
 #include "debugc.h"
 #include "usart.h"
 #include "motor.h"
-#include "pid.h"
 
 char debugRvBuff[DEBUG_RVSIZE]={0};
 char debugBuff[DEBUG_RVSIZE]={0};
-temp_pid temp;
+temp_pid temp={0};
 
 void DEBUGC_UartInit()
 {
@@ -67,8 +65,6 @@ void DEBUGC_UartIdleCallback(UART_HandleTypeDef *huart)
             break;
         }
     }
-    temp.PID->Pos_Param_set(temp.p_kp,temp.p_ki,temp.p_kd);
-    temp.PID->Spd_Param_set(temp.s_kp,temp.s_ki,temp.s_kd);
     memset(debugRvBuff,0,data_length);
     data_length = 0;
     HAL_UART_Receive_DMA(huart, (uint8_t*)debugRvBuff, DEBUG_RVSIZE);

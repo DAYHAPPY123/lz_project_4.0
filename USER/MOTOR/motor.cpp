@@ -13,6 +13,7 @@
 #include "cmsis_os2.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "debugc.h"
 
 uint8_t mode;
 float left_angle=0;
@@ -120,34 +121,20 @@ void motor_reset()
 
 void Speed_Send(void){
 
-    //****给研究院使用，未面向工业需求，先取消了自动前进后退固定距离的功能****//
-//    if ( (mode==MOTOR_AUTO)&&(rc_ctrl.rc.s[0] == 2)&&
-//    (abs(PID3_1.motor.calculate_continuous-PID3_1.motor.set_pos)<=100) )
-//    {
-//        PIDControl_3508(&pid3_1,0,PID3_1.motor.rpm);
-//        PIDControl_3508(&pid3_2,0,PID3_2.motor.rpm);
-//    } else
+    PID3_1.Pos_Param_set(temp.p_kp,temp.p_ki,temp.p_kd);
+    PID3_1.Spd_Param_set(temp.s_kp,temp.s_ki,temp.s_kd);
 
     PID3_1.Spd_calculate(PID3_1.motor.set_rpm,PID3_1.motor.rpm);
     PID3_2.Spd_calculate(-PID3_2.motor.set_rpm,PID3_2.motor.rpm);
 
-    taskENTER_CRITICAL();
     PID2_1.Pos_calculate(PID2_1.motor.set_pos,PID2_1.motor.calculate_continuous);
     PID2_2.Pos_calculate(PID2_2.motor.set_pos,PID2_2.motor.calculate_continuous);
 
     PID2_1.Spd_calculate(PID2_1.Pos_output_get(),PID2_1.motor.rpm);
     PID2_2.Spd_calculate(PID2_2.Pos_output_get(),PID2_2.motor.rpm);
 
-    taskEXIT_CRITICAL();
-//    usart_printf("%.2f,%d,%.2f\r\n",pid2_1.output,
-//                 PID2_1.motor.set_pos,PID2_1.motor.calculate_continuous);
-//    usart_printf("%.2f  %.2f \r\n",pid2_1.integral,pid2_2.integral);
     PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
             ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
-    //    usart_printf("%.2f %.2f %d %d\r\n",PID3_1.motor.set_rpm,PID3_2.motor.set_rpm,rc_ctrl.ch[2],rc_ctrl.ch[3]);
-
-//        usart_printf("%d %d %d %d\r\n",rc_ctrl.ch[0],rc_ctrl.ch[1],rc_ctrl.ch[2],rc_ctrl.ch[3]);
-
 }
 
 void angle_cal()

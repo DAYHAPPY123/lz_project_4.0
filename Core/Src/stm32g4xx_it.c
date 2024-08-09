@@ -27,7 +27,7 @@
 #include "motor.h"
 #include "mycan.h"
 #include "fdcan.h"
-//#include "debugc.h"
+#include "debugc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -315,7 +315,7 @@ void LPUART1_IRQHandler(void)
   /* USER CODE END LPUART1_IRQn 0 */
 //  HAL_UART_IRQHandler(&hlpuart1);
   /* USER CODE BEGIN LPUART1_IRQn 1 */
-//    DEBUGC_UartIrqHandler(&hlpuart1);
+    DEBUGC_UartIrqHandler(&hlpuart1);
   /* USER CODE END LPUART1_IRQn 1 */
 }
 

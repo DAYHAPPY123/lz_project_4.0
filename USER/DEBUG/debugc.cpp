@@ -64,8 +64,15 @@ void DEBUGC_UartIdleCallback(UART_HandleTypeDef *huart)
             }
             break;
         }
+        case 0x74://t
+        {
+            temp.p_target=strtof(debugBuff,NULL);break;
+//            temp.s_target=strtof(debugBuff,NULL);break;
+        }
     }
     memset(debugRvBuff,0,data_length);
     data_length = 0;
     HAL_UART_Receive_DMA(huart, (uint8_t*)debugRvBuff, DEBUG_RVSIZE);
+//    usart_printf("%d,%.2f,%.2f,%.2f,%.2f\r\n",mode,temp.p_kp,temp.s_ki,temp.s_target);
 }
+

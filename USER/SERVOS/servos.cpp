@@ -125,31 +125,3 @@ void servos_control()
     }
 //    usart_printf("%d,%d\r\n",actual_pos_input[0],actual_pos_input[1]);
 }
-
-//void ADC_detect()
-//{
-//    HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_7);//LED
-//    HAL_ADC_Start_DMA(&hadc4, &adc_value[0], 1);
-//    HAL_ADC_Start_DMA(&hadc1, &adc_value[1], 1);
-//    if( (adc_value[0]>4000)||(adc_value[1]>4000) )
-//    {
-//        if(detect_counter>=1)
-//        {
-//            mode=MOTOR_STOP;
-//            servos_init();
-//            servos_pos[0]=0;servos_pos[1]=0;
-//            actual_pos_input[0]=servo0_start;
-//            actual_pos_input[1]=servo1_start;
-//            detect_counter=0;
-//            while(mode==MOTOR_AUTO);
-//        }
-//        else
-//        {
-//            detect_counter++;
-//        }
-//    } else if( (adc_value[0]==0)&&(adc_value[1]==0) )
-//    {
-//        detect_counter=0;
-//    }
-//    usart_printf("%d,%d,%d\n",adc_value[0],adc_value[1],detect_counter);
-//}

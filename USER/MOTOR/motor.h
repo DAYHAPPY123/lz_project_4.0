@@ -63,6 +63,7 @@ void backwheel_speed_cal(void);
 void Speed_Send(void);
 void motor_reset();
 float limit(float *a, float ABS_MAX);
+void debug_test();
 
 extern float back_setrpm;
 

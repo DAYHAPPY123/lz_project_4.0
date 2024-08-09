@@ -67,14 +67,14 @@ osThreadId_t Control_TaskHandle;
 const osThreadAttr_t Control_Task_attributes = {
   .name = "Control_Task",
   .priority = (osPriority_t) osPriorityHigh,
-  .stack_size = 1024 * 4
+  .stack_size = 4096 * 4
 };
 /* Definitions for Error_Task */
 osThreadId_t Error_TaskHandle;
 const osThreadAttr_t Error_Task_attributes = {
   .name = "Error_Task",
   .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
+  .stack_size = 256 * 4
 };
 
 /* Private function prototypes -----------------------------------------------*/

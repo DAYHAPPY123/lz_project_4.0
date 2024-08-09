@@ -28,33 +28,33 @@ void motor_enable()
     PID2_1.motor.set_pos=mid_counter_2_1;
     PID2_2.motor.set_pos=mid_counter_2_2;
 
-    PID3_1.Spd_Param_set(0,0,0);
-    PID3_1.Pos_Param_set(0,0,0);
-    PID3_1.ramp_Spd_set(0.2);
+    PID3_1.Spd_Param_set(200,2,0,0);
+    PID3_1.Pos_Param_set(0,0,0,0);
+    PID3_1.ramp_Spd_set(0.1);
     PID3_1.ramp_Pos_set(0);
-    PID3_1.limit_Spd_set(0,0,0,0);
+    PID3_1.limit_Spd_set(20,5000,10000,8000);
     PID3_1.limit_Pos_set(0,0,0,0);
 
-    PID3_2.Spd_Param_set(0,0,0);
-    PID3_2.Pos_Param_set(0,0,0);
-    PID3_2.ramp_Spd_set(0.2);
+    PID3_2.Spd_Param_set(200,2,0,0);
+    PID3_2.Pos_Param_set(0,0,0,0);
+    PID3_2.ramp_Spd_set(0.1);
     PID3_2.ramp_Pos_set(0);
-    PID3_2.limit_Spd_set(0,0,0,0);
+    PID3_2.limit_Spd_set(20,5000,10000,8000);
     PID3_2.limit_Pos_set(0,0,0,0);
 
-    PID2_1.Spd_Param_set(0,0,0);
-    PID2_1.Pos_Param_set(0,0,0);
-    PID2_1.ramp_Spd_set(0.3);
-    PID2_1.ramp_Pos_set(20);
-    PID2_1.limit_Spd_set(0,0,0,0);
-    PID2_1.limit_Pos_set(0,0,0,0);
+    PID2_1.Spd_Param_set(300,0.1,0,0);
+    PID2_1.Pos_Param_set(0.07,0,2,0);
+    PID2_1.ramp_Spd_set(1);
+    PID2_1.ramp_Pos_set(1000);
+    PID2_1.limit_Spd_set(100,100000,10000,10000);
+    PID2_1.limit_Pos_set(5000,100000,10000,200);
 
-    PID2_2.Spd_Param_set(0,0,0);
-    PID2_2.Pos_Param_set(0,0,0);
-    PID2_2.ramp_Spd_set(0.3);
-    PID2_2.ramp_Pos_set(20);
-    PID2_2.limit_Spd_set(0,0,0,0);
-    PID2_2.limit_Pos_set(0,0,0,0);
+    PID2_2.Spd_Param_set(300,0.1,0,0);
+    PID2_2.Pos_Param_set(0.07,0,2,0);
+    PID2_2.ramp_Spd_set(1);
+    PID2_2.ramp_Pos_set(1000);
+    PID2_2.limit_Spd_set(100,100000,10000,10000);
+    PID2_2.limit_Pos_set(5000,100000,10000,200);
 
 }
 
@@ -65,7 +65,7 @@ void motor_reset()
     {
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
-        PID2_1.Spd_calculate(-50,PID2_1.motor.rpm);
+        PID2_1.Spd_calculate(-80,PID2_1.motor.rpm);
         PID2_2.Spd_calculate(0,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                           ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
@@ -78,25 +78,26 @@ void motor_reset()
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
         PID2_1.Spd_calculate(0,PID2_1.motor.rpm);
-        PID2_2.Spd_calculate(50,PID2_2.motor.rpm);
+        PID2_2.Spd_calculate(80,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
         if(abs(PID2_2.motor.current)>9000) i2++;
         osDelay(5);
     }
-
+    taskENTER_CRITICAL();
     {
         counter_change2006_1=0;
         counter_change2006_2=0;
         PID2_1.motor.calculate_continuous=0;PID2_1.motor.continuous=0;
         PID2_2.motor.calculate_continuous=0;PID2_2.motor.continuous=0;
     }
+    taskEXIT_CRITICAL();
 
     while (PID2_1.motor.calculate_continuous<=3200)
     {
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
-        PID2_1.Spd_calculate(50,PID2_1.motor.rpm);
+        PID2_1.Spd_calculate(80,PID2_1.motor.rpm);
         PID2_2.Spd_calculate(0,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
@@ -108,7 +109,7 @@ void motor_reset()
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
         PID2_1.Spd_calculate(0,PID2_1.motor.rpm);
-        PID2_2.Spd_calculate(-50,PID2_2.motor.rpm);
+        PID2_2.Spd_calculate(-80,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
         osDelay(5);
@@ -120,10 +121,7 @@ void motor_reset()
 }
 
 void Speed_Send(void){
-
-    PID3_1.Pos_Param_set(temp.p_kp,temp.p_ki,temp.p_kd);
-    PID3_1.Spd_Param_set(temp.s_kp,temp.s_ki,temp.s_kd);
-
+//debug_test();
     PID3_1.Spd_calculate(PID3_1.motor.set_rpm,PID3_1.motor.rpm);
     PID3_2.Spd_calculate(-PID3_2.motor.set_rpm,PID3_2.motor.rpm);
 
@@ -132,9 +130,10 @@ void Speed_Send(void){
 
     PID2_1.Spd_calculate(PID2_1.Pos_output_get(),PID2_1.motor.rpm);
     PID2_2.Spd_calculate(PID2_2.Pos_output_get(),PID2_2.motor.rpm);
-
+//    usart_printf("%.2f   %d\r\n",PID3_1.motor.set_rpm,rc_start);
     PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
             ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
+//    PortSendMotorsCur(0,0,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
 }
 
 void angle_cal()
@@ -196,8 +195,6 @@ void angle_cal()
 
 void backwheel_speed_cal(void)
 {
-//    usart_printf("%d %d %f %f   123\r\n",mode,rc_ctrl.ch[3],PID3_1.motor.set_rpm,PID3_2.motor.set_rpm);
-
     if (mode == MOTOR_MANUAL)//0-70mm/s,对应set_rpm=0-14.53
     {
         if(rc_ctrl.ch[3]==0){
@@ -261,8 +258,6 @@ void backwheel_speed_cal(void)
 
 //        }
 
-
-//        usart_printf("%.2f \r\n",back_setrpm);
     }
 
     else if (mode == MOTOR_STOP)
@@ -281,4 +276,22 @@ float limit(float *a, float ABS_MAX)
     return *a;
 }
 
-
+void debug_test()
+{
+    PID2_2.Pos_Param_set(temp.p_kp,temp.p_ki,temp.p_kd,0);
+    PID2_2.Spd_Param_set(temp.s_kp,temp.s_ki,temp.s_kd,0);
+    PID2_2.Pos_calculate(temp.p_target,PID2_2.motor.calculate_continuous);
+    PID2_2.Spd_calculate(PID2_2.Pos_output_get(),PID2_2.motor.rpm);
+//    usart_printf("%.1f,%.1f,%.1f,%.1f,%.1f \r\n",temp.p_target,PID2_2.motor.calculate_continuous,
+//                 PID2_2.Pos_output_get(),PID2_2.Pos_error_get(),PID2_2.Pos_derivative_get());
+    if (mode==MOTOR_MANUAL)
+    {
+        PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
+                ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
+    }
+    else if(mode == MOTOR_STOP)
+    {
+        PID2_2.PID_clear();
+        PortSendMotorsCur(0,0,0,0);
+    }
+}

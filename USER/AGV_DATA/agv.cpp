@@ -53,8 +53,8 @@ void read_agv_data()
         agv_buffer[6] = (float)agvBuff[7]-noise;
         agv_buffer[7] = (float)agvBuff[6]-noise;
     }
-    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
-                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
+//    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
+//                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);

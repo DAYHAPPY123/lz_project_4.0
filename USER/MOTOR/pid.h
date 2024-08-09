@@ -20,7 +20,6 @@ struct PID_INIT{
     float integral_max;
     float derivative_max;
     float output_max;
-    float input;
     float target;
     float ramp;
 };
@@ -32,8 +31,8 @@ private:
     PID_INIT Pos;
 public:
     motor_init motor;
-    void Spd_Param_set(float kp,float ki,float kd);
-    void Pos_Param_set(float kp,float ki,float kd);
+    void Spd_Param_set(float kp,float ki,float kd,float target);
+    void Pos_Param_set(float kp,float ki,float kd,float target);
     void ramp_Spd_set(float value);
     void limit_Spd_set(float error_max,float integral_max
             ,float derivative_max,float output_max);
@@ -45,8 +44,15 @@ public:
     void PID_clear();
     float Spd_calculate(float targetSpeed,float NowSpeed);
     float Pos_calculate(float targetPos,float NowPos);
+    float Spd_intergal_get();
+    float Pos_intergal_get();
+    float Spd_error_get();
+    float Pos_error_get();
+    float Spd_derivative_get();
+    float Pos_derivative_get();
     float Spd_output_get();
     float Pos_output_get();
+
 };
 
 extern cPID PID3_1;

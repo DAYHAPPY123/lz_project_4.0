@@ -15,18 +15,20 @@ cPID PID3_2;
 cPID PID2_1;
 cPID PID2_2;
 
-void cPID::Spd_Param_set(float kp, float ki, float kd)
+void cPID::Spd_Param_set(float kp,float ki,float kd,float target)
 {
     Spd.kp=kp;
     Spd.ki=ki;
     Spd.kd=kd;
+    Spd.target=target;
 }
 
-void cPID::Pos_Param_set(float kp, float ki, float kd)
+void cPID::Pos_Param_set(float kp, float ki, float kd,float target)
 {
     Pos.kp=kp;
     Pos.ki=ki;
     Pos.kd=kd;
+    Pos.target=target;
 }
 
 void cPID::ramp_Spd_set(float value)
@@ -96,15 +98,12 @@ void cPID::PID_clear()
     Spd.integral=0;
     Spd.derivative=0;
     Spd.output=0;
-    Spd.input=0;
     Spd.target=0;
-
     Pos.now_error=0;
     Pos.last_error=0;
     Pos.integral=0;
     Pos.derivative=0;
     Pos.output=0;
-    Pos.input=0;
     Pos.target=0;
 }
 
@@ -112,6 +111,8 @@ float cPID::Spd_calculate(float targetSpeed, float NowSpeed)
 {
     update_target_v(targetSpeed,NowSpeed);
     Spd.now_error = motor.target_spd_new - NowSpeed;
+    Spd.now_error= limit(&Spd.now_error,Spd.error_max);
+
     Spd.integral += Spd.now_error;
     Spd.integral= limit(&Spd.integral,Spd.integral_max);
 
@@ -131,6 +132,8 @@ float cPID::Pos_calculate(float targetPos, float NowPos)
 {
     update_target_p(targetPos,NowPos);
     Pos.now_error = motor.target_pos_new - NowPos;
+    Pos.now_error= limit(&Pos.now_error,Pos.error_max);
+
     Pos.integral += Pos.now_error;
     Pos.integral= limit(&Pos.integral,Pos.integral_max);
 
@@ -153,5 +156,35 @@ float cPID::Spd_output_get()
 
 float cPID::Pos_output_get()
 {
-    return Pos_output_get();
+    return Pos.output;
 };
+
+float cPID::Spd_intergal_get()
+{
+    return Spd.integral;
+}
+
+float cPID::Pos_intergal_get()
+{
+    return Pos.integral;
+}
+
+float cPID::Spd_error_get()
+{
+    return Spd.now_error;
+}
+
+float cPID::Pos_error_get()
+{
+    return Pos.now_error;
+}
+
+float cPID::Spd_derivative_get()
+{
+    return Spd.derivative;
+}
+
+float cPID::Pos_derivative_get()
+{
+    return Pos.derivative;
+}

@@ -20,12 +20,22 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="DEBUG框架完毕 待调参">
+    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="准备上电了">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Src/app_freertos.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/app_freertos.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Src/stm32g4xx_it.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/stm32g4xx_it.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/DEBUG/debugc.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/DEBUG/debugc.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/DEBUG/debugc.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/DEBUG/debugc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/MOTOR/pid.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/pid.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/MOTOR/pid.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/pid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/SERVOS/servos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/SERVOS/servos.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/TASK/mytask.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/TASK/mytask.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.tab.json" beforeDir="false" afterPath="$PROJECT_DIR$/debug.tab.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lz_project_4.0.ioc" beforeDir="false" afterPath="$PROJECT_DIR$/lz_project_4.0.ioc" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,11 +79,6 @@
   }
 }</component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="lz_project_4.0.elf" type="com.jetbrains.cidr.embedded.openocd.conf.type" factoryName="com.jetbrains.cidr.embedded.openocd.conf.factory" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lz_project_4.0" TARGET_NAME="lz_project_4.0.elf" CONFIG_NAME="Debug" version="1" RUN_TARGET_PROJECT_NAME="lz_project_4.0" RUN_TARGET_NAME="lz_project_4.0.elf">
       <openocd version="1" gdb-port="3333" telnet-port="4444" board-config="F:\myCUBEMX\lz_project_4.0\daplink.cfg" reset-type="INIT" download-type="UPDATED_ONLY">
         <debugger kind="GDB" isBundled="true" />
@@ -112,7 +117,11 @@
       <workItem from="1723117303134" duration="6162000" />
       <workItem from="1723168090203" duration="1088000" />
       <workItem from="1723171134539" duration="995000" />
-      <workItem from="1723173243719" duration="2477000" />
+      <workItem from="1723173243719" duration="5631000" />
+      <workItem from="1723185793651" duration="3117000" />
+      <workItem from="1723188969115" duration="745000" />
+      <workItem from="1723190052822" duration="394000" />
+      <workItem from="1723190545616" duration="7382000" />
     </task>
     <task id="LOCAL-00001" summary="准备写串级PID">
       <option name="closed" value="true" />
@@ -130,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723109505833</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="准备上电了">
+      <option name="closed" value="true" />
+      <created>1723175765185</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1723175765186</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,6 +173,23 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="准备写串级PID" />
     <MESSAGE value="代码重构完毕 PID部分改为C++ 所有函数封装完成 带调参" />
-    <option name="LAST_COMMIT_MESSAGE" value="代码重构完毕 PID部分改为C++ 所有函数封装完成 带调参" />
+    <MESSAGE value="准备上电了" />
+    <option name="LAST_COMMIT_MESSAGE" value="准备上电了" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/USER/MOTOR/pid.cpp</url>
+          <line>111</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/USER/MOTOR/pid.cpp</url>
+          <line>110</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

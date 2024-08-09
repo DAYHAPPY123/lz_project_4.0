@@ -19,6 +19,8 @@ extern "C" {
 //#define d 0x64
 //#define o 0x6F
 //#define n 0x6E
+//#define t 0x74
+
 #define maohao 0x3A
 
     struct temp_pid
@@ -29,6 +31,8 @@ extern "C" {
         float s_kp;
         float s_ki;
         float s_kd;
+        float s_target;
+        float p_target;
     };
 
 void DEBUGC_UartInit();

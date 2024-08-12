@@ -22,6 +22,7 @@ int16_t left_counter=0;
 int16_t right_counter=0;
 float back_setrpm=0;
 
+
 void motor_enable()
 {
     mode=MOTOR_STOP;
@@ -216,6 +217,9 @@ void backwheel_speed_cal(void)
         if(rc_ctrl.ch[3]<0){
             PID3_2.motor.set_rpm=float((float)(rc_ctrl.ch[2])/671.0f*14.53f);
             PID3_1.motor.set_rpm=PID3_2.motor.set_rpm* tan(right_angle)/tan(left_angle);}
+        PID3_1.motor.set_rpm = PID3_1.motor.set_rpm*SD;
+        PID3_2.motor.set_rpm = PID3_2.motor.set_rpm*SD;
+        usart_printf("%.2f,%.2f,%.2f\r\n",PID3_1.motor.set_rpm,PID3_1.motor.set_rpm,SD);
     }
 
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53
@@ -249,23 +253,6 @@ void backwheel_speed_cal(void)
                 limit(&PID3_1.motor.set_rpm,14.53);
                 PID3_2.motor.set_rpm=PID3_1.motor.set_rpm* tan(right_angle)/tan(left_angle);
             }
-
-        //****给研究院使用，未面向工业需求，先取消了自动前进后退固定距离的功能****//
-//        else if (rc_ctrl.rc.s[0] == 2)//右拨杆打下,开启后退
-//        {
-//        if(rc_ctrl.rc.ch[1]<=-500)
-//        {
-//            PID3_1.motor.set_rpm=-3;
-//            PID3_2.motor.set_rpm=-3;
-//            PID3_1.motor.calculate_continuous=0;
-//            PID3_2.motor.calculate_continuous=0;
-////            PID3_1.motor.set_pos=-2834;            //  8191X100/92/PI=2834
-////            PID3_2.motor.set_pos=-2834;
-//            PID3_1.motor.set_pos=-1417;            //  8191X100/92/PI=2834
-//            PID3_2.motor.set_pos=-1417;
-//        }
-
-//        }
 
     }
 

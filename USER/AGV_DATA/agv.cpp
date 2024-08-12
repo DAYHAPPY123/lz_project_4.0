@@ -18,6 +18,7 @@ float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
 uint8_t agvBuff[AGV_RVSIZE]={0};
 static uint8_t origin_max_index = 0;
+float SD=0;//手动速度选择，控制motor.set_rpm
 
 float turn_angle;
 
@@ -109,6 +110,19 @@ void state_control()//模式控制
     if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
     {
         mode = MOTOR_STOP;
+    }
+    /**
+     * 控制set.rpm的系数
+     */
+    if (rc_ctrl.ch[7] > 600)
+    {
+        SD = 1.5;
+    } else if( (rc_ctrl.ch[7] < 100)&&(rc_ctrl.ch[7] > -100) )
+    {
+        SD = 1;
+    } else if (rc_ctrl.ch[7] < -600)
+    {
+        SD = 0.5;
     }
     taskEXIT_CRITICAL();
 }

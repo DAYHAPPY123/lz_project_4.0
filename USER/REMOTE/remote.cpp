@@ -10,9 +10,6 @@
 
 uint32_t last_rc_receive_time = 0; // 上一次接收到遥控器信号的时间戳
 uint32_t rc_timeout = 1000; // 超时阈值，单位为毫秒
-int now_SA;
-int now_SC;
-
 RC_ctrl_t rc_ctrl;
 static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
 

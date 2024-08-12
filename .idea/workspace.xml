@@ -20,15 +20,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="基本功能调试完">
+    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="加上了激光调节，解决了遥控器bug，结束">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/BUTTON/button.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/BUTTON/button.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/TASK/mytask.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/TASK/mytask.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/mainpp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/mainpp.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +114,7 @@
       <workItem from="1723190545616" duration="7528000" />
       <workItem from="1723357988957" duration="2289000" />
       <workItem from="1723376935643" duration="4767000" />
-      <workItem from="1723426729208" duration="3116000" />
+      <workItem from="1723426729208" duration="5234000" />
     </task>
     <task id="LOCAL-00001" summary="准备写串级PID">
       <option name="closed" value="true" />
@@ -159,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723425949464</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="加上了激光调节，解决了遥控器bug，结束">
+      <option name="closed" value="true" />
+      <created>1723430281676</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1723430281676</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,6 +193,7 @@
     <MESSAGE value="准备上电了" />
     <MESSAGE value="所有PID参数已调完 发现遥控器有bug待解决" />
     <MESSAGE value="基本功能调试完" />
-    <option name="LAST_COMMIT_MESSAGE" value="基本功能调试完" />
+    <MESSAGE value="加上了激光调节，解决了遥控器bug，结束" />
+    <option name="LAST_COMMIT_MESSAGE" value="加上了激光调节，解决了遥控器bug，结束" />
   </component>
 </project>

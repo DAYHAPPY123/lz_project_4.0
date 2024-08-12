@@ -20,12 +20,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="加上了激光调节，解决了遥控器bug，结束">
+    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="新增了手动模式下最大移动速度切换功能，SD键控制">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/TASK/mytask.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/TASK/mytask.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +112,11 @@
       <workItem from="1723190545616" duration="7528000" />
       <workItem from="1723357988957" duration="2289000" />
       <workItem from="1723376935643" duration="4767000" />
-      <workItem from="1723426729208" duration="5234000" />
+      <workItem from="1723426729208" duration="6612000" />
+      <workItem from="1723433912352" duration="1247000" />
+      <workItem from="1723435423673" duration="678000" />
+      <workItem from="1723436140276" duration="1132000" />
+      <workItem from="1723446016546" duration="3000" />
     </task>
     <task id="LOCAL-00001" summary="准备写串级PID">
       <option name="closed" value="true" />
@@ -164,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723430281676</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="新增了手动模式下最大移动速度切换功能，SD键控制">
+      <option name="closed" value="true" />
+      <created>1723432625377</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1723432625377</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +204,7 @@
     <MESSAGE value="所有PID参数已调完 发现遥控器有bug待解决" />
     <MESSAGE value="基本功能调试完" />
     <MESSAGE value="加上了激光调节，解决了遥控器bug，结束" />
-    <option name="LAST_COMMIT_MESSAGE" value="加上了激光调节，解决了遥控器bug，结束" />
+    <MESSAGE value="新增了手动模式下最大移动速度切换功能，SD键控制" />
+    <option name="LAST_COMMIT_MESSAGE" value="新增了手动模式下最大移动速度切换功能，SD键控制" />
   </component>
 </project>

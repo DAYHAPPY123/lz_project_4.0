@@ -18,9 +18,6 @@ static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
  */
 void REMOTE_detect()
 {
-//    now_SA = rc_ctrl.ch[5];
-//    now_SC = rc_ctrl.ch[6];
-
     while( (rc_ctrl.ch[5] > -600)||(rc_ctrl.ch[6] > -600) )
     {
         HAL_Delay(5);

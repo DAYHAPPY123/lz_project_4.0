@@ -20,6 +20,7 @@ void init_task(void *argument){
     for(;;)
     {
         light_mode();
+        mode_choose();
         osDelay(5);
     }
 }
@@ -29,7 +30,7 @@ void control_task(void *argument){
     servos_reset();
     for(;;)
     {
-        state_control();//ok
+
         angle_cal();
         backwheel_speed_cal();
         Speed_Send();
@@ -42,7 +43,7 @@ void agv_task(void *argument){
     agv_init();//ok
     for (;;)
     {
-        read_agv_data();//ok
+        read_agv_data();
         vTaskDelayUntil(&PrTime2, pdMS_TO_TICKS(10));  // 延迟10豪秒
     }
 }
@@ -50,7 +51,7 @@ void error_task(void *argument){
     TickType_t PrTime3 = xTaskGetTickCount();
     for (;;)
     {
-        mode_choose();
+        state_control();
         vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(5));
     }
 }

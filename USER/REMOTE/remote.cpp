@@ -9,9 +9,33 @@
 uint32_t last_rc_receive_time = 0; // 上一次接收到遥控器信号的时间戳
 uint32_t rc_timeout = 1000; // 超时阈值，单位为毫秒
 uint8_t rc_start=0;
+int now_SA;
+int now_SC;
 
 RC_ctrl_t rc_ctrl;
 static uint8_t sbus_rx_buf[2][SBUS_RX_BUF_NUM];
+
+/**
+ * 遥控器有bug 如果机器人上电后未启动遥控器，实测读取的通道值混乱，电机要疯转，DJI遥控器未出现该问题，目前原因未知
+ */
+void REMOTE_detect()
+{
+//    now_SA = rc_ctrl.ch[5];
+//    now_SC = rc_ctrl.ch[6];
+
+    while( (rc_ctrl.ch[5] > -600)||(rc_ctrl.ch[6] > -600) )
+    {
+        usart_printf("1 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+    }
+    while( (rc_ctrl.ch[5] < 600)||(rc_ctrl.ch[6] < 600) )
+    {
+        usart_printf("2 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+    }
+    while( (rc_ctrl.ch[5] > -600)||(rc_ctrl.ch[6] > -600) )
+    {
+        usart_printf("3 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+    }
+}
 
 void REMOTEC_Init(void){
     __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);

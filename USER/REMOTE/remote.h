@@ -26,6 +26,7 @@ void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl);
 extern RC_ctrl_t rc_ctrl;
 void check_rc_connection();
 extern uint8_t rc_start;
+void REMOTE_detect();
 
 #ifdef __cplusplus
 }

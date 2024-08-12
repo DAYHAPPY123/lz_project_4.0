@@ -30,14 +30,14 @@ void motor_enable()
 
     PID3_1.Spd_Param_set(200,2,0,0);
     PID3_1.Pos_Param_set(0,0,0,0);
-    PID3_1.ramp_Spd_set(0.1);
+    PID3_1.ramp_Spd_set(0.2);
     PID3_1.ramp_Pos_set(0);
     PID3_1.limit_Spd_set(20,5000,10000,8000);
     PID3_1.limit_Pos_set(0,0,0,0);
 
     PID3_2.Spd_Param_set(200,2,0,0);
     PID3_2.Pos_Param_set(0,0,0,0);
-    PID3_2.ramp_Spd_set(0.1);
+    PID3_2.ramp_Spd_set(0.2);
     PID3_2.ramp_Pos_set(0);
     PID3_2.limit_Spd_set(20,5000,10000,8000);
     PID3_2.limit_Pos_set(0,0,0,0);
@@ -60,6 +60,7 @@ void motor_enable()
 
 void motor_reset()
 {
+    REMOTE_detect();
     int i1=0;int i2=0;
     while (i1<=10)
     {

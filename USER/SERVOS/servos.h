@@ -12,8 +12,12 @@ void servos_control();
 void servos_reset();
 
 //正视
-#define servo0_start 50 //右,越大越下
-#define servo1_start 178 //左，越小越下
+//#define servo0_start 50 //右,越大越下
+//#define servo1_start 178 //左，越小越下
+
+#define servo0_start 140 //左舵机,越大越下
+#define servo1_start 110 //右舵机，越小越下
+
 #define servos_speed 0.3
 //50-116间取值
 

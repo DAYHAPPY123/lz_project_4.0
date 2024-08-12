@@ -34,8 +34,7 @@ void User_Init()
     REMOTEC_Init();
     motor_enable();
     servos_init();
-    DEBUGC_UartInit();
-}
+    DEBUGC_UartInit();}
 
 void BSP_Init()
 {

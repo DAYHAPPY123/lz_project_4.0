@@ -50,4 +50,6 @@ void light_mode()
         __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);//亮
         osDelay(100);
     }
+//    usart_printf("%d\r\n", rc_ctrl.ch[9]);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, float(rc_ctrl.ch[9]+671)/1342.0*2000);//激光
 }

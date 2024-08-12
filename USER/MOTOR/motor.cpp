@@ -66,7 +66,7 @@ void motor_reset()
     {
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
-        PID2_1.Spd_calculate(-80,PID2_1.motor.rpm);
+        PID2_1.Spd_calculate(-50,PID2_1.motor.rpm);
         PID2_2.Spd_calculate(0,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                           ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
@@ -79,7 +79,7 @@ void motor_reset()
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
         PID2_1.Spd_calculate(0,PID2_1.motor.rpm);
-        PID2_2.Spd_calculate(80,PID2_2.motor.rpm);
+        PID2_2.Spd_calculate(50,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
         if(abs(PID2_2.motor.current)>9000) i2++;
@@ -94,23 +94,23 @@ void motor_reset()
     }
     taskEXIT_CRITICAL();
 
-    while (PID2_1.motor.calculate_continuous<=3200)
+    while (PID2_1.motor.calculate_continuous<=mid_counter_2_1)
     {
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
-        PID2_1.Spd_calculate(80,PID2_1.motor.rpm);
+        PID2_1.Spd_calculate(50,PID2_1.motor.rpm);
         PID2_2.Spd_calculate(0,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
         osDelay(5);
     }
 
-    while (PID2_2.motor.calculate_continuous>=-3000)
+    while (PID2_2.motor.calculate_continuous>=mid_counter_2_2)
     {
         PID3_1.Spd_calculate(0,PID3_1.motor.rpm);
         PID3_2.Spd_calculate(0,PID3_2.motor.rpm);
         PID2_1.Spd_calculate(0,PID2_1.motor.rpm);
-        PID2_2.Spd_calculate(-80,PID2_2.motor.rpm);
+        PID2_2.Spd_calculate(-50,PID2_2.motor.rpm);
         PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
                 ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
         osDelay(5);
@@ -126,15 +126,22 @@ void Speed_Send(void){
     PID3_1.Spd_calculate(PID3_1.motor.set_rpm,PID3_1.motor.rpm);
     PID3_2.Spd_calculate(-PID3_2.motor.set_rpm,PID3_2.motor.rpm);
 
-    PID2_1.Pos_calculate(PID2_1.motor.set_pos,PID2_1.motor.calculate_continuous);
-    PID2_2.Pos_calculate(PID2_2.motor.set_pos,PID2_2.motor.calculate_continuous);
+    if (PID3_1.motor.set_rpm != 0)
+    {
+        PID2_1.Pos_calculate(PID2_1.motor.set_pos,PID2_1.motor.calculate_continuous);
+        PID2_2.Pos_calculate(PID2_2.motor.set_pos,PID2_2.motor.calculate_continuous);
 
-    PID2_1.Spd_calculate(PID2_1.Pos_output_get(),PID2_1.motor.rpm);
-    PID2_2.Spd_calculate(PID2_2.Pos_output_get(),PID2_2.motor.rpm);
-//    usart_printf("%.2f   %d\r\n",PID3_1.motor.set_rpm,rc_start);
+        PID2_1.Spd_calculate(PID2_1.Pos_output_get(),PID2_1.motor.rpm);
+        PID2_2.Spd_calculate(PID2_2.Pos_output_get(),PID2_2.motor.rpm);
+    }
+    else
+    {
+        PID2_1.PID_clear();
+        PID2_2.PID_clear();
+    }
+//    usart_printf("%.2f,%d,%.2f,%d\r\n",PID2_2.Pos_output_get(),PID2_2.motor.set_pos,PID2_2.motor.calculate_continuous,rc_ctrl.ch[3]);
     PortSendMotorsCur(PID3_1.Spd_output_get(),PID3_2.Spd_output_get()
             ,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
-//    PortSendMotorsCur(0,0,PID2_1.Spd_output_get(),PID2_2.Spd_output_get());
 }
 
 void angle_cal()
@@ -196,6 +203,7 @@ void angle_cal()
 
 void backwheel_speed_cal(void)
 {
+
     if (mode == MOTOR_MANUAL)//0-70mm/s,对应set_rpm=0-14.53
     {
         if(rc_ctrl.ch[3]==0){

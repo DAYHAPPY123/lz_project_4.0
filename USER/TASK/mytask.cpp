@@ -19,7 +19,6 @@ void init_task(void *argument){
     light_init();
     for(;;)
     {
-        mode_choose();
         light_mode();
         osDelay(5);
     }
@@ -51,8 +50,8 @@ void error_task(void *argument){
     TickType_t PrTime3 = xTaskGetTickCount();
     for (;;)
     {
-        check_rc_connection();//ok
-        vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(100));
+        mode_choose();
+        vTaskDelayUntil(&PrTime3, pdMS_TO_TICKS(5));
     }
 }
 

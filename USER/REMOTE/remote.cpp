@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "remote.h"
 #include "usart.h"
 #include "stm32g4xx_hal.h"
@@ -5,10 +6,10 @@
 #include "cmsis_os2.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "pid.h"
 
 uint32_t last_rc_receive_time = 0; // 上一次接收到遥控器信号的时间戳
 uint32_t rc_timeout = 1000; // 超时阈值，单位为毫秒
-uint8_t rc_start=0;
 int now_SA;
 int now_SC;
 
@@ -25,15 +26,18 @@ void REMOTE_detect()
 
     while( (rc_ctrl.ch[5] > -600)||(rc_ctrl.ch[6] > -600) )
     {
-        usart_printf("1 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+        HAL_Delay(5);
+//        usart_printf("1 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
     }
     while( (rc_ctrl.ch[5] < 600)||(rc_ctrl.ch[6] < 600) )
     {
-        usart_printf("2 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+        HAL_Delay(5);
+//        usart_printf("2 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
     }
     while( (rc_ctrl.ch[5] > -600)||(rc_ctrl.ch[6] > -600) )
     {
-        usart_printf("3 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
+        HAL_Delay(5);
+//        usart_printf("3 %d %d\r\n",rc_ctrl.ch[5],rc_ctrl.ch[3]);
     }
 }
 
@@ -67,11 +71,8 @@ void check_rc_connection()
     if (time_gap >= rc_timeout)
     {
         HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
-        rc_start=0;
-    } else
-    {
-        rc_start=1;
     }
+
 //    usart_printf("%d  %d \r\n",current_time,last_rc_receive_time);
 }
 

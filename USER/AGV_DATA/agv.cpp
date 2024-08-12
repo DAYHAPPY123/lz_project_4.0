@@ -55,8 +55,8 @@ void read_agv_data()
         agv_buffer[6] = (float)agvBuff[7]-noise;
         agv_buffer[7] = (float)agvBuff[6]-noise;
     }
-    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
-                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
+//    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
+//                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
@@ -97,23 +97,20 @@ void read_agv_data()
 
 void state_control()//模式控制
 {
-    if(rc_start==1)
-    {
-        mode=MOTOR_STOP;
-        if(rc_ctrl.ch[5]>600) mode=MOTOR_AUTO;
-        else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
-        else mode=MOTOR_MANUAL;
-    }
-    else
+    taskENTER_CRITICAL();
+    mode=MOTOR_STOP;
+    if(rc_ctrl.ch[5]>600) mode=MOTOR_AUTO;
+    else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
+    else mode=MOTOR_MANUAL;
+    if ((rc_ctrl.ch[4]*rc_ctrl.ch[4])<10000)
     {
         mode = MOTOR_STOP;
     }
-//    usart_printf("%d %d\r\n",rc_ctrl.ch[5],mode);
-    if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )
-    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
+    if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
     {
         mode = MOTOR_STOP;
     }
+    taskEXIT_CRITICAL();
 }
 
 

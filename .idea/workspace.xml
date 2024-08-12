@@ -20,13 +20,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="所有PID参数已调完 发现遥控器有bug待解决">
+    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="基本功能调试完">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/BUTTON/button.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/BUTTON/button.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/REMOTE/remote.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/REMOTE/remote.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/SERVOS/servos.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/SERVOS/servos.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USER/TASK/mytask.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/TASK/mytask.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/mainpp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/mainpp.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -115,7 +116,8 @@
       <workItem from="1723190052822" duration="394000" />
       <workItem from="1723190545616" duration="7528000" />
       <workItem from="1723357988957" duration="2289000" />
-      <workItem from="1723376935643" duration="3330000" />
+      <workItem from="1723376935643" duration="4767000" />
+      <workItem from="1723426729208" duration="3116000" />
     </task>
     <task id="LOCAL-00001" summary="准备写串级PID">
       <option name="closed" value="true" />
@@ -149,7 +151,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723198079259</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="基本功能调试完">
+      <option name="closed" value="true" />
+      <created>1723425949464</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1723425949464</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,22 +187,7 @@
     <MESSAGE value="代码重构完毕 PID部分改为C++ 所有函数封装完成 带调参" />
     <MESSAGE value="准备上电了" />
     <MESSAGE value="所有PID参数已调完 发现遥控器有bug待解决" />
-    <option name="LAST_COMMIT_MESSAGE" value="所有PID参数已调完 发现遥控器有bug待解决" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/USER/MOTOR/pid.cpp</url>
-          <line>111</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/USER/MOTOR/pid.cpp</url>
-          <line>110</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="基本功能调试完" />
+    <option name="LAST_COMMIT_MESSAGE" value="基本功能调试完" />
   </component>
 </project>

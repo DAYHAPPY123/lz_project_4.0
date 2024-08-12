@@ -54,7 +54,6 @@ void light_init()//counter_max=2000
 {
     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 2000);//激光
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);//指示灯
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
 }

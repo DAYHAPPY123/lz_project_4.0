@@ -12,13 +12,13 @@
 //angle_limit=50时角度为小范围，即下压力小,angle_limit=60时角度为大范围，即下压力大
 void mode_choose()
 {
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9)==1)//舵机范围选择50/60
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9)==1)//舵机范围选择50/70
     {
         angle_limit=50;
     }
     else
     {
-        angle_limit=60;
+        angle_limit=70;
     }
 //    usart_printf("%d \r\n",HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8));
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)==1)//循迹速度范围选择35/50
@@ -50,6 +50,6 @@ void light_mode()
         __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, 2000);//亮
         osDelay(100);
     }
-//    usart_printf("%d\r\n", rc_ctrl.ch[9]);
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, float(rc_ctrl.ch[9]+671)/1342.0*2000);//激光
+//    usart_printf("%d\r\n", rc_ctrl.ch[10]);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, float(rc_ctrl.ch[10]+720)/1440.0*2000);//激光
 }

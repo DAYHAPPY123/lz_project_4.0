@@ -30,7 +30,6 @@ void control_task(void *argument){
     servos_reset();
     for(;;)
     {
-
         angle_cal();
         backwheel_speed_cal();
         Speed_Send();
@@ -40,7 +39,7 @@ void control_task(void *argument){
 }
 void agv_task(void *argument){
     TickType_t PrTime2 = xTaskGetTickCount();
-    agv_init();//ok
+    agv_init();
     for (;;)
     {
         read_agv_data();

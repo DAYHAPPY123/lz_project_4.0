@@ -60,30 +60,30 @@ void servos_control()
     {
         servos_start();
 
-        if (rc_ctrl.ch[6] > 600)//上，右,越大越下
+        if (rc_ctrl.ch[5] > 600)//上，右,越大越下
         {
-            if (rc_ctrl.ch[8] > 600)//SE上拨
+            if (rc_ctrl.ch[11] > 100)//滚轮上拨
             {
                 servos_pos[0]-=servos_speed;
                 servo0_limit(&servos_pos[0]);
                 actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
             }
-            else if (rc_ctrl.ch[8] < -600)//SE下拨
+            else if (rc_ctrl.ch[11] < -100)//滚轮上拨
             {
                 servos_pos[0]+=servos_speed;
                 servo0_limit(&servos_pos[0]);
                 actual_pos_input[0]=(int)(servos_pos[0]/180.0*200+servo0_start);
             }
         }
-        else if (rc_ctrl.ch[6] < -600)//下，左，越小越下
+        else if (rc_ctrl.ch[5] < -600)//下，左，越小越下
         {
-            if (rc_ctrl.ch[8] > 600)//SE上拨
+            if (rc_ctrl.ch[11] > 100)//滚轮上拨
             {
                 servos_pos[1]+=servos_speed;
                 servo1_limit(&servos_pos[1]);
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
-            else if (rc_ctrl.ch[8] < -600)//SE下拨
+            else if (rc_ctrl.ch[11] < -100)//滚轮上拨
             {
                 servos_pos[1]-=servos_speed;
                 servo1_limit(&servos_pos[1]);
@@ -92,7 +92,7 @@ void servos_control()
         }
         else //SE于中位
         {
-            if (rc_ctrl.ch[8] > 600)//SE上拨
+            if (rc_ctrl.ch[11] > 100)//SE上拨
             {
                 servos_pos[0]-=servos_speed;
                 servo0_limit(&servos_pos[0]);
@@ -101,7 +101,7 @@ void servos_control()
                 servo1_limit(&servos_pos[1]);
                 actual_pos_input[1]=(int)(servos_pos[1]/180.0*200+servo1_start);
             }
-            else if (rc_ctrl.ch[8] < -600)//SE下拨
+            else if (rc_ctrl.ch[11] < -100)//SE下拨
             {
                 servos_pos[0]+=servos_speed;
                 servo0_limit(&servos_pos[0]);

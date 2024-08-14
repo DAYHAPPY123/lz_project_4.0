@@ -14,7 +14,8 @@ uint8_t find_max(float arry[], uint8_t length);
 extern uint8_t agv_right[4];
 extern uint8_t agv_left[4];
 extern float turn_angle;
-extern float SD;
+extern uint8_t agvRvBuff[AGV_RVSIZE];
+extern float V_AB;
 
 #ifdef __cplusplus
 }

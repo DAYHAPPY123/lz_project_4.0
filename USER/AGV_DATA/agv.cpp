@@ -18,7 +18,9 @@ float agv_buffer[8];
 uint8_t agvRvBuff[AGV_RVSIZE]={0};
 uint8_t agvBuff[AGV_RVSIZE]={0};
 static uint8_t origin_max_index = 0;
-float SD=0;//手动速度选择，控制motor.set_rpm
+int A_click = 0;//控制set_rpm;
+int B_click = 0;//控制set_rpm;
+float V_AB=0;
 
 float turn_angle;
 
@@ -56,8 +58,8 @@ void read_agv_data()
         agv_buffer[6] = (float)agvBuff[7]-noise;
         agv_buffer[7] = (float)agvBuff[6]-noise;
     }
-//    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
-//                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
+    usart_printf("%.0f %.0f %.0f %.0f %.0f %.0f %.0f %.0f\r\n",agv_buffer[0],agv_buffer[1], agv_buffer[2],
+                 agv_buffer[3],agv_buffer[4], agv_buffer[5], agv_buffer[6], agv_buffer[7]);
 
     static uint8_t fit_max_index = 0;
     origin_max_index = find_max(agv_buffer, 8);
@@ -100,13 +102,9 @@ void state_control()//模式控制
 {
     taskENTER_CRITICAL();
     mode=MOTOR_STOP;
-    if(rc_ctrl.ch[5]>600) mode=MOTOR_AUTO;
-    else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
+    if(rc_ctrl.ch[4]>600) mode=MOTOR_AUTO;
+    else if(rc_ctrl.ch[4]< -100) mode=MOTOR_STOP;//实测遥控器断连时rc_ctrl.ch[4]突变为-320，正好也用作断连异常处理代码
     else mode=MOTOR_MANUAL;
-    if ((rc_ctrl.ch[4]*rc_ctrl.ch[4])<10000)
-    {
-        mode = MOTOR_STOP;
-    }
     if ( (agv_buffer[origin_max_index] < min_agv_start) && (mode==MOTOR_AUTO) )    //若传感器最大读取值小于20.0，则机器人恢复至停止模式
     {
         mode = MOTOR_STOP;
@@ -114,15 +112,31 @@ void state_control()//模式控制
     /**
      * 控制set.rpm的系数
      */
+
+    if (rc_ctrl.ch[6] > 600)
+    {
+        A_click = 1;
+    }else
+    {
+        A_click = 0;
+    }
     if (rc_ctrl.ch[7] > 600)
     {
-        SD = 1.5;
-    } else if( (rc_ctrl.ch[7] < 100)&&(rc_ctrl.ch[7] > -100) )
+        B_click = 1;
+    }else
     {
-        SD = 1;
-    } else if (rc_ctrl.ch[7] < -600)
+        B_click = 0;
+    }
+
+    if ( (A_click+B_click) == 2 )
     {
-        SD = 0.5;
+        V_AB = 1.5;
+    } else if( (A_click+B_click) == 1 )
+    {
+        V_AB = 1;
+    } else if( (A_click+B_click) == 0 )
+    {
+        V_AB = 0.5;
     }
     taskEXIT_CRITICAL();
 }

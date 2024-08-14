@@ -72,7 +72,8 @@ void DEBUGC_UartIdleCallback(UART_HandleTypeDef *huart)
     }
     memset(debugRvBuff,0,data_length);
     data_length = 0;
+//    __HAL_DMA_ENABLE(&hdma_lpuart1_rx);
     HAL_UART_Receive_DMA(huart, (uint8_t*)debugRvBuff, DEBUG_RVSIZE);
-//    usart_printf("%d,%.2f,%.2f,%.2f,%.2f\r\n",mode,temp.p_kp,temp.s_ki,temp.s_target);
+//    usart_printf("%d,%.2f,%.2f,%.2f,%.2f\r\n",mode,temp.p_kp,temp.s_ki,temp.p_target);
 }
 

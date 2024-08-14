@@ -28,6 +28,7 @@
 #include "mycan.h"
 #include "fdcan.h"
 #include "debugc.h"
+#include "agv.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -256,9 +257,6 @@ void USART2_IRQHandler(void)
     if(__HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE) == SET)
     {
         __HAL_UART_CLEAR_IDLEFLAG(&huart2);
-        __HAL_DMA_DISABLE(&hdma_usart2_rx);
-        __HAL_DMA_GET_COUNTER(&hdma_usart2_rx) = 26;
-        __HAL_DMA_ENABLE(&hdma_usart2_rx);
     }
   /* USER CODE END USART2_IRQn 1 */
 }
@@ -317,6 +315,20 @@ void LPUART1_IRQHandler(void)
   /* USER CODE BEGIN LPUART1_IRQn 1 */
     DEBUGC_UartIrqHandler(&hlpuart1);
   /* USER CODE END LPUART1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMAMUX overrun interrupt.
+  */
+void DMAMUX_OVR_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMAMUX_OVR_IRQn 0 */
+
+  /* USER CODE END DMAMUX_OVR_IRQn 0 */
+
+  /* USER CODE BEGIN DMAMUX_OVR_IRQn 1 */
+
+  /* USER CODE END DMAMUX_OVR_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

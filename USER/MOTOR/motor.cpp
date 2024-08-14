@@ -219,7 +219,7 @@ void backwheel_speed_cal(void)
             PID3_1.motor.set_rpm=PID3_2.motor.set_rpm* tan(right_angle)/tan(left_angle);}
         PID3_1.motor.set_rpm = PID3_1.motor.set_rpm*SD;
         PID3_2.motor.set_rpm = PID3_2.motor.set_rpm*SD;
-        usart_printf("%.2f,%.2f,%.2f\r\n",PID3_1.motor.set_rpm,PID3_1.motor.set_rpm,SD);
+//        usart_printf("%.2f,%.2f,%d,%.2f\r\n",PID3_1.motor.set_rpm,PID3_1.motor.set_rpm,rc_ctrl.ch[2],SD);
     }
 
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53

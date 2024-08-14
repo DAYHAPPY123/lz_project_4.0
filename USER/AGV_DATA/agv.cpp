@@ -103,7 +103,7 @@ void state_control()//模式控制
     if(rc_ctrl.ch[5]>600) mode=MOTOR_AUTO;
     else if(rc_ctrl.ch[5]< -600) mode=MOTOR_STOP;
     else mode=MOTOR_MANUAL;
-    if ((rc_ctrl.ch[4]*rc_ctrl.ch[4])<10000)
+    if (rc_ctrl.ch[4]<600)
     {
         mode = MOTOR_STOP;
     }
@@ -111,6 +111,8 @@ void state_control()//模式控制
     {
         mode = MOTOR_STOP;
     }
+    usart_printf("%d\r\n",rc_ctrl.ch[4]);
+//
     /**
      * 控制set.rpm的系数
      */

@@ -64,7 +64,7 @@ void check_rc_connection()
         HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
     }
 
-//    usart_printf("%d  %d \r\n",current_time,last_rc_receive_time);
+    usart_printf("%d  %d \r\n",current_time,last_rc_receive_time);
 }
 
 void sbus_to_rc(volatile const uint8_t *sbus_buf, RC_ctrl_t *rc_ctrl)////转换后每通道理论量程为（-720，+720）

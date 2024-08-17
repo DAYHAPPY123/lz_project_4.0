@@ -18,7 +18,7 @@ void mode_choose()
     }
     else
     {
-        angle_limit=70;
+        angle_limit=60;
     }
 //    usart_printf("%d \r\n",HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8));
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_8)==1)//循迹速度范围选择35/50

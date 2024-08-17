@@ -155,7 +155,7 @@ void angle_cal()
             PID2_2.motor.set_pos=mid_counter_2_2;
         }
         if(rc_ctrl.ch[3]<0){//向左转
-            left_counter = int16_t(double(rc_ctrl.ch[3])/671.0f*8191.0*3.0/4.0/2*0.7);
+            left_counter = int16_t(double(rc_ctrl.ch[3])/720.0f*8191.0*3.0/4.0/2*0.7);
             left_angle = left_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             right_angle = atan(1.0/  (1.0/tan(left_angle)-(float)car_width/(float)car_length));
             right_counter = right_angle*180/PI/360*8191*3;
@@ -163,7 +163,7 @@ void angle_cal()
             PID2_2.motor.set_pos=mid_counter_2_2-right_counter;
         }
         if(rc_ctrl.ch[3]>0){//向右转
-            right_counter = int16_t(double(rc_ctrl.ch[3])/671.0f*8191.0*3.0/4.0/2*0.7);
+            right_counter = int16_t(double(rc_ctrl.ch[3])/720.0f*8191.0*3.0/4.0/2*0.7);
             right_angle = right_counter / 8191.0 /3.0 * 360 * PI / 180.0;
             left_angle = atan(1.0/  (1.0/tan(right_angle)+(float)car_width/(float)car_length));
             left_counter = left_angle*180/PI/360*8191*3;
@@ -208,14 +208,14 @@ void backwheel_speed_cal(void)
     if (mode == MOTOR_MANUAL)//0-70mm/s,对应set_rpm=0-14.53
     {
         if(rc_ctrl.ch[3]==0){
-            PID3_1.motor.set_rpm=float ((float)(rc_ctrl.ch[1])/671.0f*14.53f);
-            PID3_2.motor.set_rpm=float((float)(rc_ctrl.ch[1])/671.0f*14.53f);
+            PID3_1.motor.set_rpm=float ((float)(rc_ctrl.ch[1])/720.0f*14.53f);
+            PID3_2.motor.set_rpm=float((float)(rc_ctrl.ch[1])/720.0f*14.53f);
         }
         if(rc_ctrl.ch[3]>0){
-            PID3_1.motor.set_rpm=float((float)(rc_ctrl.ch[1])/671.0f*14.53f);
+            PID3_1.motor.set_rpm=float((float)(rc_ctrl.ch[1])/720.0f*14.53f);
             PID3_2.motor.set_rpm=PID3_1.motor.set_rpm* tan(left_angle)/tan(right_angle);}
         if(rc_ctrl.ch[3]<0){
-            PID3_2.motor.set_rpm=float((float)(rc_ctrl.ch[1])/671.0f*14.53f);
+            PID3_2.motor.set_rpm=float((float)(rc_ctrl.ch[1])/720.0f*14.53f);
             PID3_1.motor.set_rpm=PID3_2.motor.set_rpm* tan(right_angle)/tan(left_angle);}
         PID3_1.motor.set_rpm = PID3_1.motor.set_rpm*V_AB;
         PID3_2.motor.set_rpm = PID3_2.motor.set_rpm*V_AB;
@@ -225,8 +225,8 @@ void backwheel_speed_cal(void)
     else if (mode == MOTOR_AUTO )//0 -70mm/s,对应set_rpm=0-14.53
     {
             if(turn_angle==0){
-                PID3_1.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/671.0f*14.53/2.0);
-                PID3_2.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/671.0f*14.53/2.0);
+                PID3_1.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/720.0f*14.53/2.0);
+                PID3_2.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/720.0f*14.53/2.0);
                 if (PID3_1.motor.set_rpm<=0)
                 {
                     PID3_1.motor.set_rpm=0;
@@ -236,7 +236,7 @@ void backwheel_speed_cal(void)
                 limit(&PID3_2.motor.set_rpm,14.53);
             }
             if(turn_angle<0){//向左转
-                PID3_2.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/671.0f*14.53/2.0)+float(-turn_angle/1000.0);
+                PID3_2.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/720.0f*14.53/2.0)+float(-turn_angle/1000.0);
                 if (PID3_2.motor.set_rpm<=0)
                 {
                     PID3_2.motor.set_rpm=0;
@@ -245,7 +245,7 @@ void backwheel_speed_cal(void)
                 PID3_1.motor.set_rpm=PID3_2.motor.set_rpm* tan(left_angle)/tan(right_angle);
             }
             if(turn_angle>0){
-                PID3_1.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/671.0f*14.53/2.0)+float(turn_angle/1000.0);
+                PID3_1.motor.set_rpm=back_setrpm+float ((float)(rc_ctrl.ch[1])/720.0f*14.53/2.0)+float(turn_angle/1000.0);
                 if (PID3_1.motor.set_rpm<=0)
                 {
                     PID3_1.motor.set_rpm=0;

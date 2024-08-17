@@ -20,17 +20,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="遥控器有bug，SA拨杆拨下时会随油门变化，已软件解决，SA拨上才会启动">
+    <list default="true" id="695d4e28-5aab-4877-8ac6-8d2273055f80" name="更改" comment="换成了图传遥控一体化遥控器">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" beforeDir="false" afterPath="$PROJECT_DIR$/USER/AGV_DATA/agv.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/BUTTON/button.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/BUTTON/button.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/MOTOR/motor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/REMOTE/remote.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/SERVOS/servos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/SERVOS/servos.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/USER/TASK/mytask.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/USER/TASK/mytask.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/天地飞遥控器说明书/新建 Microsoft PowerPoint 演示文稿.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/泸州机器人遥控器说明4.0.docx" beforeDir="false" afterPath="$PROJECT_DIR$/泸州机器人遥控器说明4.0.docx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +35,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
@@ -126,7 +120,8 @@
       <workItem from="1723446016546" duration="3000" />
       <workItem from="1723695044036" duration="46000" />
       <workItem from="1723713897936" duration="5046000" />
-      <workItem from="1723774097483" duration="7692000" />
+      <workItem from="1723774097483" duration="8503000" />
+      <workItem from="1723866536098" duration="1367000" />
     </task>
     <task id="LOCAL-00001" summary="准备写串级PID">
       <option name="closed" value="true" />
@@ -192,7 +187,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723621324550</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="换成了图传遥控一体化遥控器">
+      <option name="closed" value="true" />
+      <created>1723797795942</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723797795942</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +227,7 @@
     <MESSAGE value="加上了激光调节，解决了遥控器bug，结束" />
     <MESSAGE value="新增了手动模式下最大移动速度切换功能，SD键控制" />
     <MESSAGE value="遥控器有bug，SA拨杆拨下时会随油门变化，已软件解决，SA拨上才会启动" />
-    <option name="LAST_COMMIT_MESSAGE" value="遥控器有bug，SA拨杆拨下时会随油门变化，已软件解决，SA拨上才会启动" />
+    <MESSAGE value="换成了图传遥控一体化遥控器" />
+    <option name="LAST_COMMIT_MESSAGE" value="换成了图传遥控一体化遥控器" />
   </component>
 </project>
